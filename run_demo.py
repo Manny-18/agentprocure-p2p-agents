@@ -20,11 +20,15 @@ from agentprocure.rules.common import inr
 
 try:
     from rich.console import Console
+    from rich.markup import escape
     from rich.panel import Panel
     from rich.table import Table
     console = Console()
 except ImportError:  # rich ships with CrewAI; plain print otherwise
     console = None
+
+    def escape(text):
+        return text
 
 
 MONEY_KPIS = {"po_value_incl_gst", "approved_payable", "disputed_amount_protected", "tds_withheld", "itc_claimable",
@@ -39,16 +43,17 @@ def say(text: str = "", style: str | None = None):
 
 
 def show_step(t: dict):
-    head = f"[bold]{t['title']}[/bold]  [dim]({t['framework']}, {t['elapsed_ms']} ms)[/dim]"
-    body = [f"[cyan]Decision:[/cyan] {t['decision']}"]
+    e = lambda x: escape(str(x))  # agent text can contain [brackets]; never read them as rich markup
+    head = f"[bold]{e(t['title'])}[/bold]  [dim]({e(t['framework'])}, {t['elapsed_ms']} ms)[/dim]"
+    body = [f"[cyan]Decision:[/cyan] {e(t['decision'])}"]
     for tool in t["tools"]:
-        body.append(f"  [green]tool[/green] {tool['tool']}: {tool['summary']}")
+        body.append(f"  [green]tool[/green] {e(tool['tool'])}: {e(tool['summary'])}")
     for f in t["findings"]:
         color = {"BLOCK": "red", "HOLD": "yellow", "HIGH": "red", "WARN": "yellow"}.get(f["severity"], "white")
-        body.append(f"  [{color}]{f['severity']}[/{color}] {f['code']}: {f['detail']}")
+        body.append(f"  [{color}]{f['severity']}[/{color}] {e(f['code'])}: {e(f['detail'])}")
     for c in t.get("crew", []):
-        body.append(f"  [magenta]{c['title']}[/magenta]: {c['output']}")
-    body.append(f"[dim]Why ({t['rationale_source']}; guardrail: {t['guardrail']}):[/dim] {t['rationale']}")
+        body.append(f"  [magenta]{e(c['title'])}[/magenta]: {e(c['output'])}")
+    body.append(f"[dim]Why ({e(t['rationale_source'])}; guardrail: {e(t['guardrail'])}):[/dim] {e(t['rationale'])}")
     if console:
         console.print(Panel("\n".join(body), title=head, title_align="left", border_style="blue"))
     else:
@@ -63,9 +68,9 @@ def run(scenario_id: str, interactive: bool, reject: bool) -> dict:
     if pack:
         for t in result["trace"]:
             show_step(t)
-        say(f"\n>>> HUMAN APPROVAL NEEDED ({pack['approver_role']}): {pack['question']}", "bold yellow")
+        say(f"\n>>> HUMAN APPROVAL NEEDED ({escape(pack['approver_role'])}): {escape(pack['question'])}", "bold yellow")
         for w in pack["warnings"]:
-            say(f"    warning: {w}", "yellow")
+            say(f"    warning: {escape(w)}", "yellow")
         if interactive:
             ans = input("    approve? [y/n] ").strip().lower()
             comment = input("    comment (optional): ").strip()
