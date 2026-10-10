@@ -222,11 +222,12 @@ def sourcing_crew_node(state: dict) -> dict:
     t0 = time.perf_counter()
     if config.USE_CREWAI:
         try:
-            llm = _build_real_llm() if GATEWAY.online else _build_offline_llm()
+            live = GATEWAY.online and not GATEWAY.disabled_reason   # quota or access already failed: run the crew offline
+            llm = _build_real_llm() if live else _build_offline_llm()
             crew = build_crew(llm)
             result = crew.kickoff(inputs={"case_id": case_id, "item": pr["item"]["description"]})
             outputs = [t.raw for t in result.tasks_output]
-            engine = f"CrewAI ({'LLM: ' + GATEWAY.label if GATEWAY.online else 'offline expert LLM'})"
+            engine = f"CrewAI ({'LLM: ' + GATEWAY.label if live else 'offline expert LLM'})"
         except Exception as exc:  # fall back to the same tools without the crew
             crew_error = f"{type(exc).__name__}: {exc}"[:300]
     # Deterministic results are the source of truth for decisions

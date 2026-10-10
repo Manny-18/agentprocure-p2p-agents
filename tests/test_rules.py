@@ -243,4 +243,30 @@ def test_gateway_does_not_retry_auth_errors(monkeypatch):
     g = LLMGateway(provider="gemini", model="test-model")
     g._chat = DeniedChat()
     out = g.narrate(persona="p", task="t", facts={}, fallback="fallback text")
-    assert out["text"] == "fallback text" and "PermissionDenied" in out["guardrail"] and g.retries == 0
+    assert out["text"] == "fallback text" and "access denied" in out["guardrail"] and g.retries == 0
+
+
+def test_gateway_stops_calling_after_daily_quota(monkeypatch):
+    from agentprocure import config as cfg
+    from agentprocure.llm import LLMGateway
+
+    class GoogleRateLimitError(Exception):
+        pass
+
+    class QuotaChat:
+        def __init__(self):
+            self.n = 0
+
+        def invoke(self, _messages):
+            self.n += 1
+            raise GoogleRateLimitError("429 RESOURCE_EXHAUSTED quotaId: GenerateRequestsPerDayPerProjectPerModel-FreeTier")
+
+    monkeypatch.setattr(cfg, "LLM_MIN_INTERVAL_S", 0)
+    monkeypatch.setattr(cfg, "LLM_RETRY_WAIT_S", 0)
+    g = LLMGateway(provider="gemini", model="test-model")
+    chat = QuotaChat()
+    g._chat = chat
+    first = g.narrate(persona="p", task="t", facts={}, fallback="fb")
+    second = g.narrate(persona="p", task="t", facts={}, fallback="fb")
+    assert chat.n == 1 and g.retries == 0                      # no retries, and no second call
+    assert "daily free-tier quota" in first["guardrail"] and "daily free-tier quota" in second["guardrail"]

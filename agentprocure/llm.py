@@ -25,6 +25,7 @@ class LLMGateway:
         self.rejections = 0
         self.retries = 0
         self._last_call = 0.0
+        self.disabled_reason: str | None = None   # set after a daily quota or auth failure: stop calling for this run
 
     @property
     def online(self) -> bool:
@@ -42,7 +43,11 @@ class LLMGateway:
         return self._chat
 
     def _invoke(self, call):
-        """Run one model call with pacing (free-tier requests-per-minute) and retries on rate limits."""
+        """Run one model call with pacing (free-tier requests-per-minute) and retries on per-minute limits.
+        A daily quota or an access error disables the model for the rest of the run (circuit breaker),
+        so later agents fall back at once instead of waiting on calls that cannot succeed."""
+        if self.disabled_reason:
+            raise RuntimeError(f"LLM disabled for this run: {self.disabled_reason}")
         for attempt in range(config.LLM_MAX_RETRIES + 1):
             wait = config.LLM_MIN_INTERVAL_S - (time.time() - self._last_call)
             if wait > 0:
@@ -52,6 +57,10 @@ class LLMGateway:
             try:
                 return call()
             except Exception as exc:
+                if is_daily_quota(exc) or is_access_denied(exc):
+                    self.disabled_reason = ("daily free-tier quota used up" if is_daily_quota(exc)
+                                            else "access denied by the provider")
+                    raise
                 if attempt < config.LLM_MAX_RETRIES and is_rate_limit(exc):
                     self.retries += 1
                     time.sleep(config.LLM_RETRY_WAIT_S * (attempt + 1))
@@ -73,7 +82,8 @@ class LLMGateway:
             text = msg.content if isinstance(msg.content, str) else " ".join(
                 part.get("text", "") for part in msg.content if isinstance(part, dict))
         except Exception as exc:  # network, quota, auth
-            return {"text": fallback, "source": "offline-template", "guardrail": f"LLM error: {type(exc).__name__}"}
+            why = self.disabled_reason or type(exc).__name__
+            return {"text": fallback, "source": "offline-template", "guardrail": f"LLM error: {why}"}
         ok, bad = numbers_grounded(text, facts)
         if not ok:
             self.rejections += 1
@@ -95,6 +105,17 @@ def is_rate_limit(exc: Exception) -> bool:
     """True for quota / rate-limit errors from any provider (HTTP 429, RESOURCE_EXHAUSTED, RateLimitError)."""
     text = f"{type(exc).__name__} {exc}".lower()
     return any(k in text for k in ("ratelimit", "rate limit", "rate_limit", "429", "resource_exhausted", "resourceexhausted", "quota"))
+
+
+def is_daily_quota(exc: Exception) -> bool:
+    """A per-day quota (e.g. Gemini free tier 'GenerateRequestsPerDay...'): retrying today cannot help."""
+    text = f"{type(exc).__name__} {exc}".lower().replace(" ", "")
+    return "perday" in text or "requestsperday" in text
+
+
+def is_access_denied(exc: Exception) -> bool:
+    text = f"{type(exc).__name__} {exc}".lower()
+    return any(k in text for k in ("permissiondenied", "permission_denied", "403", "invalid api key", "api_key_invalid", "unauthenticated"))
 
 
 # ---------------------------------------------------------------- guardrail
