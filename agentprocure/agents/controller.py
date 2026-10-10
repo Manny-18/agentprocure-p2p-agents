@@ -28,7 +28,9 @@ def kpis(state: dict) -> dict:
     sh = neg.get("should_cost") or {}
     alerts = (tr or {}).get("alerts", [])
     return {
-        "agents_involved": len({t["agent"] for t in trace}) + (2 if src else 0),   # crew adds 2 more agents
+        # AI agents only (the human approver is counted in human_touchpoints); the controller is writing this
+        # step, so it is added here; the crew's single trace entry stands for 3 agents
+        "agents_involved": len(({t["agent"] for t in trace} - {"approver"}) | {"controller"}) + (2 if src else 0),
         "tool_calls": sum(len(t.get("tools", [])) for t in trace),
         "controls_flagged": len(findings),
         "blocking_controls": sum(1 for f in findings if f["severity"] == "BLOCK"),
