@@ -82,7 +82,7 @@ pip install -r requirements.txt
 python run_demo.py                     # all four scenarios, offline, auto-approve
 python run_demo.py -s S2 --interactive # you are the approver at the interrupt
 python run_demo.py -s S1 --reject      # rejection path
-pytest                                 # 36 unit + workflow tests
+pytest                                 # 38 unit + workflow tests
 python -m evals.run_evals              # 22-case control-effectiveness evaluation
 python -m agentprocure.business_case   # ROI, payback, NPV (3 scenarios)
 ```
@@ -96,6 +96,11 @@ python run_demo.py -s S1
 ```
 
 Each agent step shows `rationale_source` (LLM or template) and the guardrail result.
+
+The Gemini free tier allows only about 10 requests a minute, so with `LLM_PROVIDER=gemini` the gateway
+spaces calls 7 seconds apart, retries rate-limit errors, and caps the CrewAI crew at 8 requests a minute
+(`LLM_MIN_INTERVAL_S`, `LLM_MAX_RETRIES`, `CREW_MAX_RPM` in `.env` override this). A full case then takes
+about two minutes. Any call that still fails falls back to the rule-based explanation; the numbers never change.
 
 ### API for n8n
 

@@ -199,3 +199,48 @@ def test_guardrail_flags_invented_numbers():
     assert ok
     ok, bad = numbers_grounded("Pay Rs 8,10,000 and expect a 5% discount.", facts)
     assert not ok and len(bad) == 2
+
+
+# ------------------------------------------------------------------ LLM gateway resilience
+def test_gateway_retries_rate_limit_then_succeeds(monkeypatch):
+    from agentprocure import config as cfg
+    from agentprocure.llm import LLMGateway
+
+    class GoogleRateLimitError(Exception):
+        pass
+
+    class FakeChat:
+        def __init__(self):
+            self.n = 0
+
+        def invoke(self, _messages):
+            self.n += 1
+            if self.n == 1:
+                raise GoogleRateLimitError("429 RESOURCE_EXHAUSTED")
+            return type("Msg", (), {"content": "Pay Rs 7,97,585.60 on time."})()
+
+    monkeypatch.setattr(cfg, "LLM_MIN_INTERVAL_S", 0)
+    monkeypatch.setattr(cfg, "LLM_RETRY_WAIT_S", 0)
+    g = LLMGateway(provider="gemini", model="test-model")
+    g._chat = FakeChat()
+    out = g.narrate(persona="p", task="t", facts={"approved_total": 797585.6}, fallback="fallback")
+    assert out["guardrail"] == "passed" and g.retries == 1
+
+
+def test_gateway_does_not_retry_auth_errors(monkeypatch):
+    from agentprocure import config as cfg
+    from agentprocure.llm import LLMGateway
+
+    class GooglePermissionDeniedError(Exception):
+        pass
+
+    class DeniedChat:
+        def invoke(self, _messages):
+            raise GooglePermissionDeniedError("403 PERMISSION_DENIED")
+
+    monkeypatch.setattr(cfg, "LLM_MIN_INTERVAL_S", 0)
+    monkeypatch.setattr(cfg, "LLM_RETRY_WAIT_S", 0)
+    g = LLMGateway(provider="gemini", model="test-model")
+    g._chat = DeniedChat()
+    out = g.narrate(persona="p", task="t", facts={}, fallback="fallback text")
+    assert out["text"] == "fallback text" and "PermissionDenied" in out["guardrail"] and g.retries == 0

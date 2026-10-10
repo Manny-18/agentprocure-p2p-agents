@@ -194,7 +194,9 @@ def build_crew(llm):
                           "opening ask, BATNA and three levers.",
               expected_output="Negotiation brief in under 140 words.", agent=ns, context=[t1, t2])
     _silence_first_run_tracing_prompt()
-    return Crew(agents=[cm, sa, ns], tasks=[t1, t2, t3], process=Process.sequential, verbose=False, tracing=False)
+    online = not getattr(llm, "model", "").startswith("offline")
+    return Crew(agents=[cm, sa, ns], tasks=[t1, t2, t3], process=Process.sequential, verbose=False, tracing=False,
+                max_rpm=config.CREW_MAX_RPM if online else None)  # CrewAI's own rate limiter, for free tiers
 
 
 def _silence_first_run_tracing_prompt():

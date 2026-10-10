@@ -928,7 +928,7 @@ Request: """${text.slice(0, 2000)}"""`, { modelTier: "quick", signal: iCtl.signa
   const passed = D.evals.filter((e) => e.pass).length;
   $("#eval-sum").textContent = `${passed} of ${D.evals.length} injected conditions handled correctly: right final outcome, right control fired, right money figure. Each case mutates a scenario (price drift, missing IRN, duplicate invoice, missing PAN...) and runs the full multi-agent workflow.`;
   $("#eval-rows").innerHTML = D.evals.map((e) => `<tr><td class="mono">${e.id}</td><td style="white-space:normal;min-width:220px">${esc(e.case)}</td><td class="mono">${esc(e.expected)}</td><td>${e.pass ? '<span class="sev sev-INFO">PASS</span>' : '<span class="sev sev-BLOCK">FAIL</span>'}</td></tr>`).join("");
-  $("#built-facts").innerHTML = `<dt>Agents</dt><dd>11 AI agents (8 graph steps + a 3-agent crew) and 1 human approver</dd><dt>Unit + workflow tests</dt><dd>36 passing (pytest)</dd>
+  $("#built-facts").innerHTML = `<dt>Agents</dt><dd>11 AI agents (8 graph steps + a 3-agent crew) and 1 human approver</dd><dt>Unit + workflow tests</dt><dd>38 passing (pytest)</dd>
     <dt>Eval cases</dt><dd>${passed}/${D.evals.length} passing</dd><dt>Traces on this page</dt><dd>${esc(D.generated_with)}</dd>
     <dt>LLM options</dt><dd>offline, Gemini (free tier), OpenAI, Anthropic, Ollama</dd>`;
   const bc = D.business_case, cols = ["Conservative", "Base", "Optimistic"];

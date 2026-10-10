@@ -23,6 +23,8 @@ class LLMGateway:
         self._chat = None
         self.calls = 0
         self.rejections = 0
+        self.retries = 0
+        self._last_call = 0.0
 
     @property
     def online(self) -> bool:
@@ -39,6 +41,23 @@ class LLMGateway:
                                          temperature=config.LLM_TEMPERATURE)
         return self._chat
 
+    def _invoke(self, call):
+        """Run one model call with pacing (free-tier requests-per-minute) and retries on rate limits."""
+        for attempt in range(config.LLM_MAX_RETRIES + 1):
+            wait = config.LLM_MIN_INTERVAL_S - (time.time() - self._last_call)
+            if wait > 0:
+                time.sleep(wait)
+            self._last_call = time.time()
+            self.calls += 1
+            try:
+                return call()
+            except Exception as exc:
+                if attempt < config.LLM_MAX_RETRIES and is_rate_limit(exc):
+                    self.retries += 1
+                    time.sleep(config.LLM_RETRY_WAIT_S * (attempt + 1))
+                    continue
+                raise
+
     def narrate(self, *, persona: str, task: str, facts: dict, fallback: str, max_words: int = 140) -> dict:
         """Ask the LLM to explain the facts in the persona's voice; enforce grounding."""
         if not self.online:
@@ -50,8 +69,7 @@ class LLMGateway:
                   "if something is unknown say so.")
         t0 = time.time()
         try:
-            self.calls += 1
-            msg = self.chat_model().invoke([("system", persona), ("user", prompt)])
+            msg = self._invoke(lambda: self.chat_model().invoke([("system", persona), ("user", prompt)]))
             text = msg.content if isinstance(msg.content, str) else " ".join(
                 part.get("text", "") for part in msg.content if isinstance(part, dict))
         except Exception as exc:  # network, quota, auth
@@ -68,10 +86,15 @@ class LLMGateway:
         if not self.online:
             return None
         try:
-            self.calls += 1
-            return self.chat_model().with_structured_output(schema).invoke([("system", persona), ("user", text)])
+            return self._invoke(lambda: self.chat_model().with_structured_output(schema).invoke([("system", persona), ("user", text)]))
         except Exception:
             return None
+
+
+def is_rate_limit(exc: Exception) -> bool:
+    """True for quota / rate-limit errors from any provider (HTTP 429, RESOURCE_EXHAUSTED, RateLimitError)."""
+    text = f"{type(exc).__name__} {exc}".lower()
+    return any(k in text for k in ("ratelimit", "rate limit", "rate_limit", "429", "resource_exhausted", "resourceexhausted", "quota"))
 
 
 # ---------------------------------------------------------------- guardrail

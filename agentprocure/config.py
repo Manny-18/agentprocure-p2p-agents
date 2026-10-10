@@ -27,6 +27,14 @@ LLM_MODEL = os.getenv("LLM_MODEL") or DEFAULT_MODELS.get(LLM_PROVIDER, "")
 LLM_TEMPERATURE = float(os.getenv("LLM_TEMPERATURE", "0.2"))
 USE_CREWAI = os.getenv("USE_CREWAI", "true").lower() == "true"
 
+# Free tiers allow only a few requests a minute (Gemini Flash free tier: about 10). Pace calls and retry on
+# rate-limit errors so a full case completes instead of falling back to templates half-way through.
+_FREE_TIER = LLM_PROVIDER == "gemini"
+LLM_MIN_INTERVAL_S = float(os.getenv("LLM_MIN_INTERVAL_S", "7" if _FREE_TIER else "0"))
+LLM_MAX_RETRIES = int(os.getenv("LLM_MAX_RETRIES", "2"))
+LLM_RETRY_WAIT_S = float(os.getenv("LLM_RETRY_WAIT_S", "20"))
+CREW_MAX_RPM = int(os.getenv("CREW_MAX_RPM", "8" if _FREE_TIER else "0")) or None
+
 
 @lru_cache
 def load_json(name: str) -> dict:
