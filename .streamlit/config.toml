@@ -1,9 +1,40 @@
+# "Approval stamp": a purchase-order desk. Carbon-copy blue paper, navy ink, stamp-indigo actions,
+# a dark ink sidebar with amber links. Barlow (industrial signage) for text, Barlow Semi Condensed
+# for headings, IBM Plex Mono for control codes such as SPLIT_PURCHASE_SUSPECTED.
 [theme]
 base = "light"
-primaryColor = "#0f766e"
-backgroundColor = "#ffffff"
-secondaryBackgroundColor = "#f2f6f5"
-textColor = "#1d2a2f"
+primaryColor = "#3341B8"
+backgroundColor = "#F3F6FA"
+secondaryBackgroundColor = "#E5EBF3"
+textColor = "#15233B"
+borderColor = "#C7D1DE"
+showWidgetBorder = true
+linkColor = "#3341B8"
+codeTextColor = "#2A3893"
+codeBackgroundColor = "#E5EBF3"
+redColor = "#C2362B"
+orangeColor = "#B5650A"
+greenColor = "#2E7D4F"
+blueColor = "#3341B8"
+font = "Barlow:https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&display=swap"
+headingFont = "'Barlow Semi Condensed':https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@600;700&display=swap"
+codeFont = "'IBM Plex Mono':https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap"
+headingFontWeights = [700, 700, 600]
+headingFontSizes = ["3.4rem", "2rem", "1.45rem"]
+baseFontSize = 16
+metricValueFontSize = "1.9rem"
+metricValueFontWeight = 600
+baseRadius = "0.25rem"
+buttonRadius = "0.25rem"
+dataframeHeaderBackgroundColor = "#E5EBF3"
+
+[theme.sidebar]
+backgroundColor = "#16213A"
+secondaryBackgroundColor = "#22304D"
+textColor = "#DCE3EE"
+linkColor = "#F2B544"
+borderColor = "#2E3D5C"
+codeBackgroundColor = "#22304D"
 
 [client]
 toolbarMode = "minimal"

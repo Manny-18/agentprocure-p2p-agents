@@ -75,8 +75,8 @@ def render_step(t: dict, expanded: bool = False):
         icon = "🧑‍💼"
     elif t["agent"] == "controller":
         icon = "📋"
-    with st.expander(f"{icon} **{t['title']}** · {t['decision']}", expanded=expanded):
-        st.caption(f"{t['framework']} · {t['elapsed_ms']} ms" + (" · " + " | ".join(t["highlights"]) if t.get("highlights") else ""))
+    with st.expander(f"{icon} **{t['title']}**: {t['decision']}", expanded=expanded):
+        st.caption(f"{t['framework']}, {t['elapsed_ms']} ms" + ("; " + "; ".join(t["highlights"]) if t.get("highlights") else ""))
         if t["tools"]:
             st.markdown("**Tools called**\n" + "\n".join(f"- `{x['tool']}`: {md(x['summary'])}" for x in t["tools"]))
         if t["findings"]:
@@ -93,7 +93,7 @@ def render_step(t: dict, expanded: bool = False):
             st.markdown(f"**{md(c['title'])}** (CrewAI): {md(c['output'])}")
         guard = t["guardrail"]
         mark = "✅" if guard == "passed" else ("⚠️" if "reject" in str(guard).lower() or "error" in str(guard).lower() else "")
-        st.markdown(f"**Why** · *{md(t['rationale_source'])}; guardrail: {md(guard)}* {mark}  \n{md(t['rationale'])}")
+        st.markdown(f"**Why** (*{md(t['rationale_source'])}; guardrail: {md(guard)}*) {mark}  \n{md(t['rationale'])}")
 
 
 def render_trace(trace: list[dict], start: int = 0):
@@ -129,7 +129,7 @@ with st.sidebar:
     if GATEWAY.disabled_reason:
         st.warning(f"Model switched off for this session: {GATEWAY.disabled_reason}. Rule-based explanations are used.")
     st.divider()
-    st.markdown("12 AI agents · 1 human approver  \nLangGraph · CrewAI · LangChain · RAG · n8n · Docker")
+    st.markdown("12 AI agents and one human approver, built with LangGraph, CrewAI, LangChain, RAG, n8n and Docker.")
     st.markdown(f"[Source code on GitHub]({REPO})")
     st.caption("Academic prototype with fictional data. Not tax or legal advice.")
 
@@ -173,7 +173,7 @@ with tab_case:
                 for w in pack["warnings"]:
                     st.warning(w)
                 comment = st.text_input("Comment for the audit trail (optional)", key="approval_comment")
-                a, r, _ = st.columns([1, 1, 4])
+                a, r, _ = st.columns([1, 1, 7])
                 decision = None
                 if a.button("Approve", type="primary", key="approve"):
                     decision = "approve"
@@ -194,11 +194,11 @@ with tab_lab:
     st.markdown("Each case takes a scenario and **injects one realistic defect** (a price above tolerance, a missing "
                 "e-invoice, a duplicate, a changed bank account, a vendor without PAN...). The full multi-agent workflow "
                 "runs and the case passes only if the final outcome and the control that fired are both right.")
-    labels = {c[0]: f"{c[0]} · {c[1]}" for c in CASES}
+    labels = {c[0]: f"{c[0]}: {c[1]}" for c in CASES}
     cid = st.selectbox("Injected defect", list(labels), format_func=labels.get)
     case = next(c for c in CASES if c[0] == cid)
     _, desc, scenario, decision, patch, exp_status, exp_codes, _checks = case
-    st.caption(f"Expected outcome: **{exp_status}**" + (f" · controls that must fire: {', '.join(exp_codes)}" if exp_codes else ""))
+    st.caption(f"Expected outcome: **{exp_status}**" + (f". Controls that must fire: {', '.join(exp_codes)}" if exp_codes else ""))
     c1, c2 = st.columns([1, 1])
     if c1.button("Run this case", type="primary", key="run_defect"):
         with st.spinner("Agents at work..."):
@@ -246,12 +246,12 @@ with tab_ask:
     if res:
         with st.container(border=True):
             st.markdown(md(res["answer"]))
-            st.caption(f"Answer by: {res['source']} · guardrail: {res['guardrail']} · retrieval: {res['retrieval']} · "
-                       f"cited: {', '.join(res['citations']) or 'none'}")
+            st.caption(f"Answer by: {res['source']}. Guardrail: {res['guardrail']}. Retrieval: {res['retrieval']}. "
+                       f"Cited: {', '.join(res['citations']) or 'none'}")
         st.markdown("**Clauses retrieved** (score = BM25 relevance)")
         for h in res["retrieved"]:
             clause = kb().get(h["clause"])
-            with st.expander(f"{h['clause']} · {h['title']} · score {h['score']}"):
+            with st.expander(f"{h['clause']} {h['title']} (score {h['score']})"):
                 st.caption(h["source"])
                 st.markdown(md(clause["text"]))
 
@@ -261,17 +261,17 @@ with tab_how:
                 "the run pauses at the human approver.")
     g = get_graph().get_graph()
     dot = ["digraph G {", 'rankdir=TB; bgcolor="transparent"; nodesep=0.35; ranksep=0.32;',
-           'node [shape=box, style="rounded,filled", fillcolor="#f4f7f6", color="#5b6b66", fontname="Helvetica", fontsize=12, width=2.2];',
-           'edge [color="#5b6b66", fontname="Helvetica", fontsize=10];']
+           'node [shape=box, style="rounded,filled", fillcolor="#FFFFFF", color="#8A97AB", fontcolor="#15233B", fontname="Barlow, Helvetica", fontsize=12, width=2.2];',
+           'edge [color="#8A97AB", fontcolor="#4A5870", fontname="Barlow, Helvetica", fontsize=10];']
     for n in g.nodes:
         label = NODE_LABEL.get(n, n).replace("\n", "\\n")
         extra = ""
         if n in ("__start__", "__end__"):
-            extra = ', shape=circle, fillcolor="#ffffff", fontsize=9, width=0.6, fixedsize=true'
+            extra = ', shape=circle, fillcolor="#E5EBF3", fontsize=9, width=0.6, fixedsize=true'
         elif n == "approval":
-            extra = ', style="rounded,dashed,filled", fillcolor="#fff7e6"'
+            extra = ', style="rounded,dashed,filled", fillcolor="#FFF1D2", color="#B5650A"'
         elif n == "sourcing_crew":
-            extra = ', fillcolor="#e6f0ff"'
+            extra = ', fillcolor="#E3E6FA", color="#3341B8"'
         dot.append(f'"{n}" [label="{label}"{extra}];')
     for e in g.edges:
         style = f' [style=dashed, label="{e.data}"]' if e.conditional else ""
