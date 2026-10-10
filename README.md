@@ -82,7 +82,7 @@ pip install -r requirements.txt
 python run_demo.py                     # all four scenarios, offline, auto-approve
 python run_demo.py -s S2 --interactive # you are the approver at the interrupt
 python run_demo.py -s S1 --reject      # rejection path
-pytest                                 # 39 unit + workflow tests
+pytest                                 # 40 unit + workflow tests
 python -m evals.run_evals              # 22-case control-effectiveness evaluation
 python -m agentprocure.business_case   # ROI, payback, NPV (3 scenarios)
 ```

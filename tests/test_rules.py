@@ -270,3 +270,13 @@ def test_gateway_stops_calling_after_daily_quota(monkeypatch):
     second = g.narrate(persona="p", task="t", facts={}, fallback="fb")
     assert chat.n == 1 and g.retries == 0                      # no retries, and no second call
     assert "daily free-tier quota" in first["guardrail"] and "daily free-tier quota" in second["guardrail"]
+
+
+def test_guardrail_reads_lakh_crore_inside_facts_and_catches_tenfold_error():
+    # A threshold written in words inside a fact ("Rs 5 crore") grounds the same figure in the LLM text...
+    ok, _ = numbers_grounded("E-invoicing applies because the supplier is above Rs 5 crore.",
+                             {"terms": ["Supplier must issue an e-invoice with IRN (AATO above Rs 5 crore)"]})
+    assert ok
+    # ...but Rs 20.93 lakh mis-stated as Rs 2.09 crore (a tenfold error seen in a live Gemini run) is caught.
+    ok, bad = numbers_grounded("Approved for payment: Rs 2.09 crore.", {"approved_total": 2093320.0})
+    assert not ok and bad == ["2.09 crore"]

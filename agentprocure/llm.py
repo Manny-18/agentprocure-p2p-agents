@@ -131,9 +131,15 @@ def _fact_numbers(obj) -> list[float]:
     elif isinstance(obj, str):
         for m in _NUM.finditer(obj):
             try:
-                found.append(float(m.group(1).replace(",", "")))
+                val = float(m.group(1).replace(",", ""))
             except ValueError:
-                pass
+                continue
+            found.append(val)
+            unit = (m.group(2) or "").lower()            # "Rs 5 crore" in a fact also grounds 5,00,00,000
+            if unit in ("lakh", "lakhs"):
+                found.append(val * 1e5)
+            elif unit in ("crore", "cr"):
+                found.append(val * 1e7)
     elif isinstance(obj, dict):
         for v in obj.values():
             found += _fact_numbers(v)
