@@ -87,8 +87,8 @@ pip install -r requirements.txt
 python run_demo.py                     # all four scenarios, offline, auto-approve
 python run_demo.py -s S2 --interactive # you are the approver at the interrupt
 python run_demo.py -s S1 --reject      # rejection path
-pytest                                 # 47 tests: rules, workflow, RAG, LLM gateway
-python -m evals.run_evals              # 22-case control-effectiveness evaluation
+pytest                                 # 47 tests (always offline, even if .env sets a model)
+python -m evals.run_evals              # 22-case control evaluation (offline; EVAL_WITH_LLM=1 to use the model)
 python -m evals.rag_eval               # 22 policy questions: does retrieval find the right clause?
 python run_demo.py --ask "Can I split an order to avoid three quotes?"   # Policy Advisor (RAG)
 python -m agentprocure.business_case   # ROI, payback, NPV (3 scenarios)

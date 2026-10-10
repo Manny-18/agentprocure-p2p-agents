@@ -10,11 +10,17 @@ from __future__ import annotations
 
 import copy
 import json
+import os
 import sys
 from contextlib import contextmanager
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
+# The evaluation scores the controls (rules), so it runs offline unless EVAL_WITH_LLM=1:
+# fast, repeatable, and it does not spend API quota.
+if os.getenv("EVAL_WITH_LLM") != "1":
+    os.environ["LLM_PROVIDER"] = "offline"
 
 from agentprocure import config  # noqa: E402
 from agentprocure.graph import run_case  # noqa: E402
