@@ -6,6 +6,8 @@ specialist AI agents. Each agent behaves like a real role in a P2P organisation 
 domain rules for Indian compliance: GST, e-invoicing, TDS under the Income-tax Act 2025, the MSMED
 Act 45-day rule and the procurement policy.
 
+**Try it live:** [https://agentprocure-p2p-agents-van3xrh4oacpderhfwkasy.streamlit.app/](https://agentprocure-p2p-agents-van3xrh4oacpderhfwkasy.streamlit.app/) runs the real agents in your browser (Streamlit Community Cloud; if it has been idle, the first visit takes about a minute to wake it).
+
 It uses six tools, each where it fits best:
 
 | Tool | Role in the project |
@@ -124,6 +126,8 @@ for the daily reset.
 * **Defect lab**: run any of the 22 injected-defect evaluation cases, or all 22 at once, and see which control fired.
 * **Ask the Policy Advisor**: RAG answers with clause citations and the retrieved clauses.
 * **How it works**: the case graph drawn from the compiled LangGraph object, and the six tools.
+
+Live deployment: [https://agentprocure-p2p-agents-van3xrh4oacpderhfwkasy.streamlit.app/](https://agentprocure-p2p-agents-van3xrh4oacpderhfwkasy.streamlit.app/).
 
 **Deploy free on Streamlit Community Cloud:** sign in at [share.streamlit.io](https://share.streamlit.io) with GitHub,
 choose *Create app* > *Deploy a public app from GitHub*, repository `Manny-18/agentprocure-p2p-agents`, branch `main`,
