@@ -1,0 +1,37 @@
+{
+  "name": "Meridian Precision Components Pvt. Ltd.",
+  "note": "Fictional company created for this academic project. All names, GSTINs and figures are illustrative.",
+  "plant": "Chakan MIDC, Pune, Maharashtra",
+  "industry": "Auto components (Tier-1 supplier of transmission housings and shafts)",
+  "gstin": "27AAKCM4821Q1ZU",
+  "pan": "AAKCM4821Q",
+  "state_code": "27",
+  "prev_year_turnover_cr": 420,
+  "tax_year": "2026-27",
+  "tax_year_end": "2027-03-31",
+  "as_of": "2026-10-10",
+  "cost_of_funds_pct": 9.25,
+  "rbi_bank_rate_pct": 5.75,
+  "rbi_bank_rate_note": "Bank Rate 5.75% after the RBI MPC decision of 7 Oct 2026 (repo 5.50%).",
+  "doa": [
+    {"max": 200000, "approver": "Department Head"},
+    {"max": 1000000, "approver": "Plant Head"},
+    {"max": 10000000, "approver": "CFO"},
+    {"max": null, "approver": "Managing Director"}
+  ],
+  "quote_rules": [
+    {"max": 50000, "min_quotes": 1, "rfq_required": false},
+    {"max": 500000, "min_quotes": 2, "rfq_required": false},
+    {"max": 2500000, "min_quotes": 3, "rfq_required": false},
+    {"max": null, "min_quotes": 3, "rfq_required": true}
+  ],
+  "match_tolerance": {"price_pct": 1.0, "amount_abs": 500},
+  "split_window_days": 30,
+  "bank_change_cooling_days": 30,
+  "budgets": {
+    "CC-PRD-210": {"name": "Production - Die-casting line", "fy_budget": 25000000, "consumed": 17650000, "committed": 3100000},
+    "CC-PRD-230": {"name": "Production - Machining cell", "fy_budget": 14000000, "consumed": 8820000, "committed": 1450000},
+    "CC-MNT-410": {"name": "Maintenance - Electrical", "fy_budget": 6000000, "consumed": 2140000, "committed": 600000},
+    "CC-LOG-520": {"name": "Logistics - Packaging", "fy_budget": 12000000, "consumed": 6930000, "committed": 900000}
+  }
+}

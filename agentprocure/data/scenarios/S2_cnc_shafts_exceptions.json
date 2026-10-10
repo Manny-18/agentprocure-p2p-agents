@@ -1,0 +1,65 @@
+{
+  "id": "S2",
+  "title": "CNC shafts: invoice price variance and QC rejection",
+  "story": "The machining cell orders 2,500 hardened shafts. The supplier invoices 3.2% above the PO price and bills for all 2,500 pieces, although quality rejected 120. The agents must pay only what is owed, hold the rest and get a credit note.",
+  "learning_points": [
+    "3-way match (PO vs GRN vs invoice) with tolerance rules",
+    "Pay the undisputed amount on time; hold only the disputed part",
+    "GST credit note and input-tax-credit treatment for rejected and overcharged quantities",
+    "A quote that cannot meet the need-by date is excluded even if it is cheapest"
+  ],
+  "requisition": {
+    "pr_no": "PR-26-0904",
+    "date": "2026-09-10",
+    "requester": "Priya Nair",
+    "department": "Machining Cell",
+    "cost_center": "CC-PRD-230",
+    "request_text": "Raise PR for 2500 EN8 transmission shafts, machined and induction hardened (drawing SFT-EN8-220), needed by 15 Oct 2026. Expected around Rs 7.4 lakh.",
+    "item": {"code": "SFT-EN8-220", "description": "EN8 transmission shaft, machined and induction hardened", "hsn": "8483", "uom": "nos", "qty": 2500, "need_by": "2026-10-15"},
+    "estimated_value": 740000,
+    "category": "machined components",
+    "criticality": "medium",
+    "annual_volume_qty": 40000,
+    "single_source": false,
+    "justification": null
+  },
+  "quotes": [
+    {"vendor_id": "V-104", "unit_price": 284.0, "freight": 0, "lead_time_days": 21},
+    {"vendor_id": "V-102", "unit_price": 318.0, "freight": 0, "lead_time_days": 30},
+    {"vendor_id": "V-109", "unit_price": 279.0, "freight": 8000, "lead_time_days": 35}
+  ],
+  "should_cost": {"material_kg": 1.6, "material_rate_per_kg": 72, "conversion": 95, "secondary_ops": 28, "overhead_margin_pct": 15},
+  "pr_history": [],
+  "po_date": "2026-09-12",
+  "grn": {"grn_no": "GRN-26-10-0147", "received_date": "2026-10-06", "accepted_date": "2026-10-08", "received_qty": 2500, "accepted_qty": 2380, "rejected_qty": 120, "remarks": "120 pcs rejected: case depth below spec (hardness)"},
+  "invoice": {
+    "invoice_no": "NCE/2627/1182",
+    "vendor_id": "V-104",
+    "date": "2026-10-06",
+    "received_on": "2026-10-07",
+    "supplier_gstin": "33AAFCN6620H1ZN",
+    "buyer_gstin": "27AAKCM4821Q1ZU",
+    "place_of_supply": "27",
+    "lines": [{"hsn": "8483", "qty": 2500, "unit_price": 293.10}],
+    "freight": 0,
+    "igst": 131895.0, "cgst": 0, "sgst": 0,
+    "total": 864645.0,
+    "irn": "7c2e9a41f0b3d5e8a6c1f9d2b7e4a0c3f8d1e6b9a2c5f0e7d4b1a8c3e6f9d2b5",
+    "irn_date": "2026-10-06",
+    "bank_account_masked": "XXXXXX7702",
+    "in_gstr2b": true
+  },
+  "invoice_history": [
+    {"vendor_id": "V-104", "invoice_no": "NCE/2627/0961", "date": "2026-08-21", "total": 702100.0}
+  ],
+  "open_payables": [],
+  "expected": {
+    "final_status": "COMPLETED_WITH_HOLD",
+    "vendor": "V-104",
+    "approver": "Plant Head",
+    "exceptions": ["PRICE_VARIANCE", "QTY_EXCEEDS_ACCEPTED"],
+    "approved_payable": 797585.60,
+    "disputed_amount": 67059.40,
+    "tds_amount": 0
+  }
+}

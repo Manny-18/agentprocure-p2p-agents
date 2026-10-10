@@ -1,0 +1,9 @@
+{
+  "note": "GST rates after the GST 2.0 rationalisation effective 22 Sep 2025 (main slabs 5% / 18% / 40%). Demo subset only; always confirm the rate against the current CBIC rate notification for the exact HSN.",
+  "rates": {
+    "7616": {"description": "Other articles of aluminium (incl. aluminium castings)", "rate": 18},
+    "8483": {"description": "Transmission shafts, cranks, bearing housings", "rate": 18},
+    "8537": {"description": "Boards, panels and consoles for electric control", "rate": 18},
+    "3923": {"description": "Plastic articles for the conveyance or packing of goods", "rate": 18}
+  }
+}

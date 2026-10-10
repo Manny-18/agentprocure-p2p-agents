@@ -1,0 +1,114 @@
+{
+  "note": "Fictional vendor master. GSTINs are syntactically constructed for the demo and do not belong to real businesses.",
+  "vendors": {
+    "V-101": {
+      "name": "Deccan Precision Castings Pvt. Ltd.",
+      "city": "Pune", "state_code": "27",
+      "gstin": "27AADCD5172K1ZG", "pan": "AADCD5172K", "gst_status": "Active",
+      "msme": {"category": "small", "udyam": "UDYAM-MH-26-0187342", "registered_on": "2022-07-14"},
+      "aato_cr": 38,
+      "bank": {"account_masked": "XXXXXX4471", "changed_on": null, "change_verified": true},
+      "performance": {"quality_ppm": 850, "otif_pct": 94, "financial_risk": 2, "compliance_score": 85},
+      "terms": {"payment_days": 45, "written_agreement": true, "discount": {"pct": 1.5, "days": 10}},
+      "approved": true, "categories": ["aluminium castings"],
+      "purchases_ty_to_date": 2860000
+    },
+    "V-102": {
+      "name": "Tungabhadra Alloy Castings Ltd.",
+      "city": "Hubballi", "state_code": "29",
+      "gstin": "29AABCT8834R1ZD", "pan": "AABCT8834R", "gst_status": "Active",
+      "msme": {"category": "none", "udyam": null, "registered_on": null},
+      "aato_cr": 610,
+      "bank": {"account_masked": "XXXXXX0928", "changed_on": null, "change_verified": true},
+      "performance": {"quality_ppm": 420, "otif_pct": 97, "financial_risk": 1, "compliance_score": 90},
+      "terms": {"payment_days": 60, "written_agreement": true, "discount": {"pct": 1.0, "days": 15}},
+      "approved": true, "categories": ["aluminium castings", "machined components"],
+      "purchases_ty_to_date": 11200000
+    },
+    "V-103": {
+      "name": "Sabarmati Foundry Works",
+      "city": "Ahmedabad", "state_code": "24",
+      "gstin": "24AAQFS2291M1ZM", "pan": "AAQFS2291M", "gst_status": "Active",
+      "msme": {"category": "micro", "udyam": "UDYAM-GJ-01-0044219", "registered_on": "2021-02-03"},
+      "aato_cr": 4.2,
+      "bank": {"account_masked": "XXXXXX3310", "changed_on": null, "change_verified": true},
+      "performance": {"quality_ppm": 1900, "otif_pct": 86, "financial_risk": 3, "compliance_score": 70},
+      "terms": {"payment_days": 30, "written_agreement": true, "discount": null},
+      "approved": true, "categories": ["aluminium castings"],
+      "purchases_ty_to_date": 0
+    },
+    "V-104": {
+      "name": "Noyyal CNC Engineering Pvt. Ltd.",
+      "city": "Coimbatore", "state_code": "33",
+      "gstin": "33AAFCN6620H1ZN", "pan": "AAFCN6620H", "gst_status": "Active",
+      "msme": {"category": "medium", "udyam": "UDYAM-TN-03-0091876", "registered_on": "2020-11-20"},
+      "aato_cr": 92,
+      "bank": {"account_masked": "XXXXXX7702", "changed_on": null, "change_verified": true},
+      "performance": {"quality_ppm": 610, "otif_pct": 95, "financial_risk": 2, "compliance_score": 88},
+      "terms": {"payment_days": 45, "written_agreement": true, "discount": null},
+      "approved": true, "categories": ["machined components"],
+      "purchases_ty_to_date": 3800000
+    },
+    "V-105": {
+      "name": "Voltline Switchgear Solutions Pvt. Ltd.",
+      "city": "Faridabad", "state_code": "06",
+      "gstin": "06AAHCV3371L1Z4", "pan": "AAHCV3317L", "gst_status": "Active",
+      "msme": {"category": "small", "udyam": "UDYAM-HR-05-0120934", "registered_on": "2024-01-09"},
+      "aato_cr": 14,
+      "bank": {"account_masked": "XXXXXX9015", "changed_on": "2026-10-04", "change_verified": false,
+               "change_channel": "email request from vendor contact"},
+      "performance": {"quality_ppm": 700, "otif_pct": 90, "financial_risk": 3, "compliance_score": 60},
+      "terms": {"payment_days": 30, "written_agreement": true, "discount": null},
+      "approved": true, "categories": ["electrical panels"],
+      "purchases_ty_to_date": 900000
+    },
+    "V-106": {
+      "name": "Godavari Packaging Industries",
+      "city": "Nashik", "state_code": "27",
+      "gstin": "27ABJPK7745D1ZI", "pan": "ABJPK7745D", "gst_status": "Active",
+      "msme": {"category": "micro", "udyam": "UDYAM-MH-20-0033815", "registered_on": "2021-06-30"},
+      "aato_cr": 3.6,
+      "bank": {"account_masked": "XXXXXX5528", "changed_on": null, "change_verified": true},
+      "performance": {"quality_ppm": 300, "otif_pct": 98, "financial_risk": 2, "compliance_score": 88},
+      "terms": {"payment_days": 30, "written_agreement": true, "discount": null},
+      "approved": true, "categories": ["packaging"],
+      "purchases_ty_to_date": 4620000
+    },
+    "V-107": {
+      "name": "Mula Industrial Supplies",
+      "city": "Pune", "state_code": "27",
+      "gstin": "27AAKFM9032B1ZE", "pan": "AAKFM9032B", "gst_status": "Active",
+      "msme": {"category": "small", "udyam": "UDYAM-MH-26-0201177", "registered_on": "2023-03-15"},
+      "aato_cr": 22,
+      "bank": {"account_masked": "XXXXXX6612", "changed_on": null, "change_verified": true},
+      "performance": {"quality_ppm": 650, "otif_pct": 92, "financial_risk": 2, "compliance_score": 82},
+      "terms": {"payment_days": 45, "written_agreement": true, "discount": null},
+      "approved": true, "categories": ["packaging", "MRO"],
+      "purchases_ty_to_date": 1250000
+    },
+    "V-108": {
+      "name": "Pavana Polymers Pvt. Ltd.",
+      "city": "Pune", "state_code": "27",
+      "gstin": "27AADCP4410N1ZB", "pan": "AADCP4410N", "gst_status": "Active",
+      "msme": {"category": "small", "udyam": "UDYAM-MH-26-0154420", "registered_on": "2022-09-01"},
+      "aato_cr": 17,
+      "bank": {"account_masked": "XXXXXX2290", "changed_on": null, "change_verified": true},
+      "performance": {"quality_ppm": 900, "otif_pct": 89, "financial_risk": 3, "compliance_score": 78},
+      "terms": {"payment_days": 45, "written_agreement": true, "discount": null},
+      "approved": true, "categories": ["packaging"],
+      "purchases_ty_to_date": 0
+    },
+    "V-109": {
+      "name": "Vaigai Turned Components Pvt. Ltd.",
+      "city": "Madurai", "state_code": "33",
+      "gstin": "33AAGCV5518E1ZH", "pan": "AAGCV5518E", "gst_status": "Active",
+      "msme": {"category": "small", "udyam": "UDYAM-TN-14-0066231", "registered_on": "2022-12-12"},
+      "aato_cr": 11,
+      "bank": {"account_masked": "XXXXXX8841", "changed_on": null, "change_verified": true},
+      "performance": {"quality_ppm": 1400, "otif_pct": 88, "financial_risk": 3, "compliance_score": 76},
+      "terms": {"payment_days": 45, "written_agreement": true, "discount": null},
+      "approved": true, "categories": ["machined components"],
+      "purchases_ty_to_date": 0
+    }
+  }
+}

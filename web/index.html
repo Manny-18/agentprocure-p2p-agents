@@ -1,0 +1,1056 @@
+<title>AgentProcure</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500..800&family=IBM+Plex+Mono:wght@400;500&family=Public+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<style>
+/* Layout: a P2P "case desk" - sticky top bar and section tabs; case folders; pipeline rail on the left,
+   the selected agent's working sheet on the right; labs and briefings as card grids below. */
+:root {
+  --paper: #eceff4;
+  --sheet: #ffffff;
+  --sheet-2: #f6f7fa;
+  --ink: #18202d;
+  --muted: #586274;
+  --rule: #d3d9e2;
+  --carbon: #2a44c4;
+  --carbon-soft: #e4e9fb;
+  --ok: #1b7548;
+  --ok-soft: #ddf0e5;
+  --hold: #9a5d06;
+  --hold-soft: #f9ecd3;
+  --block: #bb3127;
+  --block-soft: #fadfdb;
+  --tint-pink: #f7e1e6;
+  --tint-yellow: #f8efc6;
+  --shadow: 0 1px 2px rgba(24, 32, 45, .06), 0 4px 14px rgba(24, 32, 45, .06);
+  --f-display: "Archivo", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
+  --f-body: "Public Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --step--1: .8125rem;
+  --step-0: .9375rem;
+  --step-1: 1.125rem;
+  --step-2: 1.4rem;
+  --step-3: 2rem;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0e131b; --sheet: #151c27; --sheet-2: #1a2230; --ink: #e5eaf2; --muted: #9ba6b8; --rule: #2a3445;
+    --carbon: #93a4ff; --carbon-soft: #1f2846; --ok: #56c892; --ok-soft: #15301f; --hold: #e7b453; --hold-soft: #352a12;
+    --block: #ff8174; --block-soft: #3a1c19; --tint-pink: #3a232a; --tint-yellow: #36301a;
+    --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 6px 18px rgba(0, 0, 0, .25);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #0e131b; --sheet: #151c27; --sheet-2: #1a2230; --ink: #e5eaf2; --muted: #9ba6b8; --rule: #2a3445;
+  --carbon: #93a4ff; --carbon-soft: #1f2846; --ok: #56c892; --ok-soft: #15301f; --hold: #e7b453; --hold-soft: #352a12;
+  --block: #ff8174; --block-soft: #3a1c19; --tint-pink: #3a232a; --tint-yellow: #36301a;
+  --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 6px 18px rgba(0, 0, 0, .25);
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--paper); color: var(--ink); font-family: var(--f-body); font-size: var(--step-0); line-height: 1.55; }
+h1, h2, h3, h4 { font-family: var(--f-display); text-wrap: balance; margin: 0; line-height: 1.15; }
+p { margin: 0; }
+button, input, select, textarea { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--carbon); outline-offset: 2px; }
+.mono { font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
+.muted { color: var(--muted); }
+.wrap { max-width: 1240px; margin: 0 auto; padding-inline: clamp(16px, 3vw, 32px); }
+
+/* top bar */
+.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 10; background: var(--sheet); border-bottom: 1px solid var(--rule); }
+.top .wrap { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; padding-block: 12px; }
+.brand { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.brand b { font-family: var(--f-display); font-weight: 800; font-stretch: 112%; font-size: 1.35rem; letter-spacing: -.01em; }
+.brand b span { color: var(--carbon); }
+.brand small { color: var(--muted); font-size: var(--step--1); }
+@media (max-width: 1100px) { .brand small { display: none; } }
+.tabs { display: flex; gap: 4px; margin-left: auto; flex-wrap: wrap; }
+.tab { border: 1px solid transparent; background: none; padding: 7px 12px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: var(--step--1); color: var(--muted); }
+.tab:hover { color: var(--ink); background: var(--sheet-2); }
+.tab[aria-selected="true"] { color: var(--carbon); background: var(--carbon-soft); }
+
+main { padding-block: 28px 64px; }
+section.view { display: grid; gap: 22px; }
+
+/* hero line */
+.lede { display: grid; gap: 10px; max-width: 78ch; }
+.eyebrow { font-family: var(--f-display); font-stretch: 80%; font-weight: 700; text-transform: uppercase; letter-spacing: .12em; font-size: .78rem; color: var(--carbon); }
+.lede h1 { font-size: clamp(1.6rem, 1.1rem + 2vw, 2.4rem); font-weight: 800; font-stretch: 92%; }
+.lede p { color: var(--muted); max-width: 70ch; }
+
+/* case folders */
+.folders { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.folder { text-align: left; border: 1px solid var(--rule); background: var(--sheet); border-radius: 10px 10px 6px 6px; padding: 12px 14px 14px; cursor: pointer; display: grid; gap: 6px; position: relative; min-width: 0; }
+.folder:hover { border-color: var(--carbon); }
+.folder[aria-pressed="true"] { border-color: var(--carbon); box-shadow: inset 0 3px 0 var(--carbon); }
+.folder .fid { font-family: var(--f-mono); font-size: var(--step--1); color: var(--muted); }
+.folder .ftitle { font-weight: 600; line-height: 1.3; font-size: var(--step--1); }
+.stamp { font-family: var(--f-display); font-stretch: 72%; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; font-size: .72rem;
+  border: 2px solid currentColor; border-radius: 3px; padding: .1em .45em; display: inline-block; transform: rotate(-3deg); width: max-content; max-width: 100%; line-height: 1.5; }
+.st-ok { color: var(--ok); } .st-hold { color: var(--hold); } .st-block { color: var(--block); } .st-info { color: var(--carbon); }
+.stamp.big { font-size: 1.05rem; border-width: 3px; transform: rotate(-5deg); }
+
+/* case head */
+.casehead { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 18px; align-items: start; }
+.casehead .story { display: grid; gap: 10px; }
+.casehead h2 { font-size: var(--step-2); font-weight: 750; font-stretch: 95%; }
+.slip { background: var(--sheet); border: 1px dashed var(--muted); border-radius: 4px; padding: 12px 14px; display: grid; gap: 6px; font-size: var(--step--1); }
+.slip .lbl { font-family: var(--f-display); font-stretch: 75%; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; font-size: .7rem; color: var(--muted); display: flex; justify-content: space-between; gap: 8px; }
+.slip q { font-family: var(--f-mono); quotes: none; display: block; line-height: 1.5; }
+.learn { margin: 0; padding-left: 18px; color: var(--muted); font-size: var(--step--1); display: grid; gap: 2px; }
+
+/* controls */
+.controls { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.btn { border: 1px solid var(--rule); background: var(--sheet); border-radius: 6px; padding: 8px 14px; font-weight: 600; cursor: pointer; font-size: var(--step--1); }
+.btn:hover:not(:disabled) { border-color: var(--carbon); color: var(--carbon); }
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+.btn.primary { background: var(--carbon); color: var(--sheet); border-color: var(--carbon); }
+.btn.primary:hover:not(:disabled) { color: var(--sheet); filter: brightness(1.08); }
+.btn.approve { background: var(--ok); border-color: var(--ok); color: var(--sheet); }
+.btn.reject { background: var(--sheet); border-color: var(--block); color: var(--block); }
+.progress { font-family: var(--f-mono); font-size: var(--step--1); color: var(--muted); margin-left: auto; }
+
+/* desk grid */
+.desk { display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 18px; align-items: start; }
+.rail { background: var(--sheet); border: 1px solid var(--rule); border-radius: 10px; padding: 10px; display: grid; gap: 2px; position: sticky; top: calc(env(safe-area-inset-top, 0px) + 76px); }
+.node { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 10px; align-items: start; padding: 8px 8px; border-radius: 7px; border: 1px solid transparent; background: none; text-align: left; cursor: pointer; position: relative; width: 100%; }
+.node:disabled { cursor: default; }
+.node .dot { width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--rule); margin-top: 3px; margin-left: 4px; background: var(--sheet); position: relative; z-index: 1; }
+.node:not(:last-child)::after { content: ""; position: absolute; left: 18px; top: 24px; bottom: -6px; width: 2px; background: var(--rule); }
+.node .nt { font-weight: 600; font-size: var(--step--1); line-height: 1.3; }
+.node .nf { font-family: var(--f-mono); font-size: .72rem; color: var(--muted); }
+.node .nd { font-size: .78rem; color: var(--muted); line-height: 1.35; margin-top: 2px; }
+.node.done .dot { background: var(--carbon); border-color: var(--carbon); }
+.node.done.v-ok .dot { background: var(--ok); border-color: var(--ok); }
+.node.done.v-hold .dot { background: var(--hold); border-color: var(--hold); }
+.node.done.v-block .dot { background: var(--block); border-color: var(--block); }
+.node.skipped { opacity: .45; }
+.node.skipped .nd { font-style: italic; }
+.node.waiting .dot { border-color: var(--hold); background: var(--hold-soft); }
+.node[aria-current="step"] { background: var(--carbon-soft); border-color: var(--carbon); }
+.sub { display: grid; gap: 1px; margin-top: 4px; }
+.sub span { font-size: .74rem; color: var(--muted); padding-left: 10px; border-left: 2px solid var(--tint-pink); }
+
+/* sheet */
+.sheet { background: var(--sheet); border: 1px solid var(--rule); border-radius: 10px; box-shadow: var(--shadow); padding: clamp(16px, 2.4vw, 26px); display: grid; gap: 18px; min-width: 0; }
+.sheet-head { display: flex; gap: 12px; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; }
+.sheet-head h3 { font-size: var(--step-2); font-weight: 750; font-stretch: 95%; }
+.badge { font-family: var(--f-mono); font-size: .72rem; padding: 3px 8px; border-radius: 4px; border: 1px solid var(--rule); white-space: nowrap; }
+.fw-langgraph { background: var(--carbon-soft); }
+.fw-crewai { background: var(--tint-pink); }
+.fw-human { background: var(--tint-yellow); }
+.mandate { color: var(--muted); font-size: var(--step--1); max-width: 70ch; }
+.decision { font-family: var(--f-display); font-weight: 700; font-stretch: 92%; font-size: var(--step-1); line-height: 1.3; padding: 12px 14px; border-radius: 6px; background: var(--sheet-2); border-left: 4px solid var(--carbon); }
+.decision.v-ok { border-left-color: var(--ok); } .decision.v-hold { border-left-color: var(--hold); } .decision.v-block { border-left-color: var(--block); }
+.chips { display: flex; gap: 6px; flex-wrap: wrap; }
+.chip { font-size: .78rem; padding: 3px 9px; border-radius: 999px; background: var(--sheet-2); border: 1px solid var(--rule); }
+.blk-title { font-family: var(--f-display); font-stretch: 78%; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; font-size: .72rem; color: var(--muted); margin-bottom: 8px; }
+.tools { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; }
+.tools li { display: grid; grid-template-columns: minmax(150px, max-content) minmax(0, 1fr); gap: 12px; font-size: var(--step--1); padding: 6px 0; border-bottom: 1px dotted var(--rule); }
+.tools code { font-family: var(--f-mono); color: var(--carbon); font-size: .78rem; }
+.finds { display: grid; gap: 6px; }
+.find { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 10px; align-items: start; font-size: var(--step--1); padding: 8px 10px; border-radius: 6px; background: var(--sheet-2); }
+.sev { font-family: var(--f-mono); font-size: .68rem; font-weight: 500; padding: 2px 6px; border-radius: 3px; white-space: nowrap; }
+.sev-BLOCK, .sev-HIGH { background: var(--block-soft); color: var(--block); }
+.sev-HOLD, .sev-WARN { background: var(--hold-soft); color: var(--hold); }
+.sev-INFO { background: var(--carbon-soft); color: var(--carbon); }
+.find b { font-family: var(--f-mono); font-weight: 500; font-size: .76rem; }
+.why { display: grid; gap: 6px; }
+.why p { white-space: pre-line; max-width: 75ch; }
+.why .src { font-size: .74rem; color: var(--muted); font-family: var(--f-mono); }
+.crew { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.crew article { background: var(--tint-pink); border-radius: 8px; padding: 12px; display: grid; gap: 6px; align-content: start; font-size: var(--step--1); min-width: 0; }
+.crew h4 { font-size: .9rem; font-weight: 700; }
+.tbl-wrap { overflow-x: auto; border: 1px solid var(--rule); border-radius: 8px; }
+table { border-collapse: collapse; width: 100%; font-size: var(--step--1); }
+th, td { padding: 7px 10px; text-align: left; border-bottom: 1px solid var(--rule); white-space: nowrap; }
+th { font-family: var(--f-display); font-stretch: 80%; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; font-size: .7rem; color: var(--muted); background: var(--sheet-2); }
+td.num, th.num { text-align: right; font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
+tr.win td { background: var(--ok-soft); }
+tr.out td { color: var(--muted); }
+tbody tr:last-child td { border-bottom: 0; }
+pre.mail { background: var(--sheet-2); border: 1px solid var(--rule); border-radius: 6px; padding: 12px; font-family: var(--f-mono); font-size: .76rem; white-space: pre-wrap; margin: 0; overflow-x: auto; }
+.approval { border: 2px dashed var(--hold); background: var(--hold-soft); border-radius: 10px; padding: 16px; display: grid; gap: 10px; }
+.approval h4 { font-size: var(--step-1); }
+.kv { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 4px 16px; font-size: var(--step--1); }
+.kv dt { color: var(--muted); }
+.kv dd { margin: 0; }
+
+/* memo + kpis */
+.memo { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 18px; }
+.memo-card { background: var(--sheet); border: 1px solid var(--rule); border-radius: 10px; padding: 20px; display: grid; gap: 12px; align-content: start; min-width: 0; }
+.memo-card ul { margin: 0; padding-left: 18px; display: grid; gap: 6px; font-size: var(--step--1); }
+.kpis { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; align-content: start; }
+.kpi { background: var(--sheet); border: 1px solid var(--rule); border-radius: 8px; padding: 12px; display: grid; gap: 2px; min-width: 0; }
+.kpi span { font-size: .74rem; color: var(--muted); }
+.kpi b { font-family: var(--f-mono); font-weight: 500; font-size: 1.05rem; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+
+/* lab */
+.grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; align-items: start; }
+.card { background: var(--sheet); border: 1px solid var(--rule); border-radius: 10px; padding: 18px; display: grid; gap: 14px; align-content: start; min-width: 0; }
+.card h3 { font-size: var(--step-1); font-weight: 750; }
+.card .rule-ref { font-size: .74rem; color: var(--muted); font-family: var(--f-mono); }
+.fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 12px; }
+.field { display: grid; gap: 4px; font-size: .78rem; color: var(--muted); min-width: 0; }
+.field input, .field select, textarea { background: var(--sheet-2); border: 1px solid var(--rule); border-radius: 6px; padding: 7px 9px; font-family: var(--f-mono); font-size: .85rem; color: var(--ink); width: 100%; min-width: 0; }
+.field.check { grid-template-columns: auto 1fr; align-items: center; gap: 8px; color: var(--ink); font-size: var(--step--1); }
+.field.check input { width: auto; }
+.out { background: var(--sheet-2); border-radius: 8px; padding: 12px 14px; display: grid; gap: 6px; font-size: var(--step--1); }
+.out .big { font-family: var(--f-mono); font-size: 1.25rem; font-variant-numeric: tabular-nums; }
+.presets { display: flex; gap: 6px; flex-wrap: wrap; }
+.presets button { font-size: .74rem; padding: 4px 9px; }
+
+/* ask */
+.ask { display: grid; grid-template-columns: 280px minmax(0, 1fr); gap: 16px; align-items: start; }
+.agents { display: grid; gap: 4px; }
+.agents label { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 8px; align-items: start; padding: 7px 9px; border-radius: 6px; cursor: pointer; font-size: var(--step--1); border: 1px solid transparent; }
+.agents label:has(input:checked) { background: var(--carbon-soft); border-color: var(--carbon); }
+.agents small { display: block; color: var(--muted); font-size: .72rem; }
+textarea { font-family: var(--f-body); font-size: var(--step-0); min-height: 84px; resize: vertical; }
+.answer { white-space: pre-wrap; background: var(--sheet-2); border-radius: 8px; padding: 14px; min-height: 80px; font-size: var(--step-0); max-width: 80ch; }
+.note { font-size: .78rem; color: var(--muted); }
+.notice { border: 1px solid var(--rule); border-radius: 8px; padding: 10px 12px; font-size: var(--step--1); background: var(--sheet-2); }
+
+/* built */
+.tri { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.tri .card:nth-child(1) { background: var(--carbon-soft); }
+.tri .card:nth-child(2) { background: var(--tint-pink); }
+.tri .card:nth-child(3) { background: var(--tint-yellow); }
+.bars { display: grid; gap: 8px; }
+.bar { display: grid; grid-template-columns: minmax(0, 210px) minmax(0, 1fr) 70px; gap: 10px; align-items: center; font-size: var(--step--1); }
+.bar .track { background: var(--sheet-2); border-radius: 4px; height: 14px; overflow: hidden; }
+.bar .fill { height: 100%; background: var(--carbon); border-radius: 4px; }
+.bar .v { font-family: var(--f-mono); text-align: right; }
+pre.mermaid { background: var(--sheet); border: 1px solid var(--rule); border-radius: 10px; padding: 16px; overflow-x: auto; font-size: .78rem; margin: 0; }
+.foot { font-size: .76rem; color: var(--muted); border-top: 1px solid var(--rule); padding-top: 14px; }
+
+@media (max-width: 1000px) {
+  .desk { grid-template-columns: minmax(0, 1fr); }
+  .rail { position: static; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 6px; }
+  .node::after { display: none; }
+  .node { border-color: var(--rule); }
+  .sub { display: none; }
+  .casehead, .memo, .ask { grid-template-columns: minmax(0, 1fr); }
+  .crew, .tri { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 760px) {
+  .folders { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .grid2, .fields { grid-template-columns: minmax(0, 1fr); }
+  .tools li { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+  .tabs { margin-left: 0; }
+  .bar { grid-template-columns: minmax(0, 1fr) 70px; }
+  .bar .track { grid-column: 1 / -1; grid-row: 2; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .sheet { animation: rise .28s ease-out; }
+  @keyframes rise { from { transform: translateY(4px); } to { transform: none; } }
+}
+</style>
+
+<header class="top">
+  <div class="wrap">
+    <div class="brand"><b>Agent<span>Procure</span></b><small id="ctx"></small></div>
+    <nav class="tabs" role="tablist" aria-label="Sections">
+      <button class="tab" role="tab" id="tab-desk" aria-controls="desk" aria-selected="true">Case desk</button>
+      <button class="tab" role="tab" id="tab-lab" aria-controls="lab" aria-selected="false">What-if lab</button>
+      <button class="tab" role="tab" id="tab-ask" aria-controls="ask" aria-selected="false">Ask the agents</button>
+      <button class="tab" role="tab" id="tab-built" aria-controls="built" aria-selected="false">How it's built</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <!-- CASE DESK -->
+  <section class="view" id="desk" role="tabpanel" aria-labelledby="tab-desk">
+    <div class="lede">
+      <span class="eyebrow">Procure-to-Pay, run by specialist agents</span>
+      <h1>Eleven expert agents take a purchase from request to payment, and stop it when they should.</h1>
+      <p>Pick a case file. Every step below is the real output of the Python system (LangGraph workflow, CrewAI sourcing crew, tested Indian compliance rules). Run a case step by step to act as the approver yourself.</p>
+    </div>
+    <div class="folders" id="folders"></div>
+    <div class="casehead" id="casehead"></div>
+    <div class="controls">
+      <button class="btn primary" id="run">Run this case step by step</button>
+      <button class="btn" id="prev">Previous step</button>
+      <button class="btn" id="next">Next step</button>
+      <button class="btn" id="showall">Show finished case</button>
+      <span class="progress" id="progress"></span>
+    </div>
+    <div class="desk">
+      <nav class="rail" id="rail" aria-label="Agent pipeline"></nav>
+      <article class="sheet" id="sheet" aria-live="polite"></article>
+    </div>
+    <div class="memo" id="memo"></div>
+  </section>
+
+  <!-- WHAT-IF LAB -->
+  <section class="view" id="lab" role="tabpanel" aria-labelledby="tab-lab" hidden>
+    <div class="lede">
+      <span class="eyebrow">The rules engine behind the agents</span>
+      <h1>Change the numbers and watch each control decide.</h1>
+      <p>These are the same deterministic rules the agents call as tools (ported line for line from the Python package and checked against it). The LLM never produces these figures.</p>
+    </div>
+    <div class="grid2">
+      <div class="card" id="lab-match">
+        <div><h3>3-way match: PO vs goods receipt vs invoice</h3><div class="rule-ref">AP Specialist + Exception Resolver | price tolerance 1%</div></div>
+        <div class="presets"><button class="btn" data-preset="s2">Load case S2</button><button class="btn" data-preset="clean">Clean invoice</button></div>
+        <div class="fields">
+          <label class="field">PO price (Rs/unit)<input id="m-po" type="number" step="0.01" value="284"></label>
+          <label class="field">Invoice price (Rs/unit)<input id="m-inv" type="number" step="0.01" value="293.10"></label>
+          <label class="field">PO quantity<input id="m-poq" type="number" value="2500"></label>
+          <label class="field">Accepted at GRN<input id="m-acc" type="number" value="2380"></label>
+          <label class="field">Invoiced quantity<input id="m-invq" type="number" value="2500"></label>
+          <label class="field">GST rate<select id="m-rate"><option value="5">5%</option><option value="18" selected>18%</option><option value="40">40%</option></select></label>
+        </div>
+        <div class="out" id="o-match"></div>
+      </div>
+      <div class="card" id="lab-tds">
+        <div><h3>TDS on purchase of goods</h3><div class="rule-ref">Income-tax Act 2025 s.393(1) Table Sl. 8(ii), formerly s.194Q</div></div>
+        <div class="presets"><button class="btn" data-preset="s4">Load case S4</button><button class="btn" data-preset="s1">Load case S1</button></div>
+        <div class="fields">
+          <label class="field">Purchases from this seller so far this tax year (Rs)<input id="t-cum" type="number" value="4620000"></label>
+          <label class="field">This invoice, taxable value (Rs)<input id="t-this" type="number" value="860000"></label>
+          <label class="field check"><input id="t-pan" type="checkbox" checked>Seller PAN on record</label>
+          <label class="field check"><input id="t-turn" type="checkbox" checked>Our turnover last year above Rs 10 crore</label>
+        </div>
+        <div class="out" id="o-tds"></div>
+      </div>
+      <div class="card" id="lab-msme">
+        <div><h3>MSME 45-day payment clock</h3><div class="rule-ref">MSMED Act s.15, s.16 | Income-tax Act 2025 s.37(2)(g)</div></div>
+        <div class="fields">
+          <label class="field">Supplier category<select id="s-cat"><option value="micro" selected>Micro</option><option value="small">Small</option><option value="medium">Medium</option><option value="none">Not MSME</option></select></label>
+          <label class="field">Agreed credit days<input id="s-days" type="number" value="30"></label>
+          <label class="field">Goods accepted on<input id="s-acc" type="date" value="2026-08-28"></label>
+          <label class="field">Today<input id="s-today" type="date" value="2026-10-10"></label>
+          <label class="field">Amount due (Rs)<input id="s-amt" type="number" value="755200"></label>
+          <label class="field">RBI Bank Rate (%)<input id="s-br" type="number" step="0.05" value="5.75"></label>
+          <label class="field check"><input id="s-written" type="checkbox" checked>Written agreement on credit terms</label>
+        </div>
+        <div class="out" id="o-msme"></div>
+      </div>
+      <div class="card" id="lab-disc">
+        <div><h3>Take the early-payment discount?</h3><div class="rule-ref">Treasury Analyst | annualised return vs cost of funds</div></div>
+        <div class="fields">
+          <label class="field">Discount (%)<input id="d-pct" type="number" step="0.1" value="1"></label>
+          <label class="field">If paid within (days)<input id="d-days" type="number" value="15"></label>
+          <label class="field">Otherwise net (days)<input id="d-net" type="number" value="60"></label>
+          <label class="field">Our cost of funds (%)<input id="d-cof" type="number" step="0.05" value="9.25"></label>
+        </div>
+        <div class="out" id="o-disc"></div>
+      </div>
+      <div class="card" id="lab-gstin">
+        <div><h3>GSTIN and PAN check</h3><div class="rule-ref">Policy & Compliance Officer | GSTN check digit (Luhn mod 36)</div></div>
+        <div class="presets"><button class="btn" data-preset="good">A valid GSTIN</button><button class="btn" data-preset="bad">Vendor from case S3</button></div>
+        <div class="fields">
+          <label class="field">GSTIN<input id="g-gstin" type="text" value="06AAHCV3371L1Z4" maxlength="15" autocomplete="off"></label>
+          <label class="field">PAN on vendor master (optional)<input id="g-pan" type="text" value="AAHCV3317L" maxlength="10" autocomplete="off"></label>
+        </div>
+        <div class="out" id="o-gstin"></div>
+      </div>
+      <div class="card" id="lab-doa">
+        <div><h3>Who approves, and how many quotes?</h3><div class="rule-ref">Delegation of authority + competitive-quote policy (Meridian)</div></div>
+        <div class="fields">
+          <label class="field">Purchase value excl. GST (Rs)<input id="a-val" type="number" value="2380000"></label>
+          <label class="field">Related PRs in last 30 days (Rs)<input id="a-rel" type="number" value="2450000"></label>
+          <label class="field check"><input id="a-sole" type="checkbox">Sole source with documented reason</label>
+        </div>
+        <div class="out" id="o-doa"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ASK -->
+  <section class="view" id="ask" role="tabpanel" aria-labelledby="tab-ask" hidden>
+    <div class="lede">
+      <span class="eyebrow">Live agents</span>
+      <h1>Question any agent about a case, or hand the analyst a new request.</h1>
+      <p>Each answer is written live by Claude in the agent's role and grounded only on that case's record. The first question asks you to allow the page to use Claude.</p>
+    </div>
+    <div class="notice" id="ask-unavailable" hidden>Live questions need this page to be open in Claude. Everything else on the page works without it.</div>
+    <div class="ask">
+      <div class="card">
+        <div class="field">Case<select id="q-case"></select></div>
+        <div class="blk-title" style="margin:0">Agent</div>
+        <div class="agents" id="q-agents"></div>
+      </div>
+      <div class="card">
+        <div class="blk-title" style="margin:0">Suggested questions</div>
+        <div class="chips" id="q-sugg"></div>
+        <label class="field">Your question<textarea id="q-text" placeholder="Ask the agent about this case"></textarea></label>
+        <div class="controls"><button class="btn primary" id="q-go">Ask</button><button class="btn" id="q-stop" disabled>Stop</button><span class="note" id="q-status"></span></div>
+        <div class="answer" id="q-answer">Pick a suggested question or type your own.</div>
+      </div>
+    </div>
+    <div class="card">
+      <div><h3>Intake desk: try your own purchase request</h3><div class="rule-ref">Procurement Analyst (Claude extracts) -> Policy rules (computed in the page)</div></div>
+      <label class="field">Request as an employee would write it<textarea id="i-text">Urgent: need 600 nos bearing housings (cast iron, drawing BH-62) for the new gearbox line by 30 Oct 2026. Around Rs 4.2 lakh. Only Sahyadri Castings can make these, please approve fast.</textarea></label>
+      <div class="controls"><button class="btn primary" id="i-go">Run the Procurement Analyst</button><button class="btn" id="i-offline">Use the offline parser</button><span class="note" id="i-status"></span></div>
+      <div class="grid2"><div class="out" id="i-parsed">The structured requisition appears here.</div><div class="out" id="i-policy">Policy verdict appears here.</div></div>
+    </div>
+  </section>
+
+  <!-- BUILT -->
+  <section class="view" id="built" role="tabpanel" aria-labelledby="tab-built" hidden>
+    <div class="lede">
+      <span class="eyebrow">Architecture, evidence, business case</span>
+      <h1>Three tools, each doing the job it is best at.</h1>
+    </div>
+    <div class="tri">
+      <div class="card"><h3>LangGraph runs the case</h3><p>A stateful graph with conditional routes (block, reject, exception, partial release), a human approval <span class="mono">interrupt()</span> with checkpointing, and one audit record per agent step.</p></div>
+      <div class="card"><h3>CrewAI runs sourcing</h3><p>A crew of three: Category Manager (Kraljic), Supplier Performance &amp; Risk Analyst (scorecard), Negotiation Strategist (should-cost). Offline it is driven by a scripted expert LLM over the same ReAct loop.</p></div>
+      <div class="card"><h3>n8n runs the business plumbing</h3><p>Request intake, approval e-mails with approve/reject links that resume the graph, Google Sheets audit log, and a daily MSME 45-day payment watch, all through a FastAPI service.</p></div>
+    </div>
+    <pre class="mermaid">
+graph TD
+  start([Purchase request]) --> intake[Procurement Analyst]
+  intake --> policy[Policy and Compliance Officer]
+  policy -- block --> controller[Finance Controller]
+  policy -- clear --> crew[[CrewAI sourcing crew]]
+  crew --> approval{{Human approver - interrupt}}
+  approval -- reject --> controller
+  approval -- approve --> po[Buyer issues PO]
+  po --> ap[AP Specialist - 3-way match]
+  ap --> tax[GST and TDS Specialist]
+  tax -- exceptions --> resolver[Exception Resolver]
+  tax -- clean --> treasury[Treasury Analyst]
+  resolver -- partial release --> treasury
+  resolver -- hard stop --> controller
+  treasury --> controller
+  controller --> done([Case memo and audit trail])
+    </pre>
+    <div class="grid2">
+      <div class="card">
+        <h3>Numbers come from tools, never from the LLM</h3>
+        <p>The LLM explains, prioritises and drafts. Every amount, date and rate is computed by tested rules. A guardrail rejects any LLM text that contains a figure not present in the tool outputs, and the crew cannot overrule the scorecard winner; only the human approver can.</p>
+        <div class="kv" id="built-facts"></div>
+      </div>
+      <div class="card">
+        <h3>Control-effectiveness evaluation</h3>
+        <p class="muted" id="eval-sum"></p>
+        <div class="tbl-wrap"><table><thead><tr><th>ID</th><th>Injected condition</th><th>Expected</th><th>Result</th></tr></thead><tbody id="eval-rows"></tbody></table></div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Business case for Meridian (fictional), Rs lakh</h3>
+      <div class="tbl-wrap"><table><thead><tr><th></th><th class="num">Conservative</th><th class="num">Base</th><th class="num">Optimistic</th></tr></thead><tbody id="bc-rows"></tbody></table></div>
+      <div class="blk-title">Base case value drivers (Rs lakh per year)</div>
+      <div class="bars" id="bc-bars"></div>
+      <p class="note" id="bc-note"></p>
+    </div>
+    <div class="card">
+      <h3>Rules encoded (as of 10 October 2026)</h3>
+      <ul class="learn" style="color:var(--ink)">
+        <li>TDS on goods: Income-tax Act 2025 s.393(1) Table Sl. 8(ii) (formerly s.194Q): 0.1% above Rs 50 lakh per seller per tax year; 5% without PAN; buyer turnover above Rs 10 crore.</li>
+        <li>MSMED Act s.15: pay micro/small suppliers within the agreed term, never more than 45 days from acceptance (15 days with no written agreement); s.16: compound interest at 3x RBI Bank Rate (5.75% after the 7 Oct 2026 MPC decision, so 17.25%); s.23: interest not deductible.</li>
+        <li>Income-tax Act 2025 s.37(2)(g) (formerly s.43B(h)): late MSE dues are deductible only in the year paid.</li>
+        <li>GST 2.0 rates from 22 Sep 2025 (5% / 18% / 40%); IGST for inter-state supply; e-invoice IRN for suppliers above Rs 5 crore AATO; IRN within 30 days for AATO of Rs 10 crore or more; ITC reversal if the supplier is unpaid after 180 days.</li>
+      </ul>
+    </div>
+    <p class="foot" id="foot"></p>
+  </section>
+</main>
+
+<script type="application/json" id="data">{"as_of":"2026-10-10","generated_with":"offline (deterministic expert templates)","company":{"name":"Meridian Precision Components Pvt. Ltd.","plant":"Chakan MIDC, Pune, Maharashtra","industry":"Auto components (Tier-1 supplier of transmission housings and shafts)","gstin":"27AAKCM4821Q1ZU","cost_of_funds_pct":9.25,"rbi_bank_rate_pct":5.75,"tax_year":"2026-27"},"cases":{"S1":{"id":"S1","title":"Die-cast gearbox housings: clean end-to-end run","story":"Production needs 4,000 aluminium die-cast housings. Three suppliers quoted. The cheapest supplier has poor quality and delivery, so the agents must pick on total value, not price. Goods arrive and the invoice matches.","learning_points":["Weighted supplier scorecard beats lowest-price buying for a strategic item","Inter-state purchase: IGST, e-invoice IRN check, TDS on goods above the Rs 50 lakh threshold","Treasury declines an early-payment discount whose annualised return is below the cost of funds"],"request_text":"Need 4000 nos aluminium die-cast gearbox housings (ADC12, part HSG-ADC12-GB04) for the Q3 build plan, required by 5 Oct 2026. Budget about Rs 19 lakh. Line-stopper part.","status":"COMPLETED","approval_pack":{"case_id":"S1-web-approve","approver_role":"CFO","pr_no":"PR-26-0871","item":"Aluminium die-cast gearbox housing, ADC12, machined","qty":4000,"vendor_id":"V-102","vendor":"Tungabhadra Alloy Castings Ltd.","po_value_excl_gst":1774000.0,"score":94.56,"runner_up":"V-101","kraljic":"Strategic","warnings":[],"negotiation_target":432.43,"question":"Approve PO to Tungabhadra Alloy Castings Ltd. for Rs 17,74,000 (excl. GST)?"},"pre":3,"steps":[{"agent":"intake","title":"Procurement Analyst","framework":"LangGraph node","mandate":"Turn a requester's message into a complete, policy-ready purchase requisition.","decision":"Requisition structured and forwarded to Policy & Compliance","highlights":["4,000 nos | Rs 19,00,000","Direct material | HSN 7616","Need-by in 34 days"],"rationale":"PR-26-0871 is a direct material request for 4,000 nos of Aluminium die-cast gearbox housing, ADC12, machined (HSN 7616), estimated at Rs 19,00,000 and needed in 34 days. Budget on CC-PRD-210 has Rs 42,50,000 available. The request is complete and consistent with the form.","rationale_source":"offline-template","guardrail":"n/a","elapsed_ms":1.9,"tools":[{"tool":"parse_request","summary":"Extracted qty=4000.0 nos, need-by=2026-10-05, value=Rs 19,00,000, category=aluminium castings (offline rule-based parser)"},{"tool":"budget_check","summary":"Production - Die-casting line: remaining Rs 42,50,000 vs request Rs 19,00,000"}]},{"agent":"policy","title":"Policy & Compliance Officer","framework":"LangGraph node","mandate":"Apply the procurement policy before any money is committed.","decision":"Cleared for sourcing; approver = CFO","highlights":["Approver: CFO","Findings: 0 block / 0 warn"],"rationale":"Policy checks passed. Approval authority: CFO. No warnings.","rationale_source":"offline-template","guardrail":"n/a","elapsed_ms":0.2,"tools":[{"tool":"delegation_of_authority","summary":"Approver for Rs 19,00,000: CFO"},{"tool":"competitive_quote_rule","summary":"Needs 3 quote(s); received 3"},{"tool":"split_purchase_scan","summary":"0 related PR(s); combined Rs 19,00,000"},{"tool":"budget_check","summary":"Remaining Rs 42,50,000; OK"},{"tool":"vendor_due_diligence","summary":"Deccan Precision Castings Pvt. Ltd.: clean"},{"tool":"vendor_due_diligence","summary":"Tungabhadra Alloy Castings Ltd.: clean"},{"tool":"vendor_due_diligence","summary":"Sabarmati Foundry Works: clean"}]},{"agent":"supplier_analyst","title":"Sourcing Crew (3 CrewAI agents)","framework":"CrewAI crew inside a LangGraph node","mandate":"Rank suppliers on total value, not just price.","decision":"Recommend V-102 Tungabhadra Alloy Castings Ltd. at Rs 438/unit","highlights":["Kraljic: Strategic","Winner 94.56 pts","Target Rs 432.43"],"rationale":"Ranking: V-102 Tungabhadra Alloy Castings Ltd.: 94.56 pts, landed Rs 443.50/unit, lead 28 days | V-101 Deccan Precision Castings Pvt. Ltd.: 86.04 pts, landed Rs 452/unit, lead 25 days | V-103 Sabarmati Foundry Works: 73.45 pts, landed Rs 422.50/unit, lead 21 days. The cheapest quote (V-103, Rs 422.50/unit) loses on quality, delivery or eligibility, so lowest price is not best value here. Margin over runner-up: 8.52 pts.","rationale_source":"CrewAI (offline expert LLM)","guardrail":"passed","elapsed_ms":982.5,"engine":"CrewAI (offline expert LLM)","crew_tool_calls":["kraljic_analysis","supplier_scorecard","should_cost_model"],"tools":[{"tool":"kraljic_analysis","summary":"Strategic (spend Rs 2,10,88,000, risk score 3)"},{"tool":"supplier_scorecard","summary":"Winner V-102 94.56 pts; runner-up V-101"},{"tool":"should_cost_model","summary":"Should-cost Rs 432.43 vs quote Rs 438 (1.27% gap)"}],"crew":[{"agent":"category_manager","title":"Category Manager","output":"Kraljic position: Strategic. Annual spend Rs 2.11 crore gives high profit impact; supply-risk score 3 gives high supply risk. Evaluate suppliers with weights: price 25%, quality 30%, delivery 20%, risk 20%, compliance 5%. Strategy levers: Long-term agreement with index-linked raw-material pricing (share commodity risk transparently); Develop the runner-up as a qualified second source for 20-30% of volume; Joint cost-reduction (VA/VE) targets and PPM improvement plan written into the contract."},{"agent":"supplier_analyst","title":"Supplier Performance & Risk Analyst","output":"Ranking: V-102 Tungabhadra Alloy Castings Ltd.: 94.56 pts, landed Rs 443.50/unit, lead 28 days | V-101 Deccan Precision Castings Pvt. Ltd.: 86.04 pts, landed Rs 452/unit, lead 25 days | V-103 Sabarmati Foundry Works: 73.45 pts, landed Rs 422.50/unit, lead 21 days. The cheapest quote (V-103, Rs 422.50/unit) loses on quality, delivery or eligibility, so lowest price is not best value here. Margin over runner-up: 8.52 pts.\nRecommended vendor: V-102"},{"agent":"negotiator","title":"Negotiation Strategist","output":"Should-cost Rs 432.43/unit (material Rs 226.10 + conversion Rs 120 + secondary ops Rs 40 + 12% overhead and margin) vs quote Rs 438: gap 1.27%. Verdict: negotiate. Target Rs 432.43/unit, open at Rs 428.11. Value at stake Rs 22,280 on this order, Rs 2,67,360 a year. BATNA: V-101 Deccan Precision Castings Pvt. Ltd. at Rs 452/unit landed (86.04 pts). Levers: Long-term agreement with index-linked raw-material pricing (share commodity risk transparently); Develop the runner-up as a qualified second source for 20-30% of volume; Joint cost-reduction (VA/VE) targets and PPM improvement plan written into the contract."}]},{"agent":"approver","title":"Human Approver (per DoA)","framework":"LangGraph interrupt (human-in-the-loop)","mandate":"Accountable human decision at the point of financial commitment.","decision":"APPROVED by CFO","highlights":["Role required: CFO","Value Rs 17,74,000"],"rationale":"Approved as recommended.","rationale_source":"human","guardrail":"n/a","elapsed_ms":0.0,"tools":[{"tool":"approval_pack","summary":"Approve PO to Tungabhadra Alloy Castings Ltd. for Rs 17,74,000 (excl. GST)?"}]},{"agent":"buyer","title":"Buyer (PO Specialist)","framework":"LangGraph node","mandate":"Issue a compliant purchase order with the right commercial and statutory terms.","decision":"PO-26-0871 issued (Rs 20,93,320 incl. GST)","highlights":["IGST Rs 3,19,320","Delivery by 2026-10-02","Non-MSE supplier"],"rationale":"PO-26-0871 issued to Tungabhadra Alloy Castings Ltd. for 4,000 nos at Rs 438 (Rs 17,74,000 + IGST Rs 3,19,320). Delivery by 2026-10-02. Key terms: Payment: 60 days from invoice; Supplier must issue an e-invoice with IRN (AATO above Rs 5 crore); invoices without IRN will be rejected; Quote PO number on invoice; bill only accepted quantity; GSTIN of buyer 27AAKCM4821Q1ZU.","rationale_source":"offline-template","guardrail":"n/a","elapsed_ms":0.2,"tools":[{"tool":"gst_estimate","summary":"IGST @ 18% = Rs 3,19,320; PO total Rs 20,93,320"},{"tool":"tds_preview","summary":"Threshold already crossed earlier this tax year; TDS on the full taxable value"}]},{"agent":"ap","title":"Accounts Payable Specialist","framework":"LangGraph node","mandate":"Pay only what is owed: match, de-duplicate and protect against payment fraud.","decision":"Matched - release to tax review","highlights":["Approved Rs 20,93,320","Disputed Rs 0"],"rationale":"Invoice TAC/26-27/04417 matches PO PO-26-0871 and GRN-26-10-0112 within tolerance: 4,000 units at Rs 438. No duplicate, bank details unchanged. Approved for payment: Rs 20,93,320.","rationale_source":"offline-template","guardrail":"n/a","elapsed_ms":0.2,"tools":[{"tool":"three_way_match","summary":"MATCHED: price 438.0 vs 438.0 (+0.0%), qty invoiced 4,000 vs accepted 4,000"},{"tool":"duplicate_check","summary":"Checked against 1 prior invoice(s): no duplicate"},{"tool":"bank_change_check","summary":"Bank details match master; no recent change"}]},{"agent":"tax","title":"GST & TDS Specialist","framework":"LangGraph node","mandate":"Make sure the invoice is a valid tax document and withhold the right TDS.","decision":"Valid tax invoice; ITC Rs 3,19,320; TDS Rs 1,774","highlights":["IGST 18%","ITC Rs 3,19,320","TDS Rs 1,774"],"rationale":"Tax document check: IGST at 18% is correct for a supply from state 29 to place of supply 27; billed tax reconciles. E-invoice IRN verified. Claim ITC of Rs 3,19,320 on the accepted value. TDS: threshold already crossed earlier this tax year; TDS on the full taxable value - deduct Rs 1,774 under Income-tax Act 2025, s.393(1) Table Sl. 8(ii) (formerly s.194Q). Pay the supplier within 180 days of invoice date to keep the ITC.","rationale_source":"offline-template","guardrail":"n/a","elapsed_ms":0.3,"tools":[{"tool":"gst_invoice_check","summary":"IGST @ 18% on Rs 17,74,000 = Rs 3,19,320; GSTIN checksum OK; no tax errors"},{"tool":"einvoice_check","summary":"E-invoice required (AATO Rs 610 cr); IRN present, reported 0 day(s) after invoice"},{"tool":"itc_readiness","summary":"ITC claimable now: Rs 3,19,320"},{"tool":"tds_on_goods","summary":"TDS Rs 1,774 at 0.1% on Rs 17,74,000: Threshold already crossed earlier this tax year; TDS on the full taxable value"}]},{"agent":"treasury","title":"Treasury & Working-Capital Analyst","framework":"LangGraph node","mandate":"Pay at the best time: never late to MSEs, early only when it earns more than the cost of funds.","decision":"Schedule Rs 20,91,546 on 2026-11-30","highlights":["Pay on 2026-11-30","Net Rs 20,91,546","Discount skipped"],"rationale":"Pay Rs 20,91,546 (after TDS Rs 1,774) on 2026-11-30. Contract terms: 60 days from invoice date -> 2026-11-30. Skip the early-payment discount (8.19% annualised is below the 9.25% cost of funds); hold cash until the due date.","rationale_source":"offline-template","guardrail":"n/a","elapsed_ms":0.2,"tools":[{"tool":"payment_timing","summary":"Due 2026-11-30; pay on 2026-11-30"},{"tool":"discount_apr","summary":"Discount worth 8.19% annualised vs 9.25% cost of funds -> skip"}]},{"agent":"controller","title":"Finance Controller","framework":"LangGraph node","mandate":"Summarise the case for the CFO with decisions, risks, money impact and an audit trail.","decision":"Case closed: COMPLETED","highlights":["Status COMPLETED","24 tool calls","1 human touchpoint(s)"],"rationale":"- Case S1-web-approve - PR-26-0871: Aluminium die-cast gearbox housing, ADC12, machined (4,000 nos).\n- Sourcing: Tungabhadra Alloy Castings Ltd. selected (94.56 pts, Kraljic Strategic); approved by CFO; PO-26-0871 for Rs 20,93,320 incl. GST.\n- Invoice: matched; approved Rs 20,93,320.\n- Tax: ITC Rs 3,19,320 claimable; TDS Rs 1,774 (threshold already crossed earlier this tax year; TDS on the full taxable value).\n- Cash: pay Rs 20,91,546 on 2026-11-30. \n- Upside: should-cost gap worth Rs 2,67,360 a year on this part if negotiated to target.","rationale_source":"offline-template","guardrail":"n/a","elapsed_ms":0.1}],"memo":{"status":"COMPLETED","bullets":["Case S1-web-approve - PR-26-0871: Aluminium die-cast gearbox housing, ADC12, machined (4,000 nos).","Sourcing: Tungabhadra Alloy Castings Ltd. selected (94.56 pts, Kraljic Strategic); approved by CFO; PO-26-0871 for Rs 20,93,320 incl. GST.","Invoice: matched; approved Rs 20,93,320.","Tax: ITC Rs 3,19,320 claimable; TDS Rs 1,774 (threshold already crossed earlier this tax year; TDS on the full taxable value).","Cash: pay Rs 20,91,546 on 2026-11-30. ","Upside: should-cost gap worth Rs 2,67,360 a year on this part if negotiated to target."],"text":"- Case S1-web-approve - PR-26-0871: Aluminium die-cast gearbox housing, ADC12, machined (4,000 nos).\n- Sourcing: Tungabhadra Alloy Castings Ltd. selected (94.56 pts, Kraljic Strategic); approved by CFO; PO-26-0871 for Rs 20,93,320 incl. GST.\n- Invoice: matched; approved Rs 20,93,320.\n- Tax: ITC Rs 3,19,320 claimable; TDS Rs 1,774 (threshold already crossed earlier this tax year; TDS on the full taxable value).\n- Cash: pay Rs 20,91,546 on 2026-11-30. \n- Upside: should-cost gap worth Rs 2,67,360 a year on this part if negotiated to target.","kpis":{"agents_involved":10,"tool_calls":24,"controls_flagged":0,"blocking_controls":0,"human_touchpoints":1,"touchless_invoice":true,"agent_processing_ms":985.5,"po_value_incl_gst":2093320.0,"approved_payable":2093320.0,"disputed_amount_protected":0.0,"tds_withheld":1774,"itc_claimable":319320.0,"negotiation_value_this_order":22280.0,"negotiation_value_annual":267360.0,"msme_interest_accrued":0.0,"discount_decision":false}},"pr":{"pr_no":"PR-26-0871","requester":"Anil Deshmukh","department":"Production Planning","cost_center":"CC-PRD-210","estimated_value":1900000,"item":{"code":"HSG-ADC12-GB04","description":"Aluminium die-cast gearbox housing, ADC12, machined","hsn":"7616","uom":"nos","qty":4000,"need_by":"2026-10-05"}},"kraljic":{"quadrant":"Strategic","annual_spend":21088000,"profit_impact":"high","supply_risk":"high","supply_risk_score":3,"weights":{"price":0.25,"quality":0.3,"delivery":0.2,"risk":0.2,"compliance":0.05}},"ranking":[{"vendor_id":"V-102","vendor":"Tungabhadra Alloy Castings Ltd.","unit_price":438.0,"landed_unit_cost":443.5,"lead_time_days":28,"msme":"none","scores":{"price":95.26,"quality":89.5,"delivery":97.0,"risk":100.0,"compliance":90.0},"weighted_total":94.56,"eligible":true,"note":""},{"vendor_id":"V-101","vendor":"Deccan Precision Castings Pvt. Ltd.","unit_price":452.0,"landed_unit_cost":452.0,"lead_time_days":25,"msme":"small","scores":{"price":93.47,"quality":78.75,"delivery":94.0,"risk":80.0,"compliance":85.0},"weighted_total":86.04,"eligible":true,"note":""},{"vendor_id":"V-103","vendor":"Sabarmati Foundry Works","unit_price":415.0,"landed_unit_cost":422.5,"lead_time_days":21,"msme":"micro","scores":{"price":100.0,"quality":52.5,"delivery":86.0,"risk":60.0,"compliance":70.0},"weighted_total":73.45,"eligible":true,"note":""}],"should_cost":{"material_cost":226.1,"conversion":120,"secondary_ops":40,"overhead_margin_pct":12,"should_cost":432.43,"quoted":438.0,"gap_per_unit":5.57,"gap_pct":1.27,"saving_this_order":22280.0,"saving_annualised":267360.0,"verdict":"negotiate"},"po":{"po_no":"PO-26-0871","vendor":"Tungabhadra Alloy Castings Ltd.","taxable":1774000.0,"tax_type":"IGST","tax_total":319320.0,"total":2093320.0,"delivery_by":"2026-10-02","terms":["Price Rs 438/nos, firm for this order","Payment: 60 days from invoice","Supplier must issue an e-invoice with IRN (AATO above Rs 5 crore); invoices without IRN will be rejected","Quote PO number on invoice; bill only accepted quantity; GSTIN of buyer 27AAKCM4821Q1ZU","Commercial note: negotiate towards Rs 432.43/unit on the next release"]},"match":{"status":"MATCHED","exceptions":[],"po_price":438.0,"invoice_price":438.0,"price_variance_pct":0.0,"po_qty":4000,"accepted_qty":4000,"invoiced_qty":4000,"approved_taxable":1774000.0,"approved_tax":319320.0,"approved_total":2093320.0,"billed_taxable":1774000.0,"billed_total":2093320.0,"disputed_taxable":0.0,"disputed_total":0.0},"tax":{"tds":{"tds_amount":1774,"base":1774000.0,"rate_pct":0.1,"reason":"Threshold already crossed earlier this tax year; TDS on the full taxable value","provision":"Income-tax Act 2025, s.393(1) Table Sl. 8(ii) (formerly s.194Q)"},"itc_amount":319320.0,"itc_on_hold":0.0,"tax_type":"IGST","rate_pct":18},"treasury":{"net_payable":2091546.0,"due_date":"2026-11-30","pay_on":"2026-11-30","discount":{"terms":"1.0% if paid within 15 days, else net 60","annualised_return_pct":8.19,"cost_of_funds_pct":9.25,"window_closes":"2026-10-16","window_open":true,"amount":20915.46,"take":false},"msme":{"covered":false,"due_date":null,"days_allowed":null,"basis":"Supplier category 'none' is outside MSMED Act Chapter V (only micro/small enterprises)"},"reasons":["Contract terms: 60 days from invoice date -> 2026-11-30","Skip the early-payment discount (8.19% annualised is below the 9.25% cost of funds); hold cash until the due date"],"alerts":[],"run":[{"invoice_no":"TAC/26-27/04417","amount":2091546.0,"pay_on":"2026-11-30","priority":"Contractual"}]}},"S2":{"id":"S2","title":"CNC shafts: invoice price variance and QC rejection","story":"The machining cell orders 2,500 hardened shafts. The supplier invoices 3.2% above the PO price and bills for all 2,500 pieces, although quality rejected 120. The agents must pay only what is owed, hold the rest and get a credit note.","learning_points":["3-way match (PO vs GRN vs invoice) with tolerance rules","Pay the undisputed amount on time; hold only the disputed part","GST credit note and input-tax-credit treatment for rejected and overcharged quantities","A quote that cannot meet the need-by date is excluded even if it is cheapest"],"request_text":"Raise PR for 2500 EN8 transmission shafts, machined and induction hardened (drawing SFT-EN8-220), needed by 15 Oct 2026. Expected around Rs 7.4 lakh.","status":"COMPLETED_WITH_HOLD","approval_pack":{"case_id":"S2-web-approve","approver_role":"Plant Head","pr_no":"PR-26-0904","item":"EN8 transmission shaft, machined and induction hardened","qty":2500,"vendor_id":"V-104","vendor":"Noyyal CNC Engineering Pvt. Ltd.","po_value_excl_gst":710000.0,"score":92.34,"runner_up":"V-102","kraljic":"Leverage","warnings":[],"negotiation_target":273.93,"question":"Approve PO to Noyyal CNC Engineering Pvt. Ltd. for Rs 7,10,000 (excl. GST)?"},"pre":3,"steps":[{"agent":"intake","title":"Procurement Analyst","framework":"LangGraph node","mandate":"Turn a requester's message into a complete, policy-ready purchase requisition.","decision":"Requisition structured and forwarded to Policy & Compliance","highlights":["2,500 nos | Rs 7,40,000","Direct material | HSN 8483","Need-by in 35 days"],"rationale":"PR-26-0904 is a direct material request for 2,500 nos of EN8 transmission shaft, machined and induction hardened (HSN 8483), estimated at Rs 7,40,000 and needed in 35 days. Budget on CC-PRD-230 has Rs 37,30,000 available. The request is complete and consistent with the form.","rationale_source":"offline-template","guardrail":"n/a","elapsed_ms":0.4,"tools":[{"tool":"parse_request","summary":"Extracted qty=2500.0 nos, need-by=2026-10-15, value=Rs 7,40,000, category=machined components (offline rule-based parser)"},{"tool":"budget_check","summary":"Production - Machining cell: remaining Rs 37,30,000 vs request Rs 7,40,000"}]},{"agent":"policy","title":"Policy & Compliance Officer","framework":"LangGraph node","mandate":"Apply the procurement policy before any money is committed.","decision":"Cleared for sourcing; approver = Plant Head","highlights":["Approver: Plant Head","Findings: 0 block / 0 warn"],"rationale":"Policy checks passed. Approval authority: Plant Head. No warnings. Excluded from sourcing on lead time: V-109.","rationale_source":"offline-template","guardrail":"n/a","elapsed_ms":0.2,"tools":[{"tool":"delegation_of_authority","summary":"Approver for Rs 7,40,000: Plant Head"},{"tool":"competitive_quote_rule","summary":"Needs 3 quote(s); received 3"},{"tool":"split_purchase_scan","summary":"0 related PR(s); combined Rs 7,40,000"},{"tool":"budget_check","summary":"Remaining Rs 37,30,000; OK"},{"tool":"vendor_due_diligence","summary":"Noyyal CNC Engineering Pvt. Ltd.: clean"},{"tool":"vendor_due_diligence","summary":"Tungabhadra Alloy Castings Ltd.: clean"},{"tool":"vendor_due_diligence","summary":"Vaigai Turned Components Pvt. Ltd.: clean"}]},{"agent":"supplier_analyst","title":"Sourcing Crew (3 CrewAI agents)","framework":"CrewAI crew inside a LangGraph node","mandate":"Rank suppliers on total value, not just price.","decision":"Recommend V-104 Noyyal CNC Engineering Pvt. Ltd. at Rs 284/unit","highlights":["Kraljic: Leverage","Winner 92.34 pts","Target Rs 273.93"],"rationale":"Ranking: V-104 Noyyal CNC Engineering Pvt. Ltd.: 92.34 pts, landed Rs 284/unit, lead 21 days | V-102 Tungabhadra Alloy Castings Ltd.: 91.77 pts, landed Rs 318/unit, lead 30 days | V-109 Vaigai Turned Components Pvt. Ltd.: 83.65 pts, landed Rs 282.20/unit, lead 35 days [excluded: lead time misses need-by date]. The cheapest quote (V-109, Rs 282.20/unit) loses on quality, delivery or eligibility, so lowest price is not best value here. Margin over runner-up: 0.57 pts.","rationale_source":"CrewAI (offline expert LLM)","guardrail":"passed","elapsed_ms":31.9,"engine":"CrewAI (offline expert LLM)","crew_tool_calls":["kraljic_analysis","supplier_scorecard","should_cost_model"],"tools":[{"tool":"kraljic_analysis","summary":"Leverage (spend Rs 1,17,89,333, risk score 2)"},{"tool":"supplier_scorecard","summary":"Winner V-104 92.34 pts; runner-up V-102"},{"tool":"should_cost_model","summary":"Should-cost Rs 273.93 vs quote Rs 284 (3.55% gap)"}],"crew":[{"agent":"category_manager","title":"Category Manager","output":"Kraljic position: Leverage. Annual spend Rs 1.18 crore gives high profit impact; supply-risk score 2 gives low supply risk. Evaluate suppliers with weights: price 40%, quality 25%, delivery 20%, risk 10%, compliance 5%. Strategy levers: Use competitive tension: share the target price and invite a best-and-final offer; Volume consolidation across plants for a tiered price; Trade payment-term flexibility for price only where the annualised maths favours us."},{"agent":"supplier_analyst","title":"Supplier Performance & Risk Analyst","output":"Ranking: V-104 Noyyal CNC Engineering Pvt. Ltd.: 92.34 pts, landed Rs 284/unit, lead 21 days | V-102 Tungabhadra Alloy Castings Ltd.: 91.77 pts, landed Rs 318/unit, lead 30 days | V-109 Vaigai Turned Components Pvt. Ltd.: 83.65 pts, landed Rs 282.20/unit, lead 35 days [excluded: lead time misses need-by date]. The cheapest quote (V-109, Rs 282.20/unit) loses on quality, delivery or eligibility, so lowest price is not best value here. Margin over runner-up: 0.57 pts.\nRecommended vendor: V-104"},{"agent":"negotiator","title":"Negotiation Strategist","output":"Should-cost Rs 273.93/unit (material Rs 115.20 + conversion Rs 95 + secondary ops Rs 28 + 15% overhead and margin) vs quote Rs 284: gap 3.55%. Verdict: negotiate. Target Rs 273.93/unit, open at Rs 271.19. Value at stake Rs 25,175 on this order, Rs 4,02,800 a year. BATNA: V-102 Tungabhadra Alloy Castings Ltd. at Rs 318/unit landed (91.77 pts). Levers: Use competitive tension: share the target price and invite a best-and-final offer; Volume consolidation across plants for a tiered price; Trade payment-term flexibility for price only where the annualised maths favours us."}]},{"agent":"approver","title":"Human Approver (per DoA)","framework":"LangGraph interrupt (human-in-the-loop)","mandate":"Accountable human decision at the point of financial commitment.","decision":"APPROVED by Plant Head","highlights":["Role required: Plant Head","Value Rs 7,10,000"],"rationale":"Approved as recommended.","rationale_source":"human","guardrail":"n/a","elapsed_ms":0.0,"tools":[{"tool":"approval_pack","summary":"Approve PO to Noyyal CNC Engineering Pvt. Ltd. for Rs 7,10,000 (excl. GST)?"}]},{"agent":"buyer","title":"Buyer (PO Specialist)","framework":"LangGraph node","mandate":"Issue a compliant purchase order with the right commercial and statutory terms.","decision":"PO-26-0904 issued (Rs 8,37,800 incl. GST)","highlights":["IGST Rs 1,27,800","Delivery by 2026-10-03","Non-MSE supplier"],"rationale":"PO-26-0904 issued to Noyyal CNC Engineering Pvt. Ltd. for 2,500 nos at Rs 284 (Rs 7,10,000 + IGST Rs 1,27,800). Delivery by 2026-10-03. Key terms: Payment: 45 days from invoice; Supplier must issue an e-invoice with IRN (AATO above Rs 5 crore); invoices without IRN will be rejected; Quote PO number on invoice; bill only accepted quantity; GSTIN of buyer 27AAKCM4821Q1ZU.","rationale_source":"offline-template","guardrail":"n/a","elapsed_ms":0.2,"tools":[{"tool":"gst_estimate","summary":"IGST @ 18% = Rs 1,27,800; PO total Rs 8,37,800"},{"tool":"tds_preview","summary":"Cumulative purchases still below Rs 50 lakh (headroom Rs 490,000); no TDS yet"}]},{"agent":"ap","title":"Accounts Payable Specialist","framework":"LangGraph node","mandate":"Pay only what is owed: match, de-duplicate and protect against payment fraud.","decision":"Exceptions - route to resolver","highlights":["Approved Rs 7,97,585.60","Disputed Rs 67,059.40"],"rationale":"Invoice NCE/2627/1182 does not match: Invoice price 293.10 vs PO 284.00 (+3.20%, tolerance 1.0%). Invoiced 2,500 but only 2,380 accepted at GRN (120 rejected). Payable on the evidence: Rs 7,97,585.60; disputed Rs 67,059.40.","rationale_source":"offline-template","guardrail":"n/a","elapsed_ms":0.1,"tools":[{"tool":"three_way_match","summary":"EXCEPTION: price 293.1 vs 284.0 (+3.2%), qty invoiced 2,500 vs accepted 2,380"},{"tool":"duplicate_check","summary":"Checked against 1 prior invoice(s): no duplicate"},{"tool":"bank_change_check","summary":"Bank details match master; no recent change"}],"findings":[{"code":"PRICE_VARIANCE","severity":"HOLD","detail":"Invoice price 293.10 vs PO 284.00 (+3.20%, tolerance 1.0%)"},{"code":"QTY_EXCEEDS_ACCEPTED","severity":"HOLD","detail":"Invoiced 2,500 but only 2,380 accepted at GRN (120 rejected)"}]},{"agent":"tax","title":"GST & TDS Specialist","framework":"LangGraph node","mandate":"Make sure the invoice is a valid tax document and withhold the right TDS.","decision":"Valid tax invoice; ITC Rs 1,21,665.60; TDS Rs 0","highlights":["IGST 18%","ITC Rs 1,21,665.60","TDS Rs 0"],"rationale":"Tax document check: IGST at 18% is correct for a supply from state 33 to place of supply 27; billed tax reconciles. E-invoice IRN verified. Claim ITC of Rs 1,21,665.60 on the accepted value; do not claim the Rs 10,229.40 of tax on the disputed portion until the credit note arrives. TDS: cumulative purchases still below Rs 50 lakh (headroom Rs 524,080); no TDS yet. Pay the supplier within 180 days of invoice date to keep the ITC.","rationale_source":"offline-template","guardrail":"n/a","elapsed_ms":0.2,"tools":[{"tool":"gst_invoice_check","summary":"IGST @ 18% on Rs 7,32,750 = Rs 1,31,895; GSTIN checksum OK; no tax errors"},{"tool":"einvoice_check","summary":"E-invoice required (AATO Rs 92 cr); IRN present, reported 0 day(s) after invoice"},{"tool":"itc_readiness","summary":"ITC claimable now: Rs 1,21,665.60"},{"tool":"tds_on_goods","summary":"TDS Rs 0 at 0.1% on Rs 0: Cumulative purchases still below Rs 50 lakh (headroom Rs 524,080); no TDS yet"}]},{"agent":"resolver","title":"Exception Resolver","framework":"LangGraph node","mandate":"Close invoice exceptions fast: split payable from disputed, request credit notes, assign owners.","decision":"Pay undisputed Rs 7,97,585.60; hold Rs 67,059.40 pending credit note","highlights":["Release Rs 7,97,585.60","Hold Rs 67,059.40","2 owner action(s)"],"rationale":"Paying the undisputed Rs 7,97,585.60 on time protects the supplier relationship and our terms; Rs 67,059.40 stays on hold until the supplier issues a credit note. Buyer owns PRICE_VARIANCE (due 2026-10-13). Quality + Buyer owns QTY_EXCEEDS_ACCEPTED (due 2026-10-13).","rationale_source":"offline-template","guardrail":"n/a","elapsed_ms":0.1,"email_draft":"Subject: NCE/2627/1182 against PO-26-0904 - partial approval and credit note request\n\nDear Noyyal CNC Engineering Pvt. Ltd. team,\n\nWe have processed invoice NCE/2627/1182 dated 2026-10-06. We are releasing Rs 7,97,585.60 for the accepted quantity at the PO price, as per terms.\n\nThe balance is on hold for these reasons:\n- Unit price: invoiced Rs 293.10 against the PO price of Rs 284.\n- Quantity: 2,500 invoiced, 2,380 accepted after inspection (120 pcs rejected: case depth below spec (hardness)).\n\nPlease issue a GST credit note for Rs 67,059.40 (taxable Rs 56,830 plus tax) within 7 days, quoting the invoice number. Rejected parts are available for collection at our Chakan stores.\n\nRegards,\nAccounts Payable, Meridian Precision Components","tools":[{"tool":"route_exceptions","summary":"2 action(s) assigned to owners"},{"tool":"credit_note_request","summary":"Credit note for Rs 67,059.40 (Rs 56,830 + tax Rs 10,229.40)"},{"tool":"draft_supplier_email","summary":"Supplier email drafted (partial approval + credit note request)"}],"findings":[{"code":"PRICE_VARIANCE","severity":"HOLD","detail":"Invoice price 293.10 vs PO 284.00 (+3.20%, tolerance 1.0%)"},{"code":"QTY_EXCEEDS_ACCEPTED","severity":"HOLD","detail":"Invoiced 2,500 but only 2,380 accepted at GRN (120 rejected)"}]},{"agent":"treasury","title":"Treasury & Working-Capital Analyst","framework":"LangGraph node","mandate":"Pay at the best time: never late to MSEs, early only when it earns more than the cost of funds.","decision":"Schedule Rs 7,97,585.60 on 2026-11-20","highlights":["Pay on 2026-11-20","Net Rs 7,97,585.60","No discount offered"],"rationale":"Pay Rs 7,97,585.60 (after TDS Rs 0) on 2026-11-20. Contract terms: 45 days from invoice date -> 2026-11-20.","rationale_source":"offline-template","guardrail":"n/a","elapsed_ms":0.1,"tools":[{"tool":"payment_timing","summary":"Due 2026-11-20; pay on 2026-11-20"}]},{"agent":"controller","title":"Finance Controller","framework":"LangGraph node","mandate":"Summarise the case for the CFO with decisions, risks, money impact and an audit trail.","decision":"Case closed: COMPLETED_WITH_HOLD","highlights":["Status COMPLETED_WITH_HOLD","26 tool calls","2 human touchpoint(s)"],"rationale":"- Case S2-web-approve - PR-26-0904: EN8 transmission shaft, machined and induction hardened (2,500 nos).\n- Sourcing: Noyyal CNC Engineering Pvt. Ltd. selected (92.34 pts, Kraljic Leverage); approved by Plant Head; PO-26-0904 for Rs 8,37,800 incl. GST.\n- Invoice: exception; approved Rs 7,97,585.60, Rs 67,059.40 held for credit note.\n- Tax: ITC Rs 1,21,665.60 claimable; TDS Rs 0 (cumulative purchases still below Rs 50 lakh (headroom Rs 524,080); no TDS yet).\n- Cash: pay Rs 7,97,585.60 on 2026-11-20. \n- Upside: should-cost gap worth Rs 4,02,800 a year on this part if negotiated to target.","rationale_source":"offline-template","guardrail":"n/a","elapsed_ms":0.1}],"memo":{"status":"COMPLETED_WITH_HOLD","bullets":["Case S2-web-approve - PR-26-0904: EN8 transmission shaft, machined and induction hardened (2,500 nos).","Sourcing: Noyyal CNC Engineering Pvt. Ltd. selected (92.34 pts, Kraljic Leverage); approved by Plant Head; PO-26-0904 for Rs 8,37,800 incl. GST.","Invoice: exception; approved Rs 7,97,585.60, Rs 67,059.40 held for credit note.","Tax: ITC Rs 1,21,665.60 claimable; TDS Rs 0 (cumulative purchases still below Rs 50 lakh (headroom Rs 524,080); no TDS yet).","Cash: pay Rs 7,97,585.60 on 2026-11-20. ","Upside: should-cost gap worth Rs 4,02,800 a year on this part if negotiated to target."],"text":"- Case S2-web-approve - PR-26-0904: EN8 transmission shaft, machined and induction hardened (2,500 nos).\n- Sourcing: Noyyal CNC Engineering Pvt. Ltd. selected (92.34 pts, Kraljic Leverage); approved by Plant Head; PO-26-0904 for Rs 8,37,800 incl. GST.\n- Invoice: exception; approved Rs 7,97,585.60, Rs 67,059.40 held for credit note.\n- Tax: ITC Rs 1,21,665.60 claimable; TDS Rs 0 (cumulative purchases still below Rs 50 lakh (headroom Rs 524,080); no TDS yet).\n- Cash: pay Rs 7,97,585.60 on 2026-11-20. \n- Upside: should-cost gap worth Rs 4,02,800 a year on this part if negotiated to target.","kpis":{"agents_involved":11,"tool_calls":26,"controls_flagged":4,"blocking_controls":0,"human_touchpoints":2,"touchless_invoice":false,"agent_processing_ms":33.2,"po_value_incl_gst":837800.0,"approved_payable":797585.6,"disputed_amount_protected":67059.4,"tds_withheld":0,"itc_claimable":121665.6,"negotiation_value_this_order":25175.0,"negotiation_value_annual":402800.0,"msme_interest_accrued":0.0,"discount_decision":null}},"pr":{"pr_no":"PR-26-0904","requester":"Priya Nair","department":"Machining Cell","cost_center":"CC-PRD-230","estimated_value":740000,"item":{"code":"SFT-EN8-220","description":"EN8 transmission shaft, machined and induction hardened","hsn":"8483","uom":"nos","qty":2500,"need_by":"2026-10-15"}},"kraljic":{"quadrant":"Leverage","annual_spend":11789333,"profit_impact":"high","supply_risk":"low","supply_risk_score":2,"weights":{"price":0.4,"quality":0.25,"delivery":0.2,"risk":0.1,"compliance":0.05}},"ranking":[{"vendor_id":"V-104","vendor":"Noyyal CNC Engineering Pvt. Ltd.","unit_price":284.0,"landed_unit_cost":284.0,"lead_time_days":21,"msme":"medium","scores":{"price":99.37,"quality":84.75,"delivery":95.0,"risk":80.0,"compliance":88.0},"weighted_total":92.34,"eligible":true,"note":""},{"vendor_id":"V-102","vendor":"Tungabhadra Alloy Castings Ltd.","unit_price":318.0,"landed_unit_cost":318.0,"lead_time_days":30,"msme":"none","scores":{"price":88.74,"quality":89.5,"delivery":97.0,"risk":100.0,"compliance":90.0},"weighted_total":91.77,"eligible":true,"note":""},{"vendor_id":"V-109","vendor":"Vaigai Turned Components Pvt. Ltd.","unit_price":279.0,"landed_unit_cost":282.2,"lead_time_days":35,"msme":"small","scores":{"price":100.0,"quality":65.0,"delivery":88.0,"risk":60.0,"compliance":76.0},"weighted_total":83.65,"eligible":false,"note":"excluded: lead time misses need-by date"}],"should_cost":{"material_cost":115.2,"conversion":95,"secondary_ops":28,"overhead_margin_pct":15,"should_cost":273.93,"quoted":284.0,"gap_per_unit":10.07,"gap_pct":3.55,"saving_this_order":25175.0,"saving_annualised":402800.0,"verdict":"negotiate"},"po":{"po_no":"PO-26-0904","vendor":"Noyyal CNC Engineering Pvt. Ltd.","taxable":710000.0,"tax_type":"IGST","tax_total":127800.0,"total":837800.0,"delivery_by":"2026-10-03","terms":["Price Rs 284/nos, firm for this order","Payment: 45 days from invoice","Supplier must issue an e-invoice with IRN (AATO above Rs 5 crore); invoices without IRN will be rejected","Quote PO number on invoice; bill only accepted quantity; GSTIN of buyer 27AAKCM4821Q1ZU","Commercial note: negotiate towards Rs 273.93/unit on the next release"]},"match":{"status":"EXCEPTION","exceptions":[{"code":"PRICE_VARIANCE","severity":"HOLD","detail":"Invoice price 293.10 vs PO 284.00 (+3.20%, tolerance 1.0%)","amount":21658.0},{"code":"QTY_EXCEEDS_ACCEPTED","severity":"HOLD","detail":"Invoiced 2,500 but only 2,380 accepted at GRN (120 rejected)","amount":35172.0}],"po_price":284.0,"invoice_price":293.1,"price_variance_pct":3.2,"po_qty":2500,"accepted_qty":2380,"invoiced_qty":2500,"approved_taxable":675920.0,"approved_tax":121665.6,"approved_total":797585.6,"billed_taxable":732750.0,"billed_total":864645.0,"disputed_taxable":56830.0,"disputed_total":67059.4},"tax":{"tds":{"tds_amount":0,"base":0.0,"rate_pct":0.1,"reason":"Cumulative purchases still below Rs 50 lakh (headroom Rs 524,080); no TDS yet","provision":"Income-tax Act 2025, s.393(1) Table Sl. 8(ii) (formerly s.194Q)"},"itc_amount":121665.6,"itc_on_hold":10229.4,"tax_type":"IGST","rate_pct":18},"treasury":{"net_payable":797585.6,"due_date":"2026-11-20","pay_on":"2026-11-20","discount":null,"msme":{"covered":false,"due_date":null,"days_allowed":null,"basis":"Supplier category 'medium' is outside MSMED Act Chapter V (only micro/small enterprises)"},"reasons":["Contract terms: 45 days from invoice date -> 2026-11-20"],"alerts":[],"run":[{"invoice_no":"NCE/2627/1182","amount":797585.6,"pay_on":"2026-11-20","priority":"Contractual"}]}},"S3":{"id":"S3","title":"Panel retrofit: split purchase and vendor fraud red flags","story":"Maintenance raises a second 'urgent, sole-source' PR for a control-panel retrofit nine days after phase 1, each just under the Rs 25 lakh competitive-bidding limit. The vendor's GSTIN fails its checksum, its PAN does not match, and its bank account was changed by email six days ago. The agents must stop the case, not optimise it.","learning_points":["Split-purchase detection across requisitions (threshold avoidance)","Vendor due diligence: GSTIN checksum, PAN match, unverified bank change (business email compromise)","Hard stops that no single approver can override; escalation instead of approval"],"request_text":"URGENT - Line 3 control panel retrofit phase 2 (PLC + VFD panel, 1 lot). Voltline already did phase 1 survey, sole source. Rs 23.8 lakh. Please approve fast.","status":"ESCALATED","approval_pack":null,"pre":3,"steps":[{"agent":"intake","title":"Procurement Analyst","framework":"LangGraph node","mandate":"Turn a requester's message into a complete, policy-ready purchase requisition.","decision":"Requisition structured and forwarded to Policy & Compliance","highlights":["1 lot | Rs 23,80,000","Capex / maintenance | HSN 8537","Need-by in 17 days"],"rationale":"PR-26-0961 is a capex / maintenance request for 1 lot of Electrical control panel retrofit, Line 3, phase 2 (PLC + VFD panel) (HSN 8537), estimated at Rs 23,80,000 and needed in 17 days. Budget on CC-MNT-410 has Rs 32,60,000 available. Flags for the policy officer: URGENCY_LANGUAGE, SOLE_SOURCE_CLAIMED.","rationale_source":"offline-template","guardrail":"n/a","elapsed_ms":0.2,"tools":[{"tool":"parse_request","summary":"Extracted qty=1.0 lot, need-by=None, value=Rs 23,80,000, category=electrical panels (offline rule-based parser)"},{"tool":"budget_check","summary":"Maintenance - Electrical: remaining Rs 32,60,000 vs request Rs 23,80,000"}],"findings":[{"code":"URGENCY_LANGUAGE","severity":"INFO","detail":"Request pressures for speed; urgency is a common lever in policy bypass"},{"code":"SOLE_SOURCE_CLAIMED","severity":"INFO","detail":"Requester names a single supplier"}]},{"agent":"policy","title":"Policy & Compliance Officer","framework":"LangGraph node","mandate":"Apply the procurement policy before any money is committed.","decision":"BLOCKED - escalate, do not source","highlights":["Approver: Managing Director","Findings: 5 block / 2 warn"],"rationale":"STOP. This requisition cannot proceed. 1 quote(s) received; policy needs 3 for Rs 23,80,000. 1 related PR(s) within 30 days; combined value Rs 48,30,000 falls in a stricter band (min 3 quotes, competitive RFQ). Check digit is '4', expected 'Z': GSTIN is mistyped or fabricated. PAN inside GSTIN (AAHCV3371L) differs from vendor-master PAN (AAHCV3317L). Bank account changed 6 days ago via email request from vendor contact, no call-back verification. Route to the Procurement Head and Internal Audit; the bank change must be verified by call-back on a number from the vendor master before any payment, and the related requisitions must be consolidated and re-sourced competitively.","rationale_source":"offline-template","guardrail":"n/a","elapsed_ms":0.2,"tools":[{"tool":"delegation_of_authority","summary":"Approver for Rs 23,80,000: Managing Director"},{"tool":"competitive_quote_rule","summary":"Needs 3 quote(s); received 1"},{"tool":"split_purchase_scan","summary":"1 related PR(s); combined Rs 48,30,000"},{"tool":"budget_check","summary":"Remaining Rs 32,60,000; issue raised"},{"tool":"vendor_due_diligence","summary":"Voltline Switchgear Solutions Pvt. Ltd.: GSTIN_CHECKSUM_INVALID, PAN_MISMATCH, BANK_CHANGE_UNVERIFIED"}],"findings":[{"code":"SINGLE_SOURCE_WEAK_JUSTIFICATION","severity":"WARN","detail":"Sole-source request; justification does not cite OEM lock-in, IP or a documented capability gap"},{"code":"QUOTES_INSUFFICIENT","severity":"BLOCK","detail":"1 quote(s) received; policy needs 3 for Rs 23,80,000"},{"code":"BUDGET_AT_RISK","severity":"WARN","detail":"With pending requisitions (Rs 24,50,000) the cost center would need Rs 48,30,000 vs Rs 32,60,000 remaining"},{"code":"SPLIT_PURCHASE_SUSPECTED","severity":"BLOCK","detail":"1 related PR(s) within 30 days; combined value Rs 48,30,000 falls in a stricter band (min 3 quotes, competitive RFQ)"},{"code":"GSTIN_CHECKSUM_INVALID","severity":"BLOCK","detail":"Check digit is '4', expected 'Z': GSTIN is mistyped or fabricated"},{"code":"PAN_MISMATCH","severity":"BLOCK","detail":"PAN inside GSTIN (AAHCV3371L) differs from vendor-master PAN (AAHCV3317L)"},{"code":"BANK_CHANGE_UNVERIFIED","severity":"BLOCK","detail":"Bank account changed 6 days ago via email request from vendor contact, no call-back verification"}]},{"agent":"controller","title":"Finance Controller","framework":"LangGraph node","mandate":"Summarise the case for the CFO with decisions, risks, money impact and an audit trail.","decision":"Case closed: ESCALATED","highlights":["Status ESCALATED","7 tool calls","1 human touchpoint(s)"],"rationale":"- Case S3-web-approve - PR-26-0961: Electrical control panel retrofit, Line 3, phase 2 (PLC + VFD panel) (1 lot).\n- Outcome: ESCALATED. No PO, no payment. Hard stops: QUOTES_INSUFFICIENT; SPLIT_PURCHASE_SUSPECTED; GSTIN_CHECKSUM_INVALID; PAN_MISMATCH; BANK_CHANGE_UNVERIFIED.\n- Required before re-submission: call-back verification of the vendor's bank change using master-data contacts; correct GSTIN/PAN on the vendor master after GST portal verification; consolidate the related requisitions and run a competitive RFQ; budget re-validation for the cost center.\n- Internal Audit notified: pattern matches threshold-splitting plus a bank-change request (business email compromise risk).","rationale_source":"offline-template","guardrail":"n/a","elapsed_ms":0.1}],"memo":{"status":"ESCALATED","bullets":["Case S3-web-approve - PR-26-0961: Electrical control panel retrofit, Line 3, phase 2 (PLC + VFD panel) (1 lot).","Outcome: ESCALATED. No PO, no payment. Hard stops: QUOTES_INSUFFICIENT; SPLIT_PURCHASE_SUSPECTED; GSTIN_CHECKSUM_INVALID; PAN_MISMATCH; BANK_CHANGE_UNVERIFIED.","Required before re-submission: call-back verification of the vendor's bank change using master-data contacts; correct GSTIN/PAN on the vendor master after GST portal verification; consolidate the related requisitions and run a competitive RFQ; budget re-validation for the cost center.","Internal Audit notified: pattern matches threshold-splitting plus a bank-change request (business email compromise risk)."],"text":"- Case S3-web-approve - PR-26-0961: Electrical control panel retrofit, Line 3, phase 2 (PLC + VFD panel) (1 lot).\n- Outcome: ESCALATED. No PO, no payment. Hard stops: QUOTES_INSUFFICIENT; SPLIT_PURCHASE_SUSPECTED; GSTIN_CHECKSUM_INVALID; PAN_MISMATCH; BANK_CHANGE_UNVERIFIED.\n- Required before re-submission: call-back verification of the vendor's bank change using master-data contacts; correct GSTIN/PAN on the vendor master after GST portal verification; consolidate the related requisitions and run a competitive RFQ; budget re-validation for the cost center.\n- Internal Audit notified: pattern matches threshold-splitting plus a bank-change request (business email compromise risk).","kpis":{"agents_involved":2,"tool_calls":7,"controls_flagged":9,"blocking_controls":5,"human_touchpoints":1,"touchless_invoice":false,"agent_processing_ms":0.4,"po_value_incl_gst":null,"approved_payable":null,"disputed_amount_protected":null,"tds_withheld":null,"itc_claimable":null,"negotiation_value_this_order":null,"negotiation_value_annual":null,"msme_interest_accrued":0.0,"discount_decision":null}},"pr":{"pr_no":"PR-26-0961","requester":"Rohit Kale","department":"Maintenance - Electrical","cost_center":"CC-MNT-410","estimated_value":2380000,"item":{"code":"SRV-PNL-L3-P2","description":"Electrical control panel retrofit, Line 3, phase 2 (PLC + VFD panel)","hsn":"8537","uom":"lot","qty":1,"need_by":"2026-10-20"}}},"S4":{"id":"S4","title":"Packaging from a micro enterprise: MSME 45-day clock and TDS threshold","story":"Logistics replenishes VCI bags from a micro-enterprise supplier on a 30-day written agreement. This purchase pushes the supplier past Rs 50 lakh for the tax year, so TDS starts. Meanwhile an earlier invoice from the same supplier has been stuck in approvals and is already overdue under the MSMED Act.","learning_points":["TDS on purchase of goods applies only to the amount above Rs 50 lakh per seller per tax year","MSMED Act s.15/16: payment due within the agreed term (max 45 days); compound interest at 3x the RBI Bank Rate if late","Income-tax Act 2025 s.37(2)(g) (old s.43B(h)): late MSE dues are deductible only when paid","Treasury prioritises statutory deadlines over cash-holding"],"request_text":"October replenishment: 86000 VCI poly bags 600x900 mm, 50 micron. Need by 10 Oct 2026. Approx Rs 8.6 lakh.","status":"COMPLETED","approval_pack":{"case_id":"S4-web-approve","approver_role":"Plant Head","pr_no":"PR-26-0972","item":"VCI poly bags 600 x 900 mm, 50 micron","qty":86000,"vendor_id":"V-106","vendor":"Godavari Packaging Industries","po_value_excl_gst":860000.0,"score":94.1,"runner_up":"V-108","kraljic":"Non-critical","warnings":[],"negotiation_target":10.0,"question":"Approve PO to Godavari Packaging Industries for Rs 8,60,000 (excl. GST)?"},"pre":3,"steps":[{"agent":"intake","title":"Procurement Analyst","framework":"LangGraph node","mandate":"Turn a requester's message into a complete, policy-ready purchase requisition.","decision":"Requisition structured and forwarded to Policy & Compliance","highlights":["86,000 nos | Rs 8,60,000","Indirect - consumables | HSN 3923","Need-by in 11 days"],"rationale":"PR-26-0972 is a indirect - consumables request for 86,000 nos of VCI poly bags 600 x 900 mm, 50 micron (HSN 3923), estimated at Rs 8,60,000 and needed in 11 days. Budget on CC-LOG-520 has Rs 41,70,000 available. The request is complete and consistent with the form.","rationale_source":"offline-template","guardrail":"n/a","elapsed_ms":0.2,"tools":[{"tool":"parse_request","summary":"Extracted qty=86000.0 nos, need-by=2026-10-10, value=Rs 8,60,000, category=packaging (offline rule-based parser)"},{"tool":"budget_check","summary":"Logistics - Packaging: remaining Rs 41,70,000 vs request Rs 8,60,000"}]},{"agent":"policy","title":"Policy & Compliance Officer","framework":"LangGraph node","mandate":"Apply the procurement policy before any money is committed.","decision":"Cleared for sourcing; approver = Plant Head","highlights":["Approver: Plant Head","Findings: 0 block / 0 warn"],"rationale":"Policy checks passed. Approval authority: Plant Head. No warnings. Excluded from sourcing on lead time: V-107.","rationale_source":"offline-template","guardrail":"n/a","elapsed_ms":0.1,"tools":[{"tool":"delegation_of_authority","summary":"Approver for Rs 8,60,000: Plant Head"},{"tool":"competitive_quote_rule","summary":"Needs 3 quote(s); received 3"},{"tool":"split_purchase_scan","summary":"0 related PR(s); combined Rs 8,60,000"},{"tool":"budget_check","summary":"Remaining Rs 41,70,000; OK"},{"tool":"vendor_due_diligence","summary":"Godavari Packaging Industries: clean"},{"tool":"vendor_due_diligence","summary":"Mula Industrial Supplies: clean"},{"tool":"vendor_due_diligence","summary":"Pavana Polymers Pvt. Ltd.: clean"}]},{"agent":"supplier_analyst","title":"Sourcing Crew (3 CrewAI agents)","framework":"CrewAI crew inside a LangGraph node","mandate":"Rank suppliers on total value, not just price.","decision":"Recommend V-106 Godavari Packaging Industries at Rs 10/unit","highlights":["Kraljic: Non-critical","Winner 94.1 pts","Target Rs 10"],"rationale":"Ranking: V-106 Godavari Packaging Industries: 94.1 pts, landed Rs 10/unit, lead 7 days | V-108 Pavana Polymers Pvt. Ltd.: 86.55 pts, landed Rs 9.80/unit, lead 9 days | V-107 Mula Industrial Supplies: 88.31 pts, landed Rs 10.60/unit, lead 10 days [excluded: lead time misses need-by date]. The cheapest quote (V-108, Rs 9.80/unit) loses on quality, delivery or eligibility, so lowest price is not best value here. Margin over runner-up: 7.55 pts.","rationale_source":"CrewAI (offline expert LLM)","guardrail":"passed","elapsed_ms":25.1,"engine":"CrewAI (offline expert LLM)","crew_tool_calls":["kraljic_analysis","supplier_scorecard","should_cost_model"],"tools":[{"tool":"kraljic_analysis","summary":"Non-critical (spend Rs 91,20,000, risk score 1)"},{"tool":"supplier_scorecard","summary":"Winner V-106 94.1 pts; runner-up V-108"},{"tool":"should_cost_model","summary":"Should-cost Rs 9.97 vs quote Rs 10 (0.3% gap)"}],"crew":[{"agent":"category_manager","title":"Category Manager","output":"Kraljic position: Non-critical. Annual spend Rs 91.20 lakh gives low profit impact; supply-risk score 1 gives low supply risk. Evaluate suppliers with weights: price 35%, quality 20%, delivery 25%, risk 10%, compliance 10%. Strategy levers: Rate contract / catalogue buying to cut transaction cost; Bundle with similar items; automate re-orders."},{"agent":"supplier_analyst","title":"Supplier Performance & Risk Analyst","output":"Ranking: V-106 Godavari Packaging Industries: 94.1 pts, landed Rs 10/unit, lead 7 days | V-108 Pavana Polymers Pvt. Ltd.: 86.55 pts, landed Rs 9.80/unit, lead 9 days | V-107 Mula Industrial Supplies: 88.31 pts, landed Rs 10.60/unit, lead 10 days [excluded: lead time misses need-by date]. The cheapest quote (V-108, Rs 9.80/unit) loses on quality, delivery or eligibility, so lowest price is not best value here. Margin over runner-up: 7.55 pts.\nRecommended vendor: V-106"},{"agent":"negotiator","title":"Negotiation Strategist","output":"Should-cost Rs 9.97/unit (material Rs 6.40 + conversion Rs 1.90 + secondary ops Rs 0.60 + 12% overhead and margin) vs quote Rs 10: gap 0.3%. Verdict: price is fair (within 1% of should-cost). BATNA: V-108 Pavana Polymers Pvt. Ltd. at Rs 9.80/unit landed (86.55 pts). Levers: Rate contract / catalogue buying to cut transaction cost; Bundle with similar items; automate re-orders."}]},{"agent":"approver","title":"Human Approver (per DoA)","framework":"LangGraph interrupt (human-in-the-loop)","mandate":"Accountable human decision at the point of financial commitment.","decision":"APPROVED by Plant Head","highlights":["Role required: Plant Head","Value Rs 8,60,000"],"rationale":"Approved as recommended.","rationale_source":"human","guardrail":"n/a","elapsed_ms":0.0,"tools":[{"tool":"approval_pack","summary":"Approve PO to Godavari Packaging Industries for Rs 8,60,000 (excl. GST)?"}]},{"agent":"buyer","title":"Buyer (PO Specialist)","framework":"LangGraph node","mandate":"Issue a compliant purchase order with the right commercial and statutory terms.","decision":"PO-26-0972 issued (Rs 10,14,800 incl. GST)","highlights":["CGST+SGST Rs 1,54,800","Delivery by 2026-10-07","MSME clause added"],"rationale":"PO-26-0972 issued to Godavari Packaging Industries for 86,000 nos at Rs 10 (Rs 8,60,000 + CGST+SGST Rs 1,54,800). Delivery by 2026-10-07. Key terms: Payment: 30 days from invoice; MSMED Act clause: supplier is a micro enterprise (UDYAM-MH-20-0033815); payment within 30 days of acceptance; Quote PO number on invoice; bill only accepted quantity; GSTIN of buyer 27AAKCM4821Q1ZU.","rationale_source":"offline-template","guardrail":"n/a","elapsed_ms":0.1,"tools":[{"tool":"gst_estimate","summary":"CGST+SGST @ 18% = Rs 1,54,800; PO total Rs 10,14,800"},{"tool":"tds_preview","summary":"This invoice crosses the Rs 50 lakh threshold; TDS only on the amount above it"}]},{"agent":"ap","title":"Accounts Payable Specialist","framework":"LangGraph node","mandate":"Pay only what is owed: match, de-duplicate and protect against payment fraud.","decision":"Matched - release to tax review","highlights":["Approved Rs 10,14,800","Disputed Rs 0"],"rationale":"Invoice GPI/26-27/311 matches PO PO-26-0972 and GRN-26-10-0163 within tolerance: 86,000 units at Rs 10. No duplicate, bank details unchanged. Approved for payment: Rs 10,14,800.","rationale_source":"offline-template","guardrail":"n/a","elapsed_ms":0.1,"tools":[{"tool":"three_way_match","summary":"MATCHED: price 10.0 vs 10.0 (+0.0%), qty invoiced 86,000 vs accepted 86,000"},{"tool":"duplicate_check","summary":"Checked against 1 prior invoice(s): no duplicate"},{"tool":"bank_change_check","summary":"Bank details match master; no recent change"}]},{"agent":"tax","title":"GST & TDS Specialist","framework":"LangGraph node","mandate":"Make sure the invoice is a valid tax document and withhold the right TDS.","decision":"Valid tax invoice; ITC Rs 1,54,800; TDS Rs 480","highlights":["CGST+SGST 18%","ITC Rs 1,54,800","TDS Rs 480"],"rationale":"Tax document check: CGST+SGST at 18% is correct for a supply from state 27 to place of supply 27; billed tax reconciles. E-invoice not mandatory for this supplier. Claim ITC of Rs 1,54,800 on the accepted value. TDS: this invoice crosses the Rs 50 lakh threshold; TDS only on the amount above it - deduct Rs 480 under Income-tax Act 2025, s.393(1) Table Sl. 8(ii) (formerly s.194Q). Pay the supplier within 180 days of invoice date to keep the ITC.","rationale_source":"offline-template","guardrail":"n/a","elapsed_ms":0.1,"tools":[{"tool":"gst_invoice_check","summary":"CGST+SGST @ 18% on Rs 8,60,000 = Rs 1,54,800; GSTIN checksum OK; no tax errors"},{"tool":"einvoice_check","summary":"E-invoice not required (AATO up to Rs 5 cr)"},{"tool":"itc_readiness","summary":"ITC claimable now: Rs 1,54,800"},{"tool":"tds_on_goods","summary":"TDS Rs 480 at 0.1% on Rs 4,80,000: This invoice crosses the Rs 50 lakh threshold; TDS only on the amount above it"}]},{"agent":"treasury","title":"Treasury & Working-Capital Analyst","framework":"LangGraph node","mandate":"Pay at the best time: never late to MSEs, early only when it earns more than the cost of funds.","decision":"Schedule Rs 10,14,320 on 2026-11-06; pay 1 overdue MSME invoice(s) today","highlights":["Pay on 2026-11-06","Net Rs 10,14,320","No discount offered"],"rationale":"Pay Rs 10,14,320 (after TDS Rs 480) on 2026-11-06. Contract terms: 30 days from invoice date -> 2026-11-06. MSMED Act s.15 (micro enterprise): Written agreement of 30 days, capped at 45 -> pay by 2026-11-07. URGENT: GPI/26-27/279 overdue 13 days since 2026-09-27; interest Rs 4,620.87 at 17.25% (not tax-deductible); Rs 6,40,000 disallowed under s.37(2)(g) if still unpaid on 2027-03-31.","rationale_source":"offline-template","guardrail":"n/a","elapsed_ms":0.2,"tools":[{"tool":"payment_timing","summary":"Due 2026-11-06; pay on 2026-11-06"},{"tool":"msme_open_items_scan","summary":"1 overdue MSME invoice(s); interest accrued Rs 4,620.87"}],"findings":[{"code":"MSME_OVERDUE","severity":"HIGH","detail":"GPI/26-27/279 overdue 13 days since 2026-09-27; interest Rs 4,620.87 at 17.25% (not tax-deductible); Rs 6,40,000 disallowed under s.37(2)(g) if still unpaid on 2027-03-31"}]},{"agent":"controller","title":"Finance Controller","framework":"LangGraph node","mandate":"Summarise the case for the CFO with decisions, risks, money impact and an audit trail.","decision":"Case closed: COMPLETED","highlights":["Status COMPLETED","24 tool calls","1 human touchpoint(s)"],"rationale":"- Case S4-web-approve - PR-26-0972: VCI poly bags 600 x 900 mm, 50 micron (86,000 nos).\n- Sourcing: Godavari Packaging Industries selected (94.1 pts, Kraljic Non-critical); approved by Plant Head; PO-26-0972 for Rs 10,14,800 incl. GST.\n- Invoice: matched; approved Rs 10,14,800.\n- Tax: ITC Rs 1,54,800 claimable; TDS Rs 480 (this invoice crosses the Rs 50 lakh threshold; TDS only on the amount above it).\n- Cash: pay Rs 10,14,320 on 2026-11-06. Overdue MSME invoice GPI/26-27/279 (13 days late, interest Rs 4,620.87) must be paid today.","rationale_source":"offline-template","guardrail":"n/a","elapsed_ms":0.1}],"memo":{"status":"COMPLETED","bullets":["Case S4-web-approve - PR-26-0972: VCI poly bags 600 x 900 mm, 50 micron (86,000 nos).","Sourcing: Godavari Packaging Industries selected (94.1 pts, Kraljic Non-critical); approved by Plant Head; PO-26-0972 for Rs 10,14,800 incl. GST.","Invoice: matched; approved Rs 10,14,800.","Tax: ITC Rs 1,54,800 claimable; TDS Rs 480 (this invoice crosses the Rs 50 lakh threshold; TDS only on the amount above it).","Cash: pay Rs 10,14,320 on 2026-11-06. Overdue MSME invoice GPI/26-27/279 (13 days late, interest Rs 4,620.87) must be paid today."],"text":"- Case S4-web-approve - PR-26-0972: VCI poly bags 600 x 900 mm, 50 micron (86,000 nos).\n- Sourcing: Godavari Packaging Industries selected (94.1 pts, Kraljic Non-critical); approved by Plant Head; PO-26-0972 for Rs 10,14,800 incl. GST.\n- Invoice: matched; approved Rs 10,14,800.\n- Tax: ITC Rs 1,54,800 claimable; TDS Rs 480 (this invoice crosses the Rs 50 lakh threshold; TDS only on the amount above it).\n- Cash: pay Rs 10,14,320 on 2026-11-06. Overdue MSME invoice GPI/26-27/279 (13 days late, interest Rs 4,620.87) must be paid today.","kpis":{"agents_involved":10,"tool_calls":24,"controls_flagged":1,"blocking_controls":0,"human_touchpoints":1,"touchless_invoice":true,"agent_processing_ms":25.9,"po_value_incl_gst":1014800.0,"approved_payable":1014800.0,"disputed_amount_protected":0.0,"tds_withheld":480,"itc_claimable":154800.0,"negotiation_value_this_order":0.0,"negotiation_value_annual":0.0,"msme_interest_accrued":4620.87,"discount_decision":null}},"pr":{"pr_no":"PR-26-0972","requester":"Sneha Patil","department":"Logistics - Packaging","cost_center":"CC-LOG-520","estimated_value":860000,"item":{"code":"PKG-VCI-600900","description":"VCI poly bags 600 x 900 mm, 50 micron","hsn":"3923","uom":"nos","qty":86000,"need_by":"2026-10-10"}},"kraljic":{"quadrant":"Non-critical","annual_spend":9120000,"profit_impact":"low","supply_risk":"low","supply_risk_score":1,"weights":{"price":0.35,"quality":0.2,"delivery":0.25,"risk":0.1,"compliance":0.1}},"ranking":[{"vendor_id":"V-106","vendor":"Godavari Packaging Industries","unit_price":10.0,"landed_unit_cost":10.0,"lead_time_days":7,"msme":"micro","scores":{"price":98.0,"quality":92.5,"delivery":98.0,"risk":80.0,"compliance":88.0},"weighted_total":94.1,"eligible":true,"note":""},{"vendor_id":"V-108","vendor":"Pavana Polymers Pvt. Ltd.","unit_price":9.8,"landed_unit_cost":9.8,"lead_time_days":9,"msme":"small","scores":{"price":100.0,"quality":77.5,"delivery":89.0,"risk":60.0,"compliance":78.0},"weighted_total":86.55,"eligible":true,"note":""},{"vendor_id":"V-107","vendor":"Mula Industrial Supplies","unit_price":10.6,"landed_unit_cost":10.6,"lead_time_days":10,"msme":"small","scores":{"price":92.45,"quality":83.75,"delivery":92.0,"risk":80.0,"compliance":82.0},"weighted_total":88.31,"eligible":false,"note":"excluded: lead time misses need-by date"}],"should_cost":{"material_cost":6.4,"conversion":1.9,"secondary_ops":0.6,"overhead_margin_pct":12,"should_cost":9.97,"quoted":10.0,"gap_per_unit":0.03,"gap_pct":0.3,"saving_this_order":0.0,"saving_annualised":0.0,"verdict":"price is fair (within 1% of should-cost)"},"po":{"po_no":"PO-26-0972","vendor":"Godavari Packaging Industries","taxable":860000.0,"tax_type":"CGST+SGST","tax_total":154800.0,"total":1014800.0,"delivery_by":"2026-10-07","terms":["Price Rs 10/nos, firm for this order","Payment: 30 days from invoice","MSMED Act clause: supplier is a micro enterprise (UDYAM-MH-20-0033815); payment within 30 days of acceptance","Quote PO number on invoice; bill only accepted quantity; GSTIN of buyer 27AAKCM4821Q1ZU"]},"match":{"status":"MATCHED","exceptions":[],"po_price":10.0,"invoice_price":10.0,"price_variance_pct":0.0,"po_qty":86000,"accepted_qty":86000,"invoiced_qty":86000,"approved_taxable":860000.0,"approved_tax":154800.0,"approved_total":1014800.0,"billed_taxable":860000.0,"billed_total":1014800.0,"disputed_taxable":0.0,"disputed_total":0.0},"tax":{"tds":{"tds_amount":480,"base":480000.0,"rate_pct":0.1,"reason":"This invoice crosses the Rs 50 lakh threshold; TDS only on the amount above it","provision":"Income-tax Act 2025, s.393(1) Table Sl. 8(ii) (formerly s.194Q)"},"itc_amount":154800.0,"itc_on_hold":0.0,"tax_type":"CGST+SGST","rate_pct":18},"treasury":{"net_payable":1014320.0,"due_date":"2026-11-06","pay_on":"2026-11-06","discount":null,"msme":{"covered":true,"due_date":"2026-11-07","days_allowed":30,"basis":"Written agreement of 30 days, capped at 45"},"reasons":["Contract terms: 30 days from invoice date -> 2026-11-06","MSMED Act s.15 (micro enterprise): Written agreement of 30 days, capped at 45 -> pay by 2026-11-07"],"alerts":[{"invoice_no":"GPI/26-27/279","total":755200.0,"status":"unpaid - stuck awaiting PO amendment approval","msme_due":"2026-09-27","overdue_days":13,"days_to_due":0,"severity":"CRITICAL","interest_accrued":4620.87,"interest_rate_pct":17.25,"interest_tax_deductible":false,"disallowance_if_unpaid_at_year_end":640000.0,"action":"Pay in the next payment run with statutory interest; fix the approval bottleneck"}],"run":[{"invoice_no":"GPI/26-27/279","amount":759820.87,"pay_on":"2026-10-10","priority":"MSME-OVERDUE (pay now, incl. statutory interest)"},{"invoice_no":"GPI/26-27/311","amount":1014320.0,"pay_on":"2026-11-06","priority":"MSME-statutory"}]}},"S1-reject":{"id":"S1","title":"Die-cast gearbox housings: clean end-to-end run","story":"Production needs 4,000 aluminium die-cast housings. Three suppliers quoted. The cheapest supplier has poor quality and delivery, so the agents must pick on total value, not price. Goods arrive and the invoice matches.","learning_points":["Weighted supplier scorecard beats lowest-price buying for a strategic item","Inter-state purchase: IGST, e-invoice IRN check, TDS on goods above the Rs 50 lakh threshold","Treasury declines an early-payment discount whose annualised return is below the cost of funds"],"request_text":"Need 4000 nos aluminium die-cast gearbox housings (ADC12, part HSG-ADC12-GB04) for the Q3 build plan, required by 5 Oct 2026. Budget about Rs 19 lakh. Line-stopper part.","status":"REJECTED","approval_pack":{"case_id":"S1-web-reject","approver_role":"CFO","pr_no":"PR-26-0871","item":"Aluminium die-cast gearbox housing, ADC12, machined","qty":4000,"vendor_id":"V-102","vendor":"Tungabhadra Alloy Castings Ltd.","po_value_excl_gst":1774000.0,"score":94.56,"runner_up":"V-101","kraljic":"Strategic","warnings":[],"negotiation_target":432.43,"question":"Approve PO to Tungabhadra Alloy Castings Ltd. for Rs 17,74,000 (excl. GST)?"},"pre":3,"steps":[{"agent":"intake","title":"Procurement Analyst","framework":"LangGraph node","mandate":"Turn a requester's message into a complete, policy-ready purchase requisition.","decision":"Requisition structured and forwarded to Policy & Compliance","highlights":["4,000 nos | Rs 19,00,000","Direct material | HSN 7616","Need-by in 34 days"],"rationale":"PR-26-0871 is a direct material request for 4,000 nos of Aluminium die-cast gearbox housing, ADC12, machined (HSN 7616), estimated at Rs 19,00,000 and needed in 34 days. Budget on CC-PRD-210 has Rs 42,50,000 available. The request is complete and consistent with the form.","rationale_source":"offline-template","guardrail":"n/a","elapsed_ms":0.2,"tools":[{"tool":"parse_request","summary":"Extracted qty=4000.0 nos, need-by=2026-10-05, value=Rs 19,00,000, category=aluminium castings (offline rule-based parser)"},{"tool":"budget_check","summary":"Production - Die-casting line: remaining Rs 42,50,000 vs request Rs 19,00,000"}]},{"agent":"policy","title":"Policy & Compliance Officer","framework":"LangGraph node","mandate":"Apply the procurement policy before any money is committed.","decision":"Cleared for sourcing; approver = CFO","highlights":["Approver: CFO","Findings: 0 block / 0 warn"],"rationale":"Policy checks passed. Approval authority: CFO. No warnings.","rationale_source":"offline-template","guardrail":"n/a","elapsed_ms":0.1,"tools":[{"tool":"delegation_of_authority","summary":"Approver for Rs 19,00,000: CFO"},{"tool":"competitive_quote_rule","summary":"Needs 3 quote(s); received 3"},{"tool":"split_purchase_scan","summary":"0 related PR(s); combined Rs 19,00,000"},{"tool":"budget_check","summary":"Remaining Rs 42,50,000; OK"},{"tool":"vendor_due_diligence","summary":"Deccan Precision Castings Pvt. Ltd.: clean"},{"tool":"vendor_due_diligence","summary":"Tungabhadra Alloy Castings Ltd.: clean"},{"tool":"vendor_due_diligence","summary":"Sabarmati Foundry Works: clean"}]},{"agent":"supplier_analyst","title":"Sourcing Crew (3 CrewAI agents)","framework":"CrewAI crew inside a LangGraph node","mandate":"Rank suppliers on total value, not just price.","decision":"Recommend V-102 Tungabhadra Alloy Castings Ltd. at Rs 438/unit","highlights":["Kraljic: Strategic","Winner 94.56 pts","Target Rs 432.43"],"rationale":"Ranking: V-102 Tungabhadra Alloy Castings Ltd.: 94.56 pts, landed Rs 443.50/unit, lead 28 days | V-101 Deccan Precision Castings Pvt. Ltd.: 86.04 pts, landed Rs 452/unit, lead 25 days | V-103 Sabarmati Foundry Works: 73.45 pts, landed Rs 422.50/unit, lead 21 days. The cheapest quote (V-103, Rs 422.50/unit) loses on quality, delivery or eligibility, so lowest price is not best value here. Margin over runner-up: 8.52 pts.","rationale_source":"CrewAI (offline expert LLM)","guardrail":"passed","elapsed_ms":19.4,"engine":"CrewAI (offline expert LLM)","crew_tool_calls":["kraljic_analysis","supplier_scorecard","should_cost_model"],"tools":[{"tool":"kraljic_analysis","summary":"Strategic (spend Rs 2,10,88,000, risk score 3)"},{"tool":"supplier_scorecard","summary":"Winner V-102 94.56 pts; runner-up V-101"},{"tool":"should_cost_model","summary":"Should-cost Rs 432.43 vs quote Rs 438 (1.27% gap)"}],"crew":[{"agent":"category_manager","title":"Category Manager","output":"Kraljic position: Strategic. Annual spend Rs 2.11 crore gives high profit impact; supply-risk score 3 gives high supply risk. Evaluate suppliers with weights: price 25%, quality 30%, delivery 20%, risk 20%, compliance 5%. Strategy levers: Long-term agreement with index-linked raw-material pricing (share commodity risk transparently); Develop the runner-up as a qualified second source for 20-30% of volume; Joint cost-reduction (VA/VE) targets and PPM improvement plan written into the contract."},{"agent":"supplier_analyst","title":"Supplier Performance & Risk Analyst","output":"Ranking: V-102 Tungabhadra Alloy Castings Ltd.: 94.56 pts, landed Rs 443.50/unit, lead 28 days | V-101 Deccan Precision Castings Pvt. Ltd.: 86.04 pts, landed Rs 452/unit, lead 25 days | V-103 Sabarmati Foundry Works: 73.45 pts, landed Rs 422.50/unit, lead 21 days. The cheapest quote (V-103, Rs 422.50/unit) loses on quality, delivery or eligibility, so lowest price is not best value here. Margin over runner-up: 8.52 pts.\nRecommended vendor: V-102"},{"agent":"negotiator","title":"Negotiation Strategist","output":"Should-cost Rs 432.43/unit (material Rs 226.10 + conversion Rs 120 + secondary ops Rs 40 + 12% overhead and margin) vs quote Rs 438: gap 1.27%. Verdict: negotiate. Target Rs 432.43/unit, open at Rs 428.11. Value at stake Rs 22,280 on this order, Rs 2,67,360 a year. BATNA: V-101 Deccan Precision Castings Pvt. Ltd. at Rs 452/unit landed (86.04 pts). Levers: Long-term agreement with index-linked raw-material pricing (share commodity risk transparently); Develop the runner-up as a qualified second source for 20-30% of volume; Joint cost-reduction (VA/VE) targets and PPM improvement plan written into the contract."}]},{"agent":"approver","title":"Human Approver (per DoA)","framework":"LangGraph interrupt (human-in-the-loop)","mandate":"Accountable human decision at the point of financial commitment.","decision":"REJECTED by CFO","highlights":["Role required: CFO","Value Rs 17,74,000"],"rationale":"Defer: Q3 volume forecast is under review.","rationale_source":"human","guardrail":"n/a","elapsed_ms":0.0,"tools":[{"tool":"approval_pack","summary":"Approve PO to Tungabhadra Alloy Castings Ltd. for Rs 17,74,000 (excl. GST)?"}]},{"agent":"controller","title":"Finance Controller","framework":"LangGraph node","mandate":"Summarise the case for the CFO with decisions, risks, money impact and an audit trail.","decision":"Case closed: REJECTED","highlights":["Status REJECTED","13 tool calls","1 human touchpoint(s)"],"rationale":"- Case S1-web-reject - PR-26-0871: Aluminium die-cast gearbox housing, ADC12, machined (4,000 nos).\n- Outcome: REJECTED by CFO. Defer: Q3 volume forecast is under review.","rationale_source":"offline-template","guardrail":"n/a","elapsed_ms":0.0}],"memo":{"status":"REJECTED","bullets":["Case S1-web-reject - PR-26-0871: Aluminium die-cast gearbox housing, ADC12, machined (4,000 nos).","Outcome: REJECTED by CFO. Defer: Q3 volume forecast is under review."],"text":"- Case S1-web-reject - PR-26-0871: Aluminium die-cast gearbox housing, ADC12, machined (4,000 nos).\n- Outcome: REJECTED by CFO. Defer: Q3 volume forecast is under review.","kpis":{"agents_involved":6,"tool_calls":13,"controls_flagged":0,"blocking_controls":0,"human_touchpoints":1,"touchless_invoice":false,"agent_processing_ms":19.7,"po_value_incl_gst":null,"approved_payable":null,"disputed_amount_protected":null,"tds_withheld":null,"itc_claimable":null,"negotiation_value_this_order":22280.0,"negotiation_value_annual":267360.0,"msme_interest_accrued":0.0,"discount_decision":null}},"pr":{"pr_no":"PR-26-0871","requester":"Anil Deshmukh","department":"Production Planning","cost_center":"CC-PRD-210","estimated_value":1900000,"item":{"code":"HSG-ADC12-GB04","description":"Aluminium die-cast gearbox housing, ADC12, machined","hsn":"7616","uom":"nos","qty":4000,"need_by":"2026-10-05"}},"kraljic":{"quadrant":"Strategic","annual_spend":21088000,"profit_impact":"high","supply_risk":"high","supply_risk_score":3,"weights":{"price":0.25,"quality":0.3,"delivery":0.2,"risk":0.2,"compliance":0.05}},"ranking":[{"vendor_id":"V-102","vendor":"Tungabhadra Alloy Castings Ltd.","unit_price":438.0,"landed_unit_cost":443.5,"lead_time_days":28,"msme":"none","scores":{"price":95.26,"quality":89.5,"delivery":97.0,"risk":100.0,"compliance":90.0},"weighted_total":94.56,"eligible":true,"note":""},{"vendor_id":"V-101","vendor":"Deccan Precision Castings Pvt. Ltd.","unit_price":452.0,"landed_unit_cost":452.0,"lead_time_days":25,"msme":"small","scores":{"price":93.47,"quality":78.75,"delivery":94.0,"risk":80.0,"compliance":85.0},"weighted_total":86.04,"eligible":true,"note":""},{"vendor_id":"V-103","vendor":"Sabarmati Foundry Works","unit_price":415.0,"landed_unit_cost":422.5,"lead_time_days":21,"msme":"micro","scores":{"price":100.0,"quality":52.5,"delivery":86.0,"risk":60.0,"compliance":70.0},"weighted_total":73.45,"eligible":true,"note":""}],"should_cost":{"material_cost":226.1,"conversion":120,"secondary_ops":40,"overhead_margin_pct":12,"should_cost":432.43,"quoted":438.0,"gap_per_unit":5.57,"gap_pct":1.27,"saving_this_order":22280.0,"saving_annualised":267360.0,"verdict":"negotiate"}},"S2-reject":{"id":"S2","title":"CNC shafts: invoice price variance and QC rejection","story":"The machining cell orders 2,500 hardened shafts. The supplier invoices 3.2% above the PO price and bills for all 2,500 pieces, although quality rejected 120. The agents must pay only what is owed, hold the rest and get a credit note.","learning_points":["3-way match (PO vs GRN vs invoice) with tolerance rules","Pay the undisputed amount on time; hold only the disputed part","GST credit note and input-tax-credit treatment for rejected and overcharged quantities","A quote that cannot meet the need-by date is excluded even if it is cheapest"],"request_text":"Raise PR for 2500 EN8 transmission shafts, machined and induction hardened (drawing SFT-EN8-220), needed by 15 Oct 2026. Expected around Rs 7.4 lakh.","status":"REJECTED","approval_pack":{"case_id":"S2-web-reject","approver_role":"Plant Head","pr_no":"PR-26-0904","item":"EN8 transmission shaft, machined and induction hardened","qty":2500,"vendor_id":"V-104","vendor":"Noyyal CNC Engineering Pvt. Ltd.","po_value_excl_gst":710000.0,"score":92.34,"runner_up":"V-102","kraljic":"Leverage","warnings":[],"negotiation_target":273.93,"question":"Approve PO to Noyyal CNC Engineering Pvt. Ltd. for Rs 7,10,000 (excl. GST)?"},"pre":3,"steps":[{"agent":"intake","title":"Procurement Analyst","framework":"LangGraph node","mandate":"Turn a requester's message into a complete, policy-ready purchase requisition.","decision":"Requisition structured and forwarded to Policy & Compliance","highlights":["2,500 nos | Rs 7,40,000","Direct material | HSN 8483","Need-by in 35 days"],"rationale":"PR-26-0904 is a direct material request for 2,500 nos of EN8 transmission shaft, machined and induction hardened (HSN 8483), estimated at Rs 7,40,000 and needed in 35 days. Budget on CC-PRD-230 has Rs 37,30,000 available. The request is complete and consistent with the form.","rationale_source":"offline-template","guardrail":"n/a","elapsed_ms":0.2,"tools":[{"tool":"parse_request","summary":"Extracted qty=2500.0 nos, need-by=2026-10-15, value=Rs 7,40,000, category=machined components (offline rule-based parser)"},{"tool":"budget_check","summary":"Production - Machining cell: remaining Rs 37,30,000 vs request Rs 7,40,000"}]},{"agent":"policy","title":"Policy & Compliance Officer","framework":"LangGraph node","mandate":"Apply the procurement policy before any money is committed.","decision":"Cleared for sourcing; approver = Plant Head","highlights":["Approver: Plant Head","Findings: 0 block / 0 warn"],"rationale":"Policy checks passed. Approval authority: Plant Head. No warnings. Excluded from sourcing on lead time: V-109.","rationale_source":"offline-template","guardrail":"n/a","elapsed_ms":0.1,"tools":[{"tool":"delegation_of_authority","summary":"Approver for Rs 7,40,000: Plant Head"},{"tool":"competitive_quote_rule","summary":"Needs 3 quote(s); received 3"},{"tool":"split_purchase_scan","summary":"0 related PR(s); combined Rs 7,40,000"},{"tool":"budget_check","summary":"Remaining Rs 37,30,000; OK"},{"tool":"vendor_due_diligence","summary":"Noyyal CNC Engineering Pvt. Ltd.: clean"},{"tool":"vendor_due_diligence","summary":"Tungabhadra Alloy Castings Ltd.: clean"},{"tool":"vendor_due_diligence","summary":"Vaigai Turned Components Pvt. Ltd.: clean"}]},{"agent":"supplier_analyst","title":"Sourcing Crew (3 CrewAI agents)","framework":"CrewAI crew inside a LangGraph node","mandate":"Rank suppliers on total value, not just price.","decision":"Recommend V-104 Noyyal CNC Engineering Pvt. Ltd. at Rs 284/unit","highlights":["Kraljic: Leverage","Winner 92.34 pts","Target Rs 273.93"],"rationale":"Ranking: V-104 Noyyal CNC Engineering Pvt. Ltd.: 92.34 pts, landed Rs 284/unit, lead 21 days | V-102 Tungabhadra Alloy Castings Ltd.: 91.77 pts, landed Rs 318/unit, lead 30 days | V-109 Vaigai Turned Components Pvt. Ltd.: 83.65 pts, landed Rs 282.20/unit, lead 35 days [excluded: lead time misses need-by date]. The cheapest quote (V-109, Rs 282.20/unit) loses on quality, delivery or eligibility, so lowest price is not best value here. Margin over runner-up: 0.57 pts.","rationale_source":"CrewAI (offline expert LLM)","guardrail":"passed","elapsed_ms":19.5,"engine":"CrewAI (offline expert LLM)","crew_tool_calls":["kraljic_analysis","supplier_scorecard","should_cost_model"],"tools":[{"tool":"kraljic_analysis","summary":"Leverage (spend Rs 1,17,89,333, risk score 2)"},{"tool":"supplier_scorecard","summary":"Winner V-104 92.34 pts; runner-up V-102"},{"tool":"should_cost_model","summary":"Should-cost Rs 273.93 vs quote Rs 284 (3.55% gap)"}],"crew":[{"agent":"category_manager","title":"Category Manager","output":"Kraljic position: Leverage. Annual spend Rs 1.18 crore gives high profit impact; supply-risk score 2 gives low supply risk. Evaluate suppliers with weights: price 40%, quality 25%, delivery 20%, risk 10%, compliance 5%. Strategy levers: Use competitive tension: share the target price and invite a best-and-final offer; Volume consolidation across plants for a tiered price; Trade payment-term flexibility for price only where the annualised maths favours us."},{"agent":"supplier_analyst","title":"Supplier Performance & Risk Analyst","output":"Ranking: V-104 Noyyal CNC Engineering Pvt. Ltd.: 92.34 pts, landed Rs 284/unit, lead 21 days | V-102 Tungabhadra Alloy Castings Ltd.: 91.77 pts, landed Rs 318/unit, lead 30 days | V-109 Vaigai Turned Components Pvt. Ltd.: 83.65 pts, landed Rs 282.20/unit, lead 35 days [excluded: lead time misses need-by date]. The cheapest quote (V-109, Rs 282.20/unit) loses on quality, delivery or eligibility, so lowest price is not best value here. Margin over runner-up: 0.57 pts.\nRecommended vendor: V-104"},{"agent":"negotiator","title":"Negotiation Strategist","output":"Should-cost Rs 273.93/unit (material Rs 115.20 + conversion Rs 95 + secondary ops Rs 28 + 15% overhead and margin) vs quote Rs 284: gap 3.55%. Verdict: negotiate. Target Rs 273.93/unit, open at Rs 271.19. Value at stake Rs 25,175 on this order, Rs 4,02,800 a year. BATNA: V-102 Tungabhadra Alloy Castings Ltd. at Rs 318/unit landed (91.77 pts). Levers: Use competitive tension: share the target price and invite a best-and-final offer; Volume consolidation across plants for a tiered price; Trade payment-term flexibility for price only where the annualised maths favours us."}]},{"agent":"approver","title":"Human Approver (per DoA)","framework":"LangGraph interrupt (human-in-the-loop)","mandate":"Accountable human decision at the point of financial commitment.","decision":"REJECTED by Plant Head","highlights":["Role required: Plant Head","Value Rs 7,10,000"],"rationale":"Hold: re-quote after the drawing revision.","rationale_source":"human","guardrail":"n/a","elapsed_ms":0.0,"tools":[{"tool":"approval_pack","summary":"Approve PO to Noyyal CNC Engineering Pvt. Ltd. for Rs 7,10,000 (excl. GST)?"}]},{"agent":"controller","title":"Finance Controller","framework":"LangGraph node","mandate":"Summarise the case for the CFO with decisions, risks, money impact and an audit trail.","decision":"Case closed: REJECTED","highlights":["Status REJECTED","13 tool calls","1 human touchpoint(s)"],"rationale":"- Case S2-web-reject - PR-26-0904: EN8 transmission shaft, machined and induction hardened (2,500 nos).\n- Outcome: REJECTED by Plant Head. Hold: re-quote after the drawing revision.","rationale_source":"offline-template","guardrail":"n/a","elapsed_ms":0.0}],"memo":{"status":"REJECTED","bullets":["Case S2-web-reject - PR-26-0904: EN8 transmission shaft, machined and induction hardened (2,500 nos).","Outcome: REJECTED by Plant Head. Hold: re-quote after the drawing revision."],"text":"- Case S2-web-reject - PR-26-0904: EN8 transmission shaft, machined and induction hardened (2,500 nos).\n- Outcome: REJECTED by Plant Head. Hold: re-quote after the drawing revision.","kpis":{"agents_involved":6,"tool_calls":13,"controls_flagged":0,"blocking_controls":0,"human_touchpoints":1,"touchless_invoice":false,"agent_processing_ms":19.8,"po_value_incl_gst":null,"approved_payable":null,"disputed_amount_protected":null,"tds_withheld":null,"itc_claimable":null,"negotiation_value_this_order":25175.0,"negotiation_value_annual":402800.0,"msme_interest_accrued":0.0,"discount_decision":null}},"pr":{"pr_no":"PR-26-0904","requester":"Priya Nair","department":"Machining Cell","cost_center":"CC-PRD-230","estimated_value":740000,"item":{"code":"SFT-EN8-220","description":"EN8 transmission shaft, machined and induction hardened","hsn":"8483","uom":"nos","qty":2500,"need_by":"2026-10-15"}},"kraljic":{"quadrant":"Leverage","annual_spend":11789333,"profit_impact":"high","supply_risk":"low","supply_risk_score":2,"weights":{"price":0.4,"quality":0.25,"delivery":0.2,"risk":0.1,"compliance":0.05}},"ranking":[{"vendor_id":"V-104","vendor":"Noyyal CNC Engineering Pvt. Ltd.","unit_price":284.0,"landed_unit_cost":284.0,"lead_time_days":21,"msme":"medium","scores":{"price":99.37,"quality":84.75,"delivery":95.0,"risk":80.0,"compliance":88.0},"weighted_total":92.34,"eligible":true,"note":""},{"vendor_id":"V-102","vendor":"Tungabhadra Alloy Castings Ltd.","unit_price":318.0,"landed_unit_cost":318.0,"lead_time_days":30,"msme":"none","scores":{"price":88.74,"quality":89.5,"delivery":97.0,"risk":100.0,"compliance":90.0},"weighted_total":91.77,"eligible":true,"note":""},{"vendor_id":"V-109","vendor":"Vaigai Turned Components Pvt. Ltd.","unit_price":279.0,"landed_unit_cost":282.2,"lead_time_days":35,"msme":"small","scores":{"price":100.0,"quality":65.0,"delivery":88.0,"risk":60.0,"compliance":76.0},"weighted_total":83.65,"eligible":false,"note":"excluded: lead time misses need-by date"}],"should_cost":{"material_cost":115.2,"conversion":95,"secondary_ops":28,"overhead_margin_pct":15,"should_cost":273.93,"quoted":284.0,"gap_per_unit":10.07,"gap_pct":3.55,"saving_this_order":25175.0,"saving_annualised":402800.0,"verdict":"negotiate"}},"S4-reject":{"id":"S4","title":"Packaging from a micro enterprise: MSME 45-day clock and TDS threshold","story":"Logistics replenishes VCI bags from a micro-enterprise supplier on a 30-day written agreement. This purchase pushes the supplier past Rs 50 lakh for the tax year, so TDS starts. Meanwhile an earlier invoice from the same supplier has been stuck in approvals and is already overdue under the MSMED Act.","learning_points":["TDS on purchase of goods applies only to the amount above Rs 50 lakh per seller per tax year","MSMED Act s.15/16: payment due within the agreed term (max 45 days); compound interest at 3x the RBI Bank Rate if late","Income-tax Act 2025 s.37(2)(g) (old s.43B(h)): late MSE dues are deductible only when paid","Treasury prioritises statutory deadlines over cash-holding"],"request_text":"October replenishment: 86000 VCI poly bags 600x900 mm, 50 micron. Need by 10 Oct 2026. Approx Rs 8.6 lakh.","status":"REJECTED","approval_pack":{"case_id":"S4-web-reject","approver_role":"Plant Head","pr_no":"PR-26-0972","item":"VCI poly bags 600 x 900 mm, 50 micron","qty":86000,"vendor_id":"V-106","vendor":"Godavari Packaging Industries","po_value_excl_gst":860000.0,"score":94.1,"runner_up":"V-108","kraljic":"Non-critical","warnings":[],"negotiation_target":10.0,"question":"Approve PO to Godavari Packaging Industries for Rs 8,60,000 (excl. GST)?"},"pre":3,"steps":[{"agent":"intake","title":"Procurement Analyst","framework":"LangGraph node","mandate":"Turn a requester's message into a complete, policy-ready purchase requisition.","decision":"Requisition structured and forwarded to Policy & Compliance","highlights":["86,000 nos | Rs 8,60,000","Indirect - consumables | HSN 3923","Need-by in 11 days"],"rationale":"PR-26-0972 is a indirect - consumables request for 86,000 nos of VCI poly bags 600 x 900 mm, 50 micron (HSN 3923), estimated at Rs 8,60,000 and needed in 11 days. Budget on CC-LOG-520 has Rs 41,70,000 available. The request is complete and consistent with the form.","rationale_source":"offline-template","guardrail":"n/a","elapsed_ms":0.2,"tools":[{"tool":"parse_request","summary":"Extracted qty=86000.0 nos, need-by=2026-10-10, value=Rs 8,60,000, category=packaging (offline rule-based parser)"},{"tool":"budget_check","summary":"Logistics - Packaging: remaining Rs 41,70,000 vs request Rs 8,60,000"}]},{"agent":"policy","title":"Policy & Compliance Officer","framework":"LangGraph node","mandate":"Apply the procurement policy before any money is committed.","decision":"Cleared for sourcing; approver = Plant Head","highlights":["Approver: Plant Head","Findings: 0 block / 0 warn"],"rationale":"Policy checks passed. Approval authority: Plant Head. No warnings. Excluded from sourcing on lead time: V-107.","rationale_source":"offline-template","guardrail":"n/a","elapsed_ms":0.1,"tools":[{"tool":"delegation_of_authority","summary":"Approver for Rs 8,60,000: Plant Head"},{"tool":"competitive_quote_rule","summary":"Needs 3 quote(s); received 3"},{"tool":"split_purchase_scan","summary":"0 related PR(s); combined Rs 8,60,000"},{"tool":"budget_check","summary":"Remaining Rs 41,70,000; OK"},{"tool":"vendor_due_diligence","summary":"Godavari Packaging Industries: clean"},{"tool":"vendor_due_diligence","summary":"Mula Industrial Supplies: clean"},{"tool":"vendor_due_diligence","summary":"Pavana Polymers Pvt. Ltd.: clean"}]},{"agent":"supplier_analyst","title":"Sourcing Crew (3 CrewAI agents)","framework":"CrewAI crew inside a LangGraph node","mandate":"Rank suppliers on total value, not just price.","decision":"Recommend V-106 Godavari Packaging Industries at Rs 10/unit","highlights":["Kraljic: Non-critical","Winner 94.1 pts","Target Rs 10"],"rationale":"Ranking: V-106 Godavari Packaging Industries: 94.1 pts, landed Rs 10/unit, lead 7 days | V-108 Pavana Polymers Pvt. Ltd.: 86.55 pts, landed Rs 9.80/unit, lead 9 days | V-107 Mula Industrial Supplies: 88.31 pts, landed Rs 10.60/unit, lead 10 days [excluded: lead time misses need-by date]. The cheapest quote (V-108, Rs 9.80/unit) loses on quality, delivery or eligibility, so lowest price is not best value here. Margin over runner-up: 7.55 pts.","rationale_source":"CrewAI (offline expert LLM)","guardrail":"passed","elapsed_ms":18.1,"engine":"CrewAI (offline expert LLM)","crew_tool_calls":["kraljic_analysis","supplier_scorecard","should_cost_model"],"tools":[{"tool":"kraljic_analysis","summary":"Non-critical (spend Rs 91,20,000, risk score 1)"},{"tool":"supplier_scorecard","summary":"Winner V-106 94.1 pts; runner-up V-108"},{"tool":"should_cost_model","summary":"Should-cost Rs 9.97 vs quote Rs 10 (0.3% gap)"}],"crew":[{"agent":"category_manager","title":"Category Manager","output":"Kraljic position: Non-critical. Annual spend Rs 91.20 lakh gives low profit impact; supply-risk score 1 gives low supply risk. Evaluate suppliers with weights: price 35%, quality 20%, delivery 25%, risk 10%, compliance 10%. Strategy levers: Rate contract / catalogue buying to cut transaction cost; Bundle with similar items; automate re-orders."},{"agent":"supplier_analyst","title":"Supplier Performance & Risk Analyst","output":"Ranking: V-106 Godavari Packaging Industries: 94.1 pts, landed Rs 10/unit, lead 7 days | V-108 Pavana Polymers Pvt. Ltd.: 86.55 pts, landed Rs 9.80/unit, lead 9 days | V-107 Mula Industrial Supplies: 88.31 pts, landed Rs 10.60/unit, lead 10 days [excluded: lead time misses need-by date]. The cheapest quote (V-108, Rs 9.80/unit) loses on quality, delivery or eligibility, so lowest price is not best value here. Margin over runner-up: 7.55 pts.\nRecommended vendor: V-106"},{"agent":"negotiator","title":"Negotiation Strategist","output":"Should-cost Rs 9.97/unit (material Rs 6.40 + conversion Rs 1.90 + secondary ops Rs 0.60 + 12% overhead and margin) vs quote Rs 10: gap 0.3%. Verdict: price is fair (within 1% of should-cost). BATNA: V-108 Pavana Polymers Pvt. Ltd. at Rs 9.80/unit landed (86.55 pts). Levers: Rate contract / catalogue buying to cut transaction cost; Bundle with similar items; automate re-orders."}]},{"agent":"approver","title":"Human Approver (per DoA)","framework":"LangGraph interrupt (human-in-the-loop)","mandate":"Accountable human decision at the point of financial commitment.","decision":"REJECTED by Plant Head","highlights":["Role required: Plant Head","Value Rs 8,60,000"],"rationale":"Use existing stock first; re-raise next week.","rationale_source":"human","guardrail":"n/a","elapsed_ms":0.0,"tools":[{"tool":"approval_pack","summary":"Approve PO to Godavari Packaging Industries for Rs 8,60,000 (excl. GST)?"}]},{"agent":"controller","title":"Finance Controller","framework":"LangGraph node","mandate":"Summarise the case for the CFO with decisions, risks, money impact and an audit trail.","decision":"Case closed: REJECTED","highlights":["Status REJECTED","13 tool calls","1 human touchpoint(s)"],"rationale":"- Case S4-web-reject - PR-26-0972: VCI poly bags 600 x 900 mm, 50 micron (86,000 nos).\n- Outcome: REJECTED by Plant Head. Use existing stock first; re-raise next week.","rationale_source":"offline-template","guardrail":"n/a","elapsed_ms":0.0}],"memo":{"status":"REJECTED","bullets":["Case S4-web-reject - PR-26-0972: VCI poly bags 600 x 900 mm, 50 micron (86,000 nos).","Outcome: REJECTED by Plant Head. Use existing stock first; re-raise next week."],"text":"- Case S4-web-reject - PR-26-0972: VCI poly bags 600 x 900 mm, 50 micron (86,000 nos).\n- Outcome: REJECTED by Plant Head. Use existing stock first; re-raise next week.","kpis":{"agents_involved":6,"tool_calls":13,"controls_flagged":0,"blocking_controls":0,"human_touchpoints":1,"touchless_invoice":false,"agent_processing_ms":18.4,"po_value_incl_gst":null,"approved_payable":null,"disputed_amount_protected":null,"tds_withheld":null,"itc_claimable":null,"negotiation_value_this_order":0.0,"negotiation_value_annual":0.0,"msme_interest_accrued":0.0,"discount_decision":null}},"pr":{"pr_no":"PR-26-0972","requester":"Sneha Patil","department":"Logistics - Packaging","cost_center":"CC-LOG-520","estimated_value":860000,"item":{"code":"PKG-VCI-600900","description":"VCI poly bags 600 x 900 mm, 50 micron","hsn":"3923","uom":"nos","qty":86000,"need_by":"2026-10-10"}},"kraljic":{"quadrant":"Non-critical","annual_spend":9120000,"profit_impact":"low","supply_risk":"low","supply_risk_score":1,"weights":{"price":0.35,"quality":0.2,"delivery":0.25,"risk":0.1,"compliance":0.1}},"ranking":[{"vendor_id":"V-106","vendor":"Godavari Packaging Industries","unit_price":10.0,"landed_unit_cost":10.0,"lead_time_days":7,"msme":"micro","scores":{"price":98.0,"quality":92.5,"delivery":98.0,"risk":80.0,"compliance":88.0},"weighted_total":94.1,"eligible":true,"note":""},{"vendor_id":"V-108","vendor":"Pavana Polymers Pvt. Ltd.","unit_price":9.8,"landed_unit_cost":9.8,"lead_time_days":9,"msme":"small","scores":{"price":100.0,"quality":77.5,"delivery":89.0,"risk":60.0,"compliance":78.0},"weighted_total":86.55,"eligible":true,"note":""},{"vendor_id":"V-107","vendor":"Mula Industrial Supplies","unit_price":10.6,"landed_unit_cost":10.6,"lead_time_days":10,"msme":"small","scores":{"price":92.45,"quality":83.75,"delivery":92.0,"risk":80.0,"compliance":82.0},"weighted_total":88.31,"eligible":false,"note":"excluded: lead time misses need-by date"}],"should_cost":{"material_cost":6.4,"conversion":1.9,"secondary_ops":0.6,"overhead_margin_pct":12,"should_cost":9.97,"quoted":10.0,"gap_per_unit":0.03,"gap_pct":0.3,"saving_this_order":0.0,"saving_annualised":0.0,"verdict":"price is fair (within 1% of should-cost)"}}},"personas":{"intake":{"title":"Procurement Analyst","framework":"LangGraph node","mandate":"Turn a requester's message into a complete, policy-ready purchase requisition.","expertise":["Spend classification","HSN mapping","Budget availability","Lead-time sanity checks"]},"policy":{"title":"Policy & Compliance Officer","framework":"LangGraph node","mandate":"Apply the procurement policy before any money is committed.","expertise":["Delegation of authority","Competitive-quote rules","Split-purchase detection","Vendor due diligence (GSTIN, PAN, bank changes)"]},"category_manager":{"title":"Category Manager","framework":"CrewAI agent","mandate":"Position the purchase in the Kraljic portfolio and set the sourcing strategy.","expertise":["Kraljic matrix","Supply-market risk","Sourcing strategy"]},"supplier_analyst":{"title":"Supplier Performance & Risk Analyst","framework":"CrewAI agent","mandate":"Rank suppliers on total value, not just price.","expertise":["Weighted scorecards","PPM / OTIF analysis","Financial risk","Landed cost"]},"negotiator":{"title":"Negotiation Strategist","framework":"CrewAI agent","mandate":"Prepare the buyer for negotiation with a should-cost target and levers.","expertise":["Should-cost modelling","BATNA","Negotiation levers by quadrant"]},"buyer":{"title":"Buyer (PO Specialist)","framework":"LangGraph node","mandate":"Issue a compliant purchase order with the right commercial and statutory terms.","expertise":["PO terms","MSME payment clause","E-invoice instructions","TDS flags"]},"ap":{"title":"Accounts Payable Specialist","framework":"LangGraph node","mandate":"Pay only what is owed: match, de-duplicate and protect against payment fraud.","expertise":["3-way match","Tolerance rules","Duplicate detection","Bank-change controls"]},"tax":{"title":"GST & TDS Specialist","framework":"LangGraph node","mandate":"Make sure the invoice is a valid tax document and withhold the right TDS.","expertise":["GSTIN validation","IGST vs CGST+SGST","E-invoice / IRN rules","ITC conditions","TDS on goods under Income-tax Act 2025"]},"resolver":{"title":"Exception Resolver","framework":"LangGraph node","mandate":"Close invoice exceptions fast: split payable from disputed, request credit notes, assign owners.","expertise":["Root-cause of mismatches","Credit / debit notes","Vendor communication"]},"treasury":{"title":"Treasury & Working-Capital Analyst","framework":"LangGraph node","mandate":"Pay at the best time: never late to MSEs, early only when it earns more than the cost of funds.","expertise":["MSMED Act s.15/16","s.37(2)(g) disallowance","Discount APR vs cost of funds","Payment runs"]},"controller":{"title":"Finance Controller","framework":"LangGraph node","mandate":"Summarise the case for the CFO with decisions, risks, money impact and an audit trail.","expertise":["Internal control","Audit trail","Executive communication"]},"approver":{"title":"Human Approver (per DoA)","framework":"LangGraph interrupt (human-in-the-loop)","mandate":"Accountable human decision at the point of financial commitment.","expertise":["Business judgement"]}},"evals":[{"id":"E01","case":"S1 baseline: clean strategic buy","expected":"COMPLETED","actual":"COMPLETED","pass":true},{"id":"E02","case":"Invoice price +0.8% (inside 1% tolerance)","expected":"COMPLETED","actual":"COMPLETED","pass":true},{"id":"E03","case":"Invoice price +1.5% (outside tolerance)","expected":"COMPLETED_WITH_HOLD","actual":"COMPLETED_WITH_HOLD","pass":true},{"id":"E04","case":"Large supplier invoice without IRN","expected":"ON_HOLD","actual":"ON_HOLD","pass":true},{"id":"E05","case":"IRN generated 35 days after invoice date","expected":"ON_HOLD","actual":"ON_HOLD","pass":true},{"id":"E06","case":"Inter-state invoice billed as CGST+SGST","expected":"ON_HOLD","actual":"ON_HOLD","pass":true},{"id":"E07","case":"Same invoice already booked (number formatted differently)","expected":"ON_HOLD","actual":"ON_HOLD","pass":true},{"id":"E08","case":"Bank account on invoice differs from master","expected":"ON_HOLD","actual":"ON_HOLD","pass":true},{"id":"E09","case":"CFO rejects at approval","expected":"REJECTED","actual":"REJECTED","pass":true},{"id":"E10","case":"Only two quotes for a Rs 19 lakh buy","expected":"ESCALATED","actual":"ESCALATED","pass":true},{"id":"E11","case":"Cost center budget nearly exhausted","expected":"ESCALATED","actual":"ESCALATED","pass":true},{"id":"E12","case":"S2 baseline: price variance + QC rejection","expected":"COMPLETED_WITH_HOLD","actual":"COMPLETED_WITH_HOLD","pass":true},{"id":"E13","case":"S2 with correct price and no rejection","expected":"COMPLETED","actual":"COMPLETED","pass":true},{"id":"E14","case":"Invoice arrives with no goods receipt","expected":"ON_HOLD","actual":"ON_HOLD","pass":true},{"id":"E15","case":"S3 baseline: split purchase + vendor red flags","expected":"ESCALATED","actual":"ESCALATED","pass":true},{"id":"E16","case":"S3 after vendor KYC is fixed: split purchase alone still blocks","expected":"ESCALATED","actual":"ESCALATED","pass":true},{"id":"E17","case":"S4 baseline: TDS threshold crossing + overdue MSME invoice","expected":"COMPLETED","actual":"COMPLETED","pass":true},{"id":"E18","case":"S4 supplier still below Rs 50 lakh for the year","expected":"COMPLETED","actual":"COMPLETED","pass":true},{"id":"E19","case":"S4 supplier without PAN on record (5% TDS rate)","expected":"COMPLETED","actual":"COMPLETED","pass":true},{"id":"E20","case":"S4 with no overdue MSME items","expected":"COMPLETED","actual":"COMPLETED","pass":true},{"id":"E21","case":"Early-payment discount worth more than cost of funds","expected":"COMPLETED","actual":"COMPLETED","pass":true},{"id":"E22","case":"Medium enterprise is outside the MSMED 45-day rule","expected":"COMPLETED_WITH_HOLD","actual":"COMPLETED_WITH_HOLD","pass":true}],"business_case":{"Conservative":{"drivers":{"P2P operations effort (AP + PO desk)":26.4,"Negotiation to should-cost (direct material)":32.6,"Overbilling / duplicate payments stopped":6.2,"MSMED Act interest avoided":2.4},"gross_benefit_lakh":67.6,"run_cost_lakh":24,"net_annual_benefit_lakh":43.6,"one_time_cost_lakh":38,"payback_months":10.5,"npv_3yr_lakh":66.7,"roi_3yr_pct":84},"Base":{"drivers":{"P2P operations effort (AP + PO desk)":44.0,"Negotiation to should-cost (direct material)":54.4,"Overbilling / duplicate payments stopped":10.4,"MSMED Act interest avoided":4.0},"gross_benefit_lakh":112.8,"run_cost_lakh":24,"net_annual_benefit_lakh":88.8,"one_time_cost_lakh":38,"payback_months":5.1,"npv_3yr_lakh":175.3,"roi_3yr_pct":208},"Optimistic":{"drivers":{"P2P operations effort (AP + PO desk)":61.6,"Negotiation to should-cost (direct material)":76.2,"Overbilling / duplicate payments stopped":14.6,"MSMED Act interest avoided":4.0},"gross_benefit_lakh":156.4,"run_cost_lakh":24,"net_annual_benefit_lakh":132.4,"one_time_cost_lakh":38,"payback_months":3.4,"npv_3yr_lakh":280.0,"roi_3yr_pct":327}},"ops_kpis":{"exceptions_avoided_per_year":2916,"exception_hours_released":2430,"note":"Exception effort is part of P2P operations cost, so it is not counted again as a separate benefit."}}</script>
+<script>/* AgentProcure rules engine, browser port of agentprocure/rules/*.py (used by the What-if lab).
+   Kept as plain functions so the same file can be unit-checked in Node. */
+const P2P = (() => {
+  const CH = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  const STATES = {"01":"Jammu and Kashmir","02":"Himachal Pradesh","03":"Punjab","04":"Chandigarh","05":"Uttarakhand","06":"Haryana","07":"Delhi","08":"Rajasthan","09":"Uttar Pradesh","10":"Bihar","11":"Sikkim","12":"Arunachal Pradesh","13":"Nagaland","14":"Manipur","15":"Mizoram","16":"Tripura","17":"Meghalaya","18":"Assam","19":"West Bengal","20":"Jharkhand","21":"Odisha","22":"Chhattisgarh","23":"Madhya Pradesh","24":"Gujarat","26":"Dadra and Nagar Haveli and Daman and Diu","27":"Maharashtra","29":"Karnataka","30":"Goa","31":"Lakshadweep","32":"Kerala","33":"Tamil Nadu","34":"Puducherry","35":"Andaman and Nicobar Islands","36":"Telangana","37":"Andhra Pradesh","38":"Ladakh","97":"Other Territory"};
+  const r2 = x => Math.round((x + Number.EPSILON) * 100) / 100;
+  const day = s => { const [y, m, d] = s.split("-").map(Number); return Date.UTC(y, m - 1, d); };
+  const iso = t => new Date(t).toISOString().slice(0, 10);
+  const addDays = (s, n) => iso(day(s) + n * 86400000);
+  const between = (a, b) => Math.round((day(b) - day(a)) / 86400000);
+
+  function gstinChecksum(first14) {
+    let factor = 2, total = 0;
+    for (const ch of first14.split("").reverse()) {
+      const a = factor * CH.indexOf(ch);
+      factor = factor === 2 ? 1 : 2;
+      total += Math.floor(a / 36) + (a % 36);
+    }
+    return CH[(36 - (total % 36)) % 36];
+  }
+
+  function validateGstin(g, pan) {
+    g = (g || "").trim().toUpperCase();
+    const out = { gstin: g, issues: [], state: null, pan: null, expected: null };
+    if (!/^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z][1-9A-Z]Z[0-9A-Z]$/.test(g)) {
+      out.issues.push(["GSTIN_FORMAT_INVALID", "Not a 15-character GSTIN (2-digit state + PAN + entity no. + Z + check digit)"]);
+      return out;
+    }
+    out.state = STATES[g.slice(0, 2)] || null;
+    out.pan = g.slice(2, 12);
+    out.expected = gstinChecksum(g.slice(0, 14));
+    if (!out.state) out.issues.push(["GSTIN_STATE_INVALID", `State code ${g.slice(0, 2)} does not exist`]);
+    if (out.expected !== g[14]) out.issues.push(["GSTIN_CHECKSUM_INVALID", `Check digit is '${g[14]}', expected '${out.expected}'`]);
+    if (pan && pan.toUpperCase() !== out.pan) out.issues.push(["PAN_MISMATCH", `PAN in GSTIN ${out.pan} differs from ${pan.toUpperCase()}`]);
+    return out;
+  }
+
+  function taxSplit(taxable, rate, interState) {
+    const igst = interState ? r2(taxable * rate / 100) : 0;
+    const half = interState ? 0 : r2(taxable * rate / 200);
+    return { igst, cgst: half, sgst: half, tax: r2(igst + 2 * half), total: r2(taxable + igst + 2 * half) };
+  }
+
+  function threeWayMatch({ poPrice, poQty, acceptedQty, invQty, invPrice, rate, tolPct = 1 }) {
+    const ex = [];
+    const varPct = (invPrice - poPrice) / poPrice * 100;
+    if (varPct > tolPct) ex.push(["PRICE_VARIANCE", `+${varPct.toFixed(2)}% over PO (tolerance ${tolPct}%)`, r2((invPrice - poPrice) * Math.min(invQty, acceptedQty))]);
+    if (invQty > acceptedQty) ex.push(["QTY_EXCEEDS_ACCEPTED", `${invQty.toLocaleString("en-IN")} invoiced vs ${acceptedQty.toLocaleString("en-IN")} accepted`, r2((invQty - acceptedQty) * invPrice)]);
+    if (invQty > poQty) ex.push(["QTY_EXCEEDS_PO", `${invQty.toLocaleString("en-IN")} invoiced vs PO ${poQty.toLocaleString("en-IN")}`, 0]);
+    const payQty = Math.min(invQty, acceptedQty);
+    const payPrice = varPct > tolPct ? Math.min(invPrice, poPrice) : invPrice;
+    const approvedTaxable = r2(payQty * payPrice);
+    const billedTaxable = r2(invQty * invPrice);
+    const approvedTotal = r2(approvedTaxable * (1 + rate / 100));
+    const billedTotal = r2(billedTaxable * (1 + rate / 100));
+    return { status: ex.length ? "EXCEPTION" : "MATCHED", exceptions: ex, varPct: r2(varPct), approvedTaxable, billedTaxable,
+             approvedTotal, billedTotal, disputedTotal: r2(billedTotal - approvedTotal), disputedTax: r2((billedTotal - billedTaxable) - (approvedTotal - approvedTaxable)) };
+  }
+
+  function tdsOnGoods({ buyerTurnoverCr, hasPan, cumBefore, thisTaxable }) {
+    const T = 5000000;
+    if (buyerTurnoverCr <= 10) return { tds: 0, base: 0, rate: 0, note: "Buyer turnover not above Rs 10 crore: provision does not apply" };
+    const base = Math.max(0, cumBefore + thisTaxable - T) - Math.max(0, cumBefore - T);
+    const rate = hasPan ? 0.1 : 5;
+    if (base <= 0) return { tds: 0, base: 0, rate, note: `Still below Rs 50 lakh this tax year (headroom ${inr(T - cumBefore - thisTaxable)})` };
+    return { tds: Math.round(base * rate / 100), base, rate,
+             note: cumBefore >= T ? "Threshold crossed earlier: TDS on the full value" : "Crosses Rs 50 lakh now: TDS only on the excess" };
+  }
+
+  function msmeDue({ acceptDate, category, written, agreedDays }) {
+    if (!["micro", "small"].includes(category)) return { covered: false, due: null, days: null };
+    const days = written ? Math.min(agreedDays, 45) : 15;
+    return { covered: true, days, due: addDays(acceptDate, days) };
+  }
+
+  function msmeInterest({ principal, due, asOf, bankRate }) {
+    const annual = 3 * bankRate / 100;
+    const late = Math.max(0, between(due, asOf));
+    const months = late / (365 / 12);
+    return { annualPct: r2(annual * 100), late, interest: late ? r2(principal * (Math.pow(1 + annual / 12, months) - 1)) : 0 };
+  }
+
+  function discountApr(pct, ddays, net) {
+    const d = pct / 100;
+    return r2(d / (1 - d) * 365 / (net - ddays) * 100);
+  }
+
+  const DOA = [[200000, "Department Head"], [1000000, "Plant Head"], [10000000, "CFO"], [Infinity, "Managing Director"]];
+  const QUOTES = [[50000, 1, false], [500000, 2, false], [2500000, 3, false], [Infinity, 3, true]];
+  const approverFor = v => DOA.find(([m]) => v <= m)[1];
+  const quoteRule = v => { const q = QUOTES.find(([m]) => v <= m); return { min: q[1], rfq: q[2] }; };
+
+  function inr(x, dec) {
+    if (x === null || x === undefined || Number.isNaN(x)) return "-";
+    const neg = x < 0; x = Math.abs(x);
+    if (dec === undefined) dec = Number.isInteger(r2(x)) ? 0 : 2;
+    let [w, f] = x.toFixed(dec).split(".");
+    if (w.length > 3) {
+      let head = w.slice(0, -3); const tail = w.slice(-3); const g = [];
+      while (head.length > 2) { g.unshift(head.slice(-2)); head = head.slice(0, -2); }
+      if (head) g.unshift(head);
+      w = g.concat(tail).join(",");
+    }
+    return (neg ? "-" : "") + "₹" + w + (f ? "." + f : "");
+  }
+
+  return { gstinChecksum, validateGstin, taxSplit, threeWayMatch, tdsOnGoods, msmeDue, msmeInterest, discountApr,
+           approverFor, quoteRule, inr, addDays, between, STATES };
+})();
+if (typeof module !== "undefined") module.exports = P2P;
+</script>
+<script>
+(() => {
+  const D = JSON.parse(document.getElementById("data").textContent);
+  const $ = (s) => document.querySelector(s);
+  const inr = P2P.inr;
+  const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const rupee = (s) => esc(s).replace(/\bRs /g, "₹");
+  const store = { get(k) { try { return localStorage.getItem(k); } catch { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch {} } };
+
+  $("#ctx").textContent = "Meridian Precision Components (fictional) | Pune | as of 10 Oct 2026";
+
+  /* ---------------- tabs ---------------- */
+  const TABS = ["desk", "lab", "ask", "built"];
+  function showTab(id) {
+    TABS.forEach((t) => { $("#" + t).hidden = t !== id; $("#tab-" + t).setAttribute("aria-selected", String(t === id)); });
+    store.set("ap-tab", id);
+  }
+  TABS.forEach((t) => $("#tab-" + t).addEventListener("click", () => showTab(t)));
+  const startTab = (location.hash || "").slice(1);
+  showTab(TABS.includes(startTab) ? startTab : (store.get("ap-tab") || "desk"));
+
+  /* ---------------- case desk ---------------- */
+  const BASES = ["S1", "S2", "S3", "S4"];
+  const NODES = [
+    { key: "intake", label: "Procurement Analyst" },
+    { key: "policy", label: "Policy & Compliance Officer" },
+    { key: "supplier_analyst", label: "Sourcing crew", sub: ["Category Manager", "Supplier Performance & Risk Analyst", "Negotiation Strategist"] },
+    { key: "approver", label: "Human approver" },
+    { key: "buyer", label: "Buyer (PO Specialist)" },
+    { key: "ap", label: "Accounts Payable Specialist" },
+    { key: "tax", label: "GST & TDS Specialist" },
+    { key: "resolver", label: "Exception Resolver" },
+    { key: "treasury", label: "Treasury & Working-Capital Analyst" },
+    { key: "controller", label: "Finance Controller" },
+  ];
+  const STATUS = {
+    COMPLETED: ["Completed", "st-ok"], COMPLETED_WITH_HOLD: ["Part paid, rest held", "st-hold"], ESCALATED: ["Escalated, no PO", "st-block"],
+    REJECTED: ["Rejected by approver", "st-block"], ON_HOLD: ["On hold", "st-hold"],
+  };
+  const fwClass = (fw) => /crew/i.test(fw) ? "fw-crewai" : /interrupt|human/i.test(fw) ? "fw-human" : "fw-langgraph";
+  const fwShort = (fw) => /crew/i.test(fw) ? "CrewAI" : /interrupt|human/i.test(fw) ? "Human-in-the-loop" : "LangGraph";
+
+  function verdict(step) {
+    const d = (step.decision || "").toUpperCase();
+    const sev = (step.findings || []).map((f) => f.severity);
+    if (/BLOCK|REJECT|HOLD ENTIRE|ESCALATED/.test(d)) return "v-block";
+    if (/HOLD|EXCEPTION|PARTIAL|PAID IN PART/.test(d) || sev.includes("HIGH") || sev.includes("HOLD")) return "v-hold";
+    if (/APPROVED|MATCHED|VALID|ISSUED|COMPLETED|CLEARED|RECOMMEND|SCHEDULE|STRUCTURED/.test(d)) return "v-ok";
+    return "";
+  }
+
+  const S = { base: "S1", key: "S1", upto: 0, sel: 0, waiting: false, playing: false, timer: null };
+  const cur = () => D.cases[S.key];
+  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  function restAt(base) {
+    stopTimer();
+    S.base = base; S.key = base; S.waiting = false; S.playing = false;
+    S.upto = cur().steps.length; S.sel = S.upto - 1;
+    store.set("ap-case", base);
+    renderAll();
+  }
+  function stopTimer() { clearTimeout(S.timer); S.timer = null; }
+
+  function renderFolders() {
+    $("#folders").innerHTML = BASES.map((b) => {
+      const c = D.cases[b];
+      const [label, cls] = STATUS[c.status] || [c.status, "st-info"];
+      return `<button class="folder" data-case="${b}" aria-pressed="${b === S.base}">
+        <span class="fid">${b} | ${esc(c.pr.pr_no)}</span>
+        <span class="ftitle">${esc(c.title)}</span>
+        <span class="stamp ${cls}">${esc(label)}</span></button>`;
+    }).join("");
+    document.querySelectorAll(".folder").forEach((f) => f.addEventListener("click", () => restAt(f.dataset.case)));
+  }
+
+  function renderHead() {
+    const c = D.cases[S.base];
+    $("#casehead").innerHTML = `
+      <div class="story">
+        <h2>${esc(c.title)}</h2>
+        <p>${esc(c.story)}</p>
+        <ul class="learn">${c.learning_points.map((l) => `<li>${esc(l)}</li>`).join("")}</ul>
+      </div>
+      <div class="slip">
+        <div class="lbl"><span>Purchase requisition ${esc(c.pr.pr_no)}</span><span>${esc(c.pr.cost_center)}</span></div>
+        <q>${esc(c.request_text)}</q>
+        <div class="lbl"><span>${esc(c.pr.requester)}, ${esc(c.pr.department)}</span><span>HSN ${esc(c.pr.item.hsn)}</span></div>
+      </div>`;
+  }
+
+  function stepIndexFor(key) { return cur().steps.findIndex((s) => s.agent === key); }
+
+  function renderRail() {
+    const c = cur();
+    const visited = new Set(c.steps.slice(0, S.upto).map((s) => s.agent));
+    const done = S.upto >= c.steps.length && !S.waiting;
+    $("#rail").innerHTML = NODES.map((n) => {
+      const idx = stepIndexFor(n.key);
+      const step = idx >= 0 ? c.steps[idx] : null;
+      const isVisited = visited.has(n.key);
+      const isWaiting = S.waiting && n.key === "approver";
+      const skipped = !isVisited && (done || idx < 0 && S.upto >= c.steps.length);
+      const cls = ["node", isVisited ? "done " + verdict(step) : "", isWaiting ? "waiting" : "", skipped ? "skipped" : ""].join(" ");
+      const desc = isWaiting ? "Waiting for your decision" : isVisited ? step.decision : skipped ? "Not needed in this case" : "Pending";
+      const fw = step ? fwShort(step.framework) : (n.key === "supplier_analyst" ? "CrewAI" : n.key === "approver" ? "Human-in-the-loop" : "LangGraph");
+      const current = (isVisited && idx === S.sel) || isWaiting;
+      return `<button class="${cls}" data-idx="${idx}" ${isVisited ? "" : "disabled"} ${current ? 'aria-current="step"' : ""}>
+        <span class="dot"></span>
+        <span><span class="nt">${esc(n.label)}</span> <span class="nf">${fw}</span>
+        <span class="nd">${rupee(desc)}</span>
+        ${n.sub ? `<span class="sub">${n.sub.map((x) => `<span>${esc(x)}</span>`).join("")}</span>` : ""}</span>
+      </button>`;
+    }).join("");
+    document.querySelectorAll("#rail .node:not(:disabled)").forEach((b) => b.addEventListener("click", () => {
+      S.sel = Number(b.dataset.idx); S.waiting = false; stopTimer(); S.playing = false; renderAll();
+    }));
+  }
+
+  function tableRanking(c) {
+    const w = c.kraljic.weights;
+    return `<div class="tbl-wrap"><table>
+      <thead><tr><th>Supplier</th><th class="num">Quote</th><th class="num">Landed</th><th class="num">Lead</th>
+      ${Object.keys(w).map((k) => `<th class="num">${k} ${Math.round(w[k] * 100)}%</th>`).join("")}<th class="num">Score</th></tr></thead>
+      <tbody>${c.ranking.map((r, i) => `<tr class="${i === 0 && r.eligible ? "win" : !r.eligible ? "out" : ""}">
+        <td>${esc(r.vendor_id)} ${esc(r.vendor)}${r.note ? `<br><small class="muted">${esc(r.note)}</small>` : ""}<br><small class="muted">MSME: ${esc(r.msme)}</small></td>
+        <td class="num">${inr(r.unit_price)}</td><td class="num">${inr(r.landed_unit_cost)}</td><td class="num">${r.lead_time_days} d</td>
+        ${Object.keys(w).map((k) => `<td class="num">${r.scores[k].toFixed(1)}</td>`).join("")}
+        <td class="num"><b>${r.weighted_total.toFixed(2)}</b></td></tr>`).join("")}</tbody></table></div>`;
+  }
+
+  function extraFor(step, c) {
+    const k = step.agent;
+    if (k === "supplier_analyst" && c.ranking) {
+      const sc = c.should_cost;
+      return `<div><div class="blk-title">The crew's three agents (CrewAI, sequential process)</div>
+        <div class="crew">${(step.crew || []).map((m) => `<article><h4>${esc(m.title)}</h4><p>${rupee(m.output)}</p></article>`).join("")}</div></div>
+        <div><div class="blk-title">Supplier scorecard | Kraljic: ${esc(c.kraljic.quadrant)} (annual spend ${inr(c.kraljic.annual_spend)})</div>${tableRanking(c)}</div>
+        ${sc ? `<dl class="kv"><dt>Should-cost</dt><dd class="mono">${inr(sc.should_cost)} per unit vs quote ${inr(sc.quoted)} (gap ${sc.gap_pct}%)</dd>
+          <dt>Value at stake</dt><dd class="mono">${inr(sc.saving_this_order)} this order | ${inr(sc.saving_annualised)} a year</dd></dl>` : ""}`;
+    }
+    if (k === "approver" && c.approval_pack) {
+      const p = c.approval_pack;
+      return `<dl class="kv"><dt>Required approver</dt><dd>${esc(p.approver_role)}</dd><dt>PO value excl. GST</dt><dd class="mono">${inr(p.po_value_excl_gst)}</dd>
+        <dt>Supplier</dt><dd>${esc(p.vendor)} (${p.score} pts, runner-up ${esc(p.runner_up)})</dd>
+        <dt>Comment</dt><dd>${esc(step.rationale)}</dd></dl>`;
+    }
+    if (k === "buyer" && c.po) {
+      return `<div><div class="blk-title">PO terms</div><ul class="learn" style="color:var(--ink)">${c.po.terms.map((t) => `<li>${rupee(t)}</li>`).join("")}</ul></div>`;
+    }
+    if (k === "ap" && c.match) {
+      const m = c.match;
+      return `<div class="tbl-wrap"><table><thead><tr><th></th><th class="num">PO</th><th class="num">Goods receipt</th><th class="num">Invoice</th></tr></thead><tbody>
+        <tr><td>Quantity</td><td class="num">${m.po_qty.toLocaleString("en-IN")}</td><td class="num">${m.accepted_qty.toLocaleString("en-IN")} accepted</td><td class="num">${m.invoiced_qty.toLocaleString("en-IN")}</td></tr>
+        <tr><td>Unit price</td><td class="num">${inr(m.po_price)}</td><td class="num">-</td><td class="num">${inr(m.invoice_price)}</td></tr>
+        <tr><td>Total incl. GST</td><td class="num">-</td><td class="num">${inr(m.approved_total)} approved</td><td class="num">${inr(m.billed_total)}</td></tr>
+        </tbody></table></div>`;
+    }
+    if (k === "tax" && c.tax) {
+      const t = c.tax.tds;
+      return `<dl class="kv"><dt>GST</dt><dd>${esc(c.tax.tax_type)} at ${c.tax.rate_pct}%</dd><dt>ITC claimable now</dt><dd class="mono">${inr(c.tax.itc_amount)}${c.tax.itc_on_hold > 0.5 ? ` (${inr(c.tax.itc_on_hold)} waits for the credit note)` : ""}</dd>
+        <dt>TDS</dt><dd class="mono">${inr(t.tds_amount)} = ${t.rate_pct}% x ${inr(t.base)}</dd><dt>Provision</dt><dd>${esc(t.provision)}</dd></dl>`;
+    }
+    if (k === "resolver" && step.email_draft) {
+      return `<div><div class="blk-title">Draft e-mail to supplier</div><pre class="mail">${rupee(step.email_draft)}</pre></div>`;
+    }
+    if (k === "treasury" && c.treasury) {
+      const tr = c.treasury;
+      return `<div class="tbl-wrap"><table><thead><tr><th>Payment run</th><th class="num">Amount</th><th>Pay on</th><th>Priority</th></tr></thead><tbody>
+        ${tr.run.map((r) => `<tr><td>${esc(r.invoice_no)}</td><td class="num">${inr(r.amount)}</td><td class="mono">${esc(r.pay_on)}</td><td>${esc(r.priority)}</td></tr>`).join("")}
+        </tbody></table></div>
+        ${tr.discount ? `<dl class="kv"><dt>Discount offered</dt><dd>${esc(tr.discount.terms)}</dd><dt>Worth</dt><dd class="mono">${tr.discount.annualised_return_pct}% a year vs ${tr.discount.cost_of_funds_pct}% cost of funds: ${tr.discount.take ? "take it" : "skip it"}</dd></dl>` : ""}`;
+    }
+    return "";
+  }
+
+  function renderSheet() {
+    const c = cur();
+    const sheet = $("#sheet");
+    if (S.waiting) {
+      const p = D.cases[S.base].approval_pack;
+      sheet.innerHTML = `<div class="sheet-head"><h3>Your decision, ${esc(p.approver_role)}</h3><span class="badge fw-human">LangGraph interrupt</span></div>
+        <p class="mandate">The graph is paused with its state checkpointed. In production this is the e-mail n8n sends with Approve / Reject links.</p>
+        <div class="approval">
+          <h4>${rupee(p.question)}</h4>
+          <dl class="kv"><dt>Item</dt><dd>${esc(p.item)} (${p.qty.toLocaleString("en-IN")})</dd>
+          <dt>Recommended</dt><dd>${esc(p.vendor_id)} ${esc(p.vendor)} | ${p.score} pts | Kraljic ${esc(p.kraljic)}</dd>
+          <dt>Runner-up</dt><dd>${esc(p.runner_up || "-")}</dd>
+          <dt>Negotiation target</dt><dd class="mono">${p.negotiation_target ? inr(p.negotiation_target) + " per unit" : "-"}</dd>
+          <dt>Warnings</dt><dd>${p.warnings.length ? p.warnings.map(rupee).join("<br>") : "None"}</dd></dl>
+          <div class="controls"><button class="btn approve" id="approve">Approve PO</button><button class="btn reject" id="reject">Reject</button></div>
+        </div>`;
+      $("#approve").addEventListener("click", () => decide(true));
+      $("#reject").addEventListener("click", () => decide(false));
+      return;
+    }
+    const step = c.steps[S.sel];
+    if (!step) { sheet.innerHTML = ""; return; }
+    const v = verdict(step);
+    sheet.innerHTML = `
+      <div class="sheet-head"><div><div class="eyebrow">Step ${S.sel + 1} of ${c.steps.length}</div><h3>${esc(step.title)}</h3></div>
+        <span class="badge ${fwClass(step.framework)}">${esc(step.framework)} | ${step.elapsed_ms} ms</span></div>
+      <p class="mandate">${esc(step.mandate || "")}</p>
+      <div class="decision ${v}">${rupee(step.decision)}</div>
+      ${step.highlights ? `<div class="chips">${step.highlights.map((h) => `<span class="chip">${rupee(h)}</span>`).join("")}</div>` : ""}
+      ${step.tools && step.tools.length ? `<div><div class="blk-title">Tools called</div><ul class="tools">${step.tools.map((t) => `<li><code>${esc(t.tool)}</code><span>${rupee(t.summary)}</span></li>`).join("")}</ul></div>` : ""}
+      ${step.findings && step.findings.length ? `<div><div class="blk-title">Findings</div><div class="finds">${step.findings.map((f) => `<div class="find"><span class="sev sev-${f.severity}">${f.severity}</span><span><b>${esc(f.code)}</b> ${rupee(f.detail)}</span></div>`).join("")}</div></div>` : ""}
+      ${extraFor(step, c)}
+      ${step.agent !== "approver" ? `<div class="why"><div class="blk-title">Why</div><p>${rupee(step.rationale)}</p>
+        <span class="src">written by: ${esc(step.rationale_source)} | numeric guardrail: ${esc(step.guardrail)}</span></div>` : ""}`;
+  }
+
+  function renderMemo() {
+    const c = cur();
+    const done = S.upto >= c.steps.length && !S.waiting;
+    if (!done || !c.memo) {
+      $("#memo").innerHTML = `<div class="memo-card"><div class="blk-title">CFO case memo</div><p class="muted">The Finance Controller writes the memo when the case closes.</p></div><div></div>`;
+      return;
+    }
+    const m = c.memo, k = m.kpis;
+    const [label, cls] = STATUS[m.status] || [m.status, "st-info"];
+    const tiles = [
+      ["Approved payable", k.approved_payable, true], ["Held for credit note", k.disputed_amount_protected, true],
+      ["TDS withheld", k.tds_withheld, true], ["GST input credit", k.itc_claimable, true],
+      ["MSME interest flagged", k.msme_interest_accrued, true], ["Negotiation value / year", k.negotiation_value_annual, true],
+      ["Tool calls", k.tool_calls, false], ["Controls flagged", k.controls_flagged, false],
+      ["Human touchpoints", k.human_touchpoints, false], ["Agent processing time", k.agent_processing_ms, "ms"],
+    ].filter(([, v]) => v !== null && v !== undefined);
+    $("#memo").innerHTML = `<div class="memo-card"><div class="sheet-head"><div class="blk-title">CFO case memo | Finance Controller</div><span class="stamp big ${cls}">${esc(label)}</span></div>
+      <ul>${m.bullets.map((b) => `<li>${rupee(b)}</li>`).join("")}</ul></div>
+      <div class="kpis">${tiles.map(([n, v, money]) => `<div class="kpi"><span>${esc(n)}</span><b>${money === true ? inr(v) : money === "ms" ? Math.round(v) + " ms" : esc(v)}</b></div>`).join("")}</div>`;
+  }
+
+  function renderControls() {
+    const c = cur();
+    $("#progress").textContent = S.waiting ? "Paused for approval" : `Step ${Math.min(S.sel + 1, c.steps.length)} of ${c.steps.length}`;
+    $("#prev").disabled = S.waiting || S.sel <= 0;
+    $("#next").disabled = S.waiting || (S.sel >= c.steps.length - 1 && S.upto >= c.steps.length);
+    $("#run").textContent = S.playing ? "Pause" : "Run this case step by step";
+  }
+
+  function renderAll() { renderFolders(); renderHead(); renderRail(); renderSheet(); renderMemo(); renderControls(); }
+
+  function advance() {
+    const c = cur();
+    if (S.sel < S.upto - 1) { S.sel++; renderAll(); return true; }
+    if (S.upto >= c.steps.length) { S.playing = false; renderAll(); return false; }
+    if (c.approval_pack && S.upto === c.pre && S.key === S.base) { S.waiting = true; S.playing = false; stopTimer(); renderAll(); return false; }
+    S.upto++; S.sel = S.upto - 1; renderAll(); return true;
+  }
+  function loop() { stopTimer(); if (!S.playing) return; S.timer = setTimeout(() => { if (advance()) loop(); }, reduced ? 900 : 1300); }
+  function decide(ok) {
+    S.waiting = false;
+    S.key = ok ? S.base : S.base + "-reject";
+    S.upto = cur().pre + 1; S.sel = S.upto - 1; S.playing = true;
+    renderAll(); loop();
+  }
+  $("#run").addEventListener("click", () => {
+    if (S.playing) { S.playing = false; stopTimer(); renderAll(); return; }
+    if (S.upto >= cur().steps.length && !S.waiting) { S.key = S.base; S.upto = 1; S.sel = 0; }
+    S.playing = true; renderAll(); loop();
+  });
+  $("#next").addEventListener("click", () => { S.playing = false; stopTimer(); advance(); });
+  $("#prev").addEventListener("click", () => { S.playing = false; stopTimer(); if (S.sel > 0) { S.sel--; renderAll(); } });
+  $("#showall").addEventListener("click", () => restAt(S.base));
+  restAt(BASES.includes(store.get("ap-case")) ? store.get("ap-case") : "S1");
+
+  /* ---------------- what-if lab ---------------- */
+  const num = (id) => Number($(id).value) || 0;
+  const pill = (txt, cls) => `<span class="stamp ${cls}">${esc(txt)}</span>`;
+  function labMatch() {
+    const m = P2P.threeWayMatch({ poPrice: num("#m-po"), poQty: num("#m-poq"), acceptedQty: num("#m-acc"), invQty: num("#m-invq"), invPrice: num("#m-inv"), rate: num("#m-rate") });
+    $("#o-match").innerHTML = `${pill(m.status === "MATCHED" ? "Matched: pay in full" : "Exception: pay part, hold rest", m.status === "MATCHED" ? "st-ok" : "st-hold")}
+      ${m.exceptions.map((e) => `<div class="find"><span class="sev sev-HOLD">HOLD</span><span><b>${e[0]}</b> ${esc(e[1])}${e[2] ? ` (${inr(e[2])})` : ""}</span></div>`).join("")}
+      <dl class="kv"><dt>Release now</dt><dd class="mono big">${inr(m.approvedTotal)}</dd><dt>Hold for credit note</dt><dd class="mono">${inr(m.disputedTotal)}</dd>
+      <dt>GST credit to defer</dt><dd class="mono">${inr(m.disputedTax)}</dd><dt>Price variance</dt><dd class="mono">${m.varPct}%</dd></dl>`;
+  }
+  function labTds() {
+    const t = P2P.tdsOnGoods({ buyerTurnoverCr: $("#t-turn").checked ? 420 : 8, hasPan: $("#t-pan").checked, cumBefore: num("#t-cum"), thisTaxable: num("#t-this") });
+    $("#o-tds").innerHTML = `<div class="big">${inr(t.tds)}</div><div>${t.base ? `${t.rate}% on ${inr(t.base)}` : ""}</div><div class="muted">${esc(t.note)}</div>`;
+  }
+  function labMsme() {
+    const d = P2P.msmeDue({ acceptDate: $("#s-acc").value, category: $("#s-cat").value, written: $("#s-written").checked, agreedDays: num("#s-days") });
+    if (!d.covered) { $("#o-msme").innerHTML = `${pill("Outside MSMED Act Chapter V", "st-info")}<div class="muted">Only micro and small enterprises are covered; pay on contract terms.</div>`; return; }
+    const i = P2P.msmeInterest({ principal: num("#s-amt"), due: d.due, asOf: $("#s-today").value, bankRate: num("#s-br") });
+    const late = i.late > 0;
+    const left = P2P.between($("#s-today").value, d.due);
+    $("#o-msme").innerHTML = `${pill(late ? `${i.late} days overdue` : `${left} days left`, late ? "st-block" : left <= 7 ? "st-hold" : "st-ok")}
+      <dl class="kv"><dt>Statutory due date</dt><dd class="mono">${d.due} (${d.days} days from acceptance)</dd>
+      <dt>Interest accrued</dt><dd class="mono big">${inr(i.interest)}</dd><dt>Interest rate</dt><dd class="mono">${i.annualPct}% a year, compounded monthly; not tax-deductible</dd>
+      <dt>If unpaid on 31 Mar 2027</dt><dd>${late || d.due <= "2027-03-31" ? "Expense disallowed for tax year 2026-27 under s.37(2)(g); deductible only when paid" : "No disallowance yet"}</dd></dl>`;
+  }
+  function labDisc() {
+    const apr = P2P.discountApr(num("#d-pct"), num("#d-days"), num("#d-net")), cof = num("#d-cof");
+    const take = apr > cof;
+    $("#o-disc").innerHTML = `${pill(take ? "Take the discount" : "Skip it, pay on the due date", take ? "st-ok" : "st-info")}
+      <div class="big">${apr}% a year</div><div class="muted">Paying ${num("#d-net") - num("#d-days")} days early earns ${apr}% annualised vs ${cof}% cost of funds.</div>`;
+  }
+  function labGstin() {
+    const g = P2P.validateGstin($("#g-gstin").value, $("#g-pan").value.trim() || null);
+    const ok = !g.issues.length;
+    $("#o-gstin").innerHTML = `${pill(ok ? "Valid" : "Fails checks", ok ? "st-ok" : "st-block")}
+      ${g.issues.map((i) => `<div class="find"><span class="sev sev-BLOCK">BLOCK</span><span><b>${i[0]}</b> ${esc(i[1])}</span></div>`).join("")}
+      <dl class="kv"><dt>State</dt><dd>${esc(g.state || "-")}</dd><dt>PAN inside</dt><dd class="mono">${esc(g.pan || "-")}</dd><dt>Expected check digit</dt><dd class="mono">${esc(g.expected || "-")}</dd></dl>`;
+  }
+  function labDoa() {
+    const v = num("#a-val"), rel = num("#a-rel"), sole = $("#a-sole").checked;
+    let appr = P2P.approverFor(v);
+    const one = P2P.quoteRule(v), all = P2P.quoteRule(v + rel);
+    const split = rel > 0 && (one.min !== all.min || one.rfq !== all.rfq);
+    if (split) appr = P2P.approverFor(v + rel);
+    if (sole) { const order = ["Department Head", "Plant Head", "CFO", "Managing Director"]; appr = order[Math.min(order.indexOf(appr) + 1, 3)]; }
+    $("#o-doa").innerHTML = `<dl class="kv"><dt>Approver</dt><dd><b>${esc(appr)}</b>${sole ? " (one level up for sole source)" : ""}</dd>
+      <dt>Quotes needed</dt><dd>${sole ? "1 allowed with documented justification" : one.min}${one.rfq ? ", formal RFQ / e-auction" : ""}</dd></dl>
+      ${split ? `<div class="find"><span class="sev sev-BLOCK">BLOCK</span><span><b>SPLIT_PURCHASE_SUSPECTED</b> Combined ${inr(v + rel)} needs ${all.min} quotes${all.rfq ? " and a formal RFQ" : ""}</span></div>` : ""}`;
+  }
+  const LABS = [["#lab-match", labMatch], ["#lab-tds", labTds], ["#lab-msme", labMsme], ["#lab-disc", labDisc], ["#lab-gstin", labGstin], ["#lab-doa", labDoa]];
+  LABS.forEach(([card, fn]) => { $(card).addEventListener("input", fn); $(card).addEventListener("change", fn); fn(); });
+  const setv = (o) => Object.entries(o).forEach(([id, v]) => { const e = $(id); if (e.type === "checkbox") e.checked = v; else e.value = v; });
+  document.querySelectorAll("[data-preset]").forEach((b) => b.addEventListener("click", () => {
+    const p = b.dataset.preset;
+    if (p === "s2") setv({ "#m-po": 284, "#m-inv": 293.10, "#m-poq": 2500, "#m-acc": 2380, "#m-invq": 2500, "#m-rate": 18 });
+    if (p === "clean") setv({ "#m-po": 438, "#m-inv": 438, "#m-poq": 4000, "#m-acc": 4000, "#m-invq": 4000, "#m-rate": 18 });
+    if (p === "s4") setv({ "#t-cum": 4620000, "#t-this": 860000, "#t-pan": true, "#t-turn": true });
+    if (p === "s1") setv({ "#t-cum": 11200000, "#t-this": 1774000, "#t-pan": true, "#t-turn": true });
+    if (p === "good") setv({ "#g-gstin": "29AABCT8834R1ZD", "#g-pan": "AABCT8834R" });
+    if (p === "bad") setv({ "#g-gstin": "06AAHCV3371L1Z4", "#g-pan": "AAHCV3317L" });
+    LABS.forEach(([, fn]) => fn());
+  }));
+
+  /* ---------------- ask the agents ---------------- */
+  const ASKABLE = ["intake", "policy", "category_manager", "supplier_analyst", "negotiator", "buyer", "ap", "tax", "resolver", "treasury", "controller"];
+  const SUGG = {
+    S1: [["supplier_analyst", "Why didn't we buy from the cheapest supplier?"], ["treasury", "Why did you skip the 1% early-payment discount?"], ["tax", "How was the TDS of Rs 1,774 worked out?"], ["negotiator", "How should the buyer use the should-cost gap?"]],
+    S2: [["resolver", "Why is Rs 67,059.40 on hold?"], ["tax", "Can we claim the full GST credit on this invoice?"], ["ap", "What exactly did the 3-way match find?"], ["treasury", "Does the MSME 45-day rule apply to this supplier?"]],
+    S3: [["policy", "Which red flags stopped this case?"], ["policy", "Why is a bank-account change by e-mail dangerous?"], ["controller", "What must happen before this can be re-submitted?"], ["intake", "What in the request text looked suspicious?"]],
+    S4: [["tax", "Why is TDS only Rs 480?"], ["treasury", "What does the overdue MSME invoice cost us?"], ["treasury", "What happens if it is still unpaid on 31 March?"], ["supplier_analyst", "Why Godavari Packaging over the cheaper quote?"]],
+  };
+  $("#q-case").innerHTML = BASES.map((b) => `<option value="${b}">${b}: ${esc(D.cases[b].title)}</option>`).join("");
+  $("#q-agents").innerHTML = ASKABLE.map((k, i) => `<label><input type="radio" name="q-agent" value="${k}" ${i === 0 ? "checked" : ""}><span>${esc(D.personas[k].title)}<small>${esc(fwShort(D.personas[k].framework))}</small></span></label>`).join("");
+  function renderSugg() {
+    const b = $("#q-case").value;
+    $("#q-sugg").innerHTML = SUGG[b].map(([a, q], i) => `<button class="btn" data-i="${i}">${esc(q)}</button>`).join("");
+    $("#q-sugg").querySelectorAll("button").forEach((btn) => btn.addEventListener("click", () => {
+      const [a, q] = SUGG[b][Number(btn.dataset.i)];
+      document.querySelector(`input[name="q-agent"][value="${a}"]`).checked = true;
+      $("#q-text").value = q;
+      ask();
+    }));
+  }
+  $("#q-case").addEventListener("change", renderSugg);
+  $("#q-case").value = S.base; renderSugg();
+
+  function caseRecord(b) {
+    const c = D.cases[b];
+    const rec = { case: b, title: c.title, story: c.story, request: c.request_text, final_status: c.status,
+      steps: c.steps.map((s) => ({ agent: s.title, decision: s.decision, tools: (s.tools || []).map((t) => `${t.tool}: ${t.summary}`),
+        findings: (s.findings || []).map((f) => `${f.severity} ${f.code}: ${f.detail}`), reasoning: s.rationale, crew: s.crew })),
+      memo: c.memo, scorecard: c.ranking, kraljic: c.kraljic, should_cost: c.should_cost, po: c.po, match: c.match, tax: c.tax, treasury: c.treasury,
+      company: D.company };
+    return JSON.stringify(rec);
+  }
+  const ERR = { not_granted: "The page was not allowed to use Claude, so live questions are off for this view.", sampling_disabled: "Claude is not available for this account.",
+    rate_limited: "Too many questions in a short time. Wait a little and ask again.", session_expired: "Sign in to Claude again, then ask.", refused: "Claude declined this question. Try asking it differently.",
+    empty_completion: "No answer came back. Try a shorter question.", invalid_json: "The analyst's reply could not be read. Try again.", prompt_too_large: "The question is too long." };
+  const errCopy = (e) => ERR[e && e.code] || "The answer was interrupted. Try again.";
+
+  let samplePromise = null;
+  const getSample = () => (samplePromise ||= (window.claude && window.claude.use ? window.claude.use("sample") : Promise.resolve(null)).catch(() => null));
+  getSample().then((s) => { if (!s) { $("#ask-unavailable").hidden = false; $("#q-go").disabled = true; $("#i-go").disabled = true; } });
+
+  let qCtl = null;
+  async function ask() {
+    const sample = await getSample();
+    if (!sample) return;
+    const q = $("#q-text").value.trim();
+    if (!q) { $("#q-status").textContent = "Type a question first."; return; }
+    const key = document.querySelector('input[name="q-agent"]:checked').value;
+    const p = D.personas[key], b = $("#q-case").value;
+    const prompt = `You are the ${p.title} in AgentProcure, a team of domain-expert AI agents running Procure-to-Pay for ${D.company.name}, a fictional Indian auto-components manufacturer in Pune. Today is 10 October 2026.
+Your mandate: ${p.mandate}
+Your expertise: ${p.expertise.join(", ")}.
+
+Answer the question using ONLY the case record below. The record was produced by the system's tested rules engine and other agents.
+Rules:
+- Use only figures, dates, names and rates that appear in the record. Never invent a number. If the record does not contain something, say so.
+- Name the rule or legal provision behind a conclusion when the record names it.
+- Plain business English for an MBA audience. At most 170 words. Short paragraphs or up to 5 bullets. Write amounts in Indian format with the rupee sign.
+- Speak in the first person as this agent. If the question belongs to another agent, answer briefly and say which agent owns it.
+- This is a teaching demo with fictional data, not tax or legal advice.
+
+CASE RECORD (JSON):
+${caseRecord(b)}
+
+QUESTION: ${q}`;
+    qCtl?.abort();
+    qCtl = new AbortController();
+    $("#q-answer").textContent = "Thinking...";
+    $("#q-status").textContent = `${p.title} on case ${b}`;
+    $("#q-go").disabled = true; $("#q-stop").disabled = false;
+    try {
+      await sample(prompt, { signal: qCtl.signal, cache: false, onText: ({ text }) => { $("#q-answer").textContent = text; } });
+    } catch (e) {
+      $("#q-answer").textContent = e && e.text ? e.text : "";
+      if (!e || e.code !== "cancelled") $("#q-status").textContent = errCopy(e);
+      if (e && ["not_granted", "sampling_disabled"].includes(e.code)) { $("#ask-unavailable").hidden = false; }
+    } finally {
+      $("#q-go").disabled = false; $("#q-stop").disabled = true;
+    }
+  }
+  $("#q-go").addEventListener("click", ask);
+  $("#q-stop").addEventListener("click", () => qCtl?.abort());
+
+  /* intake desk */
+  const CATS = { "aluminium castings": ["die-cast", "die cast", "casting", "adc12"], "machined components": ["shaft", "machined", "cnc", "turned"],
+    "electrical panels": ["panel", "plc", "vfd", "switchgear"], packaging: ["bag", "film", "packaging", "carton"], MRO: ["bolt", "fastener", "glove", "spare", "bearing", "tool"] };
+  function offlineParse(t) {
+    const s = t.toLowerCase();
+    const q = s.match(/(\d[\d,]*)\s*(nos|pcs|units|rolls|kits|lot)\b/);
+    const v = s.match(/rs\.?\s*([\d.]+)\s*(lakh|crore)/);
+    const d = s.match(/by (\d{1,2}) ([a-z]{3,9}) (\d{4})/);
+    const months = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
+    let need = null;
+    if (d) { const m = months.indexOf(d[2].slice(0, 3)); if (m >= 0) need = `${d[3]}-${String(m + 1).padStart(2, "0")}-${d[1].padStart(2, "0")}`; }
+    const category = Object.keys(CATS).find((c) => CATS[c].some((k) => s.includes(k))) || "other";
+    const out = { item: t.slice(0, 80), quantity: q ? Number(q[1].replace(/,/g, "")) : null, uom: q ? q[2] : null, need_by: need,
+      estimated_value_inr: v ? Number(v[1]) * (v[2] === "lakh" ? 1e5 : 1e7) : null, category,
+      urgent: /urgent|asap|approve fast|immediately/.test(s), sole_source_claimed: /only .* can|sole source|single source|only vendor/.test(s) };
+    out.missing = ["quantity", "need_by", "estimated_value_inr"].filter((k) => out[k] === null);
+    out.note = out.missing.length ? `Please add: ${out.missing.join(", ")}.` : "Request is complete enough to raise a requisition.";
+    return out;
+  }
+  function showIntake(r, by) {
+    const val = Number(r.estimated_value_inr) || 0;
+    $("#i-parsed").innerHTML = `<div class="blk-title" style="margin:0">Structured requisition (${esc(by)})</div><dl class="kv">
+      <dt>Item</dt><dd>${esc(r.item)}</dd><dt>Quantity</dt><dd class="mono">${esc(r.quantity ?? "-")} ${esc(r.uom ?? "")}</dd>
+      <dt>Need by</dt><dd class="mono">${esc(r.need_by ?? "-")}</dd><dt>Estimated value</dt><dd class="mono">${val ? inr(val) : "-"}</dd>
+      <dt>Category</dt><dd>${esc(r.category ?? "-")}</dd><dt>Missing</dt><dd>${esc((r.missing || []).join(", ") || "nothing")}</dd>
+      <dt>Note to requester</dt><dd>${esc(r.note ?? "")}</dd></dl>`;
+    if (!val) { $("#i-policy").innerHTML = `<div class="muted">No value given, so the approver and quote rule cannot be set yet.</div>`; return; }
+    let appr = P2P.approverFor(val); const q = P2P.quoteRule(val);
+    const flags = [];
+    if (r.urgent) flags.push(["INFO", "URGENCY_LANGUAGE", "Pressure for speed is a common lever in policy bypass"]);
+    if (r.sole_source_claimed) { flags.push(["WARN", "SOLE_SOURCE_CLAIMED", "Needs a documented reason (OEM lock-in, IP, capability gap); approval moves one level up"]); appr = ["Department Head", "Plant Head", "CFO", "Managing Director"][Math.min(["Department Head", "Plant Head", "CFO", "Managing Director"].indexOf(appr) + 1, 3)]; }
+    if (r.sole_source_claimed && q.min > 1) flags.push(["BLOCK", "QUOTES_INSUFFICIENT", `Policy needs ${q.min} quotes for ${inr(val)} unless the sole-source reason is accepted`]);
+    $("#i-policy").innerHTML = `<div class="blk-title" style="margin:0">Policy & Compliance Officer (rules in the page)</div>
+      <dl class="kv"><dt>Approver</dt><dd><b>${esc(appr)}</b></dd><dt>Quotes needed</dt><dd>${q.min}${q.rfq ? " + formal RFQ" : ""}</dd></dl>
+      ${flags.map(([s, c, d]) => `<div class="find"><span class="sev sev-${s}">${s}</span><span><b>${c}</b> ${esc(d)}</span></div>`).join("")}`;
+  }
+  let iCtl = null;
+  $("#i-go").addEventListener("click", async () => {
+    const sample = await getSample();
+    if (!sample) return;
+    const text = $("#i-text").value.trim();
+    if (!text) return;
+    iCtl?.abort(); iCtl = new AbortController();
+    $("#i-status").textContent = "Thinking..."; $("#i-go").disabled = true;
+    try {
+      const r = await sample.json(`You are the Procurement Analyst agent at an Indian manufacturer. Today is 2026-10-10. Extract a purchase requisition from the employee's request below.
+Reply with only one JSON object with exactly these keys:
+{"item": string, "quantity": number or null, "uom": string or null, "need_by": "YYYY-MM-DD" or null, "estimated_value_inr": number or null (convert lakh and crore to rupees), "category": one of "aluminium castings" | "machined components" | "electrical panels" | "packaging" | "MRO" | "other", "urgent": boolean, "sole_source_claimed": boolean, "missing": array of the fields a buyer still needs, "note": one short sentence to the requester}
+Request: """${text.slice(0, 2000)}"""`, { modelTier: "quick", signal: iCtl.signal });
+      showIntake(r || {}, "Claude, in the Procurement Analyst role");
+      $("#i-status").textContent = "";
+    } catch (e) {
+      if (!e || e.code !== "cancelled") $("#i-status").textContent = errCopy(e);
+    } finally { $("#i-go").disabled = false; }
+  });
+  $("#i-offline").addEventListener("click", () => { showIntake(offlineParse($("#i-text").value), "offline parser"); $("#i-status").textContent = ""; });
+
+  /* ---------------- how it's built ---------------- */
+  const passed = D.evals.filter((e) => e.pass).length;
+  $("#eval-sum").textContent = `${passed} of ${D.evals.length} injected conditions handled correctly: right final outcome, right control fired, right money figure. Each case mutates a scenario (price drift, missing IRN, duplicate invoice, missing PAN...) and runs the full multi-agent workflow.`;
+  $("#eval-rows").innerHTML = D.evals.map((e) => `<tr><td class="mono">${e.id}</td><td style="white-space:normal;min-width:220px">${esc(e.case)}</td><td class="mono">${esc(e.expected)}</td><td>${e.pass ? '<span class="sev sev-INFO">PASS</span>' : '<span class="sev sev-BLOCK">FAIL</span>'}</td></tr>`).join("");
+  $("#built-facts").innerHTML = `<dt>Agents</dt><dd>11 AI agents (8 graph steps + a 3-agent crew) and 1 human approver</dd><dt>Unit + workflow tests</dt><dd>36 passing (pytest)</dd>
+    <dt>Eval cases</dt><dd>${passed}/${D.evals.length} passing</dd><dt>Traces on this page</dt><dd>${esc(D.generated_with)}</dd>
+    <dt>LLM options</dt><dd>offline, Gemini (free tier), OpenAI, Anthropic, Ollama</dd>`;
+  const bc = D.business_case, cols = ["Conservative", "Base", "Optimistic"];
+  const row = (label, f) => `<tr><td>${label}</td>${cols.map((c) => `<td class="num">${f(bc[c])}</td>`).join("")}</tr>`;
+  $("#bc-rows").innerHTML = [
+    row("Gross annual benefit", (x) => x.gross_benefit_lakh.toFixed(1)), row("Run cost per year", (x) => x.run_cost_lakh.toFixed(1)),
+    row("<b>Net annual benefit</b>", (x) => `<b>${x.net_annual_benefit_lakh.toFixed(1)}</b>`), row("One-time cost", (x) => x.one_time_cost_lakh.toFixed(1)),
+    row("Payback (months)", (x) => x.payback_months), row("3-year NPV at 12%", (x) => x.npv_3yr_lakh.toFixed(1)), row("3-year ROI", (x) => x.roi_3yr_pct + "%"),
+  ].join("");
+  const drivers = Object.entries(bc.Base.drivers), max = Math.max(...drivers.map(([, v]) => v));
+  $("#bc-bars").innerHTML = drivers.map(([k, v]) => `<div class="bar"><span>${esc(k)}</span><span class="track"><span class="fill" style="width:${(v / max * 100).toFixed(1)}%;display:block"></span></span><span class="v">${v.toFixed(1)}</span></div>`).join("");
+  $("#bc-note").textContent = `Assumptions are explicit in agentprocure/business_case.py (spend Rs 260 crore, 36,000 invoices a year, 40% effort reduction in Year 1, against a best-in-class cost gap of about 73% in Ardent Partners' 2026 benchmarks). About ${D.ops_kpis.exceptions_avoided_per_year.toLocaleString("en-IN")} invoice exceptions a year are avoided; that effort sits inside operations cost and is not counted twice.`;
+  $("#foot").textContent = "Academic prototype. Company, vendors, GSTINs and figures are fictional. Rules reflect the position as of 10 October 2026; confirm against current notifications before any real use. Not tax or legal advice.";
+})();
+</script>

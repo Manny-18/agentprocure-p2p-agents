@@ -1,0 +1,41 @@
+{
+  "id": "S3",
+  "title": "Panel retrofit: split purchase and vendor fraud red flags",
+  "story": "Maintenance raises a second 'urgent, sole-source' PR for a control-panel retrofit nine days after phase 1, each just under the Rs 25 lakh competitive-bidding limit. The vendor's GSTIN fails its checksum, its PAN does not match, and its bank account was changed by email six days ago. The agents must stop the case, not optimise it.",
+  "learning_points": [
+    "Split-purchase detection across requisitions (threshold avoidance)",
+    "Vendor due diligence: GSTIN checksum, PAN match, unverified bank change (business email compromise)",
+    "Hard stops that no single approver can override; escalation instead of approval"
+  ],
+  "requisition": {
+    "pr_no": "PR-26-0961",
+    "date": "2026-10-03",
+    "requester": "Rohit Kale",
+    "department": "Maintenance - Electrical",
+    "cost_center": "CC-MNT-410",
+    "request_text": "URGENT - Line 3 control panel retrofit phase 2 (PLC + VFD panel, 1 lot). Voltline already did phase 1 survey, sole source. Rs 23.8 lakh. Please approve fast.",
+    "item": {"code": "SRV-PNL-L3-P2", "description": "Electrical control panel retrofit, Line 3, phase 2 (PLC + VFD panel)", "hsn": "8537", "uom": "lot", "qty": 1, "need_by": "2026-10-20"},
+    "estimated_value": 2380000,
+    "category": "electrical panels",
+    "criticality": "medium",
+    "annual_volume_qty": 2,
+    "single_source": true,
+    "justification": "Vendor already familiar with the line from phase 1 survey."
+  },
+  "quotes": [
+    {"vendor_id": "V-105", "unit_price": 2380000.0, "freight": 0, "lead_time_days": 14}
+  ],
+  "should_cost": null,
+  "pr_history": [
+    {"pr_no": "PR-26-0950", "date": "2026-09-24", "requester": "Rohit Kale", "cost_center": "CC-MNT-410", "vendor_id": "V-105", "category": "electrical panels", "description": "Line 3 control panel retrofit phase 1", "value": 2450000, "status": "pending approval"}
+  ],
+  "po_date": null,
+  "grn": null,
+  "invoice": null,
+  "invoice_history": [],
+  "open_payables": [],
+  "expected": {
+    "final_status": "ESCALATED",
+    "blocking_codes": ["GSTIN_CHECKSUM_INVALID", "PAN_MISMATCH", "BANK_CHANGE_UNVERIFIED", "SPLIT_PURCHASE_SUSPECTED", "QUOTES_INSUFFICIENT"]
+  }
+}

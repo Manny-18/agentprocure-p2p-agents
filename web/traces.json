@@ -1,0 +1,5545 @@
+{
+ "generated_with": "offline (deterministic expert templates)",
+ "as_of": "2026-10-10",
+ "company": {
+  "name": "Meridian Precision Components Pvt. Ltd.",
+  "note": "Fictional company created for this academic project. All names, GSTINs and figures are illustrative.",
+  "plant": "Chakan MIDC, Pune, Maharashtra",
+  "industry": "Auto components (Tier-1 supplier of transmission housings and shafts)",
+  "gstin": "27AAKCM4821Q1ZU",
+  "pan": "AAKCM4821Q",
+  "state_code": "27",
+  "prev_year_turnover_cr": 420,
+  "tax_year": "2026-27",
+  "tax_year_end": "2027-03-31",
+  "as_of": "2026-10-10",
+  "cost_of_funds_pct": 9.25,
+  "rbi_bank_rate_pct": 5.75,
+  "rbi_bank_rate_note": "Bank Rate 5.75% after the RBI MPC decision of 7 Oct 2026 (repo 5.50%).",
+  "doa": [
+   {
+    "max": 200000,
+    "approver": "Department Head"
+   },
+   {
+    "max": 1000000,
+    "approver": "Plant Head"
+   },
+   {
+    "max": 10000000,
+    "approver": "CFO"
+   },
+   {
+    "max": null,
+    "approver": "Managing Director"
+   }
+  ],
+  "quote_rules": [
+   {
+    "max": 50000,
+    "min_quotes": 1,
+    "rfq_required": false
+   },
+   {
+    "max": 500000,
+    "min_quotes": 2,
+    "rfq_required": false
+   },
+   {
+    "max": 2500000,
+    "min_quotes": 3,
+    "rfq_required": false
+   },
+   {
+    "max": null,
+    "min_quotes": 3,
+    "rfq_required": true
+   }
+  ],
+  "match_tolerance": {
+   "price_pct": 1.0,
+   "amount_abs": 500
+  },
+  "split_window_days": 30,
+  "bank_change_cooling_days": 30,
+  "budgets": {
+   "CC-PRD-210": {
+    "name": "Production - Die-casting line",
+    "fy_budget": 25000000,
+    "consumed": 17650000,
+    "committed": 3100000
+   },
+   "CC-PRD-230": {
+    "name": "Production - Machining cell",
+    "fy_budget": 14000000,
+    "consumed": 8820000,
+    "committed": 1450000
+   },
+   "CC-MNT-410": {
+    "name": "Maintenance - Electrical",
+    "fy_budget": 6000000,
+    "consumed": 2140000,
+    "committed": 600000
+   },
+   "CC-LOG-520": {
+    "name": "Logistics - Packaging",
+    "fy_budget": 12000000,
+    "consumed": 6930000,
+    "committed": 900000
+   }
+  }
+ },
+ "vendors": {
+  "V-101": {
+   "name": "Deccan Precision Castings Pvt. Ltd.",
+   "city": "Pune",
+   "state_code": "27",
+   "gstin": "27AADCD5172K1ZG",
+   "pan": "AADCD5172K",
+   "gst_status": "Active",
+   "msme": {
+    "category": "small",
+    "udyam": "UDYAM-MH-26-0187342",
+    "registered_on": "2022-07-14"
+   },
+   "aato_cr": 38,
+   "bank": {
+    "account_masked": "XXXXXX4471",
+    "changed_on": null,
+    "change_verified": true
+   },
+   "performance": {
+    "quality_ppm": 850,
+    "otif_pct": 94,
+    "financial_risk": 2,
+    "compliance_score": 85
+   },
+   "terms": {
+    "payment_days": 45,
+    "written_agreement": true,
+    "discount": {
+     "pct": 1.5,
+     "days": 10
+    }
+   },
+   "approved": true,
+   "categories": [
+    "aluminium castings"
+   ],
+   "purchases_ty_to_date": 2860000
+  },
+  "V-102": {
+   "name": "Tungabhadra Alloy Castings Ltd.",
+   "city": "Hubballi",
+   "state_code": "29",
+   "gstin": "29AABCT8834R1ZD",
+   "pan": "AABCT8834R",
+   "gst_status": "Active",
+   "msme": {
+    "category": "none",
+    "udyam": null,
+    "registered_on": null
+   },
+   "aato_cr": 610,
+   "bank": {
+    "account_masked": "XXXXXX0928",
+    "changed_on": null,
+    "change_verified": true
+   },
+   "performance": {
+    "quality_ppm": 420,
+    "otif_pct": 97,
+    "financial_risk": 1,
+    "compliance_score": 90
+   },
+   "terms": {
+    "payment_days": 60,
+    "written_agreement": true,
+    "discount": {
+     "pct": 1.0,
+     "days": 15
+    }
+   },
+   "approved": true,
+   "categories": [
+    "aluminium castings",
+    "machined components"
+   ],
+   "purchases_ty_to_date": 11200000
+  },
+  "V-103": {
+   "name": "Sabarmati Foundry Works",
+   "city": "Ahmedabad",
+   "state_code": "24",
+   "gstin": "24AAQFS2291M1ZM",
+   "pan": "AAQFS2291M",
+   "gst_status": "Active",
+   "msme": {
+    "category": "micro",
+    "udyam": "UDYAM-GJ-01-0044219",
+    "registered_on": "2021-02-03"
+   },
+   "aato_cr": 4.2,
+   "bank": {
+    "account_masked": "XXXXXX3310",
+    "changed_on": null,
+    "change_verified": true
+   },
+   "performance": {
+    "quality_ppm": 1900,
+    "otif_pct": 86,
+    "financial_risk": 3,
+    "compliance_score": 70
+   },
+   "terms": {
+    "payment_days": 30,
+    "written_agreement": true,
+    "discount": null
+   },
+   "approved": true,
+   "categories": [
+    "aluminium castings"
+   ],
+   "purchases_ty_to_date": 0
+  },
+  "V-104": {
+   "name": "Noyyal CNC Engineering Pvt. Ltd.",
+   "city": "Coimbatore",
+   "state_code": "33",
+   "gstin": "33AAFCN6620H1ZN",
+   "pan": "AAFCN6620H",
+   "gst_status": "Active",
+   "msme": {
+    "category": "medium",
+    "udyam": "UDYAM-TN-03-0091876",
+    "registered_on": "2020-11-20"
+   },
+   "aato_cr": 92,
+   "bank": {
+    "account_masked": "XXXXXX7702",
+    "changed_on": null,
+    "change_verified": true
+   },
+   "performance": {
+    "quality_ppm": 610,
+    "otif_pct": 95,
+    "financial_risk": 2,
+    "compliance_score": 88
+   },
+   "terms": {
+    "payment_days": 45,
+    "written_agreement": true,
+    "discount": null
+   },
+   "approved": true,
+   "categories": [
+    "machined components"
+   ],
+   "purchases_ty_to_date": 3800000
+  },
+  "V-105": {
+   "name": "Voltline Switchgear Solutions Pvt. Ltd.",
+   "city": "Faridabad",
+   "state_code": "06",
+   "gstin": "06AAHCV3371L1Z4",
+   "pan": "AAHCV3317L",
+   "gst_status": "Active",
+   "msme": {
+    "category": "small",
+    "udyam": "UDYAM-HR-05-0120934",
+    "registered_on": "2024-01-09"
+   },
+   "aato_cr": 14,
+   "bank": {
+    "account_masked": "XXXXXX9015",
+    "changed_on": "2026-10-04",
+    "change_verified": false,
+    "change_channel": "email request from vendor contact"
+   },
+   "performance": {
+    "quality_ppm": 700,
+    "otif_pct": 90,
+    "financial_risk": 3,
+    "compliance_score": 60
+   },
+   "terms": {
+    "payment_days": 30,
+    "written_agreement": true,
+    "discount": null
+   },
+   "approved": true,
+   "categories": [
+    "electrical panels"
+   ],
+   "purchases_ty_to_date": 900000
+  },
+  "V-106": {
+   "name": "Godavari Packaging Industries",
+   "city": "Nashik",
+   "state_code": "27",
+   "gstin": "27ABJPK7745D1ZI",
+   "pan": "ABJPK7745D",
+   "gst_status": "Active",
+   "msme": {
+    "category": "micro",
+    "udyam": "UDYAM-MH-20-0033815",
+    "registered_on": "2021-06-30"
+   },
+   "aato_cr": 3.6,
+   "bank": {
+    "account_masked": "XXXXXX5528",
+    "changed_on": null,
+    "change_verified": true
+   },
+   "performance": {
+    "quality_ppm": 300,
+    "otif_pct": 98,
+    "financial_risk": 2,
+    "compliance_score": 88
+   },
+   "terms": {
+    "payment_days": 30,
+    "written_agreement": true,
+    "discount": null
+   },
+   "approved": true,
+   "categories": [
+    "packaging"
+   ],
+   "purchases_ty_to_date": 4620000
+  },
+  "V-107": {
+   "name": "Mula Industrial Supplies",
+   "city": "Pune",
+   "state_code": "27",
+   "gstin": "27AAKFM9032B1ZE",
+   "pan": "AAKFM9032B",
+   "gst_status": "Active",
+   "msme": {
+    "category": "small",
+    "udyam": "UDYAM-MH-26-0201177",
+    "registered_on": "2023-03-15"
+   },
+   "aato_cr": 22,
+   "bank": {
+    "account_masked": "XXXXXX6612",
+    "changed_on": null,
+    "change_verified": true
+   },
+   "performance": {
+    "quality_ppm": 650,
+    "otif_pct": 92,
+    "financial_risk": 2,
+    "compliance_score": 82
+   },
+   "terms": {
+    "payment_days": 45,
+    "written_agreement": true,
+    "discount": null
+   },
+   "approved": true,
+   "categories": [
+    "packaging",
+    "MRO"
+   ],
+   "purchases_ty_to_date": 1250000
+  },
+  "V-108": {
+   "name": "Pavana Polymers Pvt. Ltd.",
+   "city": "Pune",
+   "state_code": "27",
+   "gstin": "27AADCP4410N1ZB",
+   "pan": "AADCP4410N",
+   "gst_status": "Active",
+   "msme": {
+    "category": "small",
+    "udyam": "UDYAM-MH-26-0154420",
+    "registered_on": "2022-09-01"
+   },
+   "aato_cr": 17,
+   "bank": {
+    "account_masked": "XXXXXX2290",
+    "changed_on": null,
+    "change_verified": true
+   },
+   "performance": {
+    "quality_ppm": 900,
+    "otif_pct": 89,
+    "financial_risk": 3,
+    "compliance_score": 78
+   },
+   "terms": {
+    "payment_days": 45,
+    "written_agreement": true,
+    "discount": null
+   },
+   "approved": true,
+   "categories": [
+    "packaging"
+   ],
+   "purchases_ty_to_date": 0
+  },
+  "V-109": {
+   "name": "Vaigai Turned Components Pvt. Ltd.",
+   "city": "Madurai",
+   "state_code": "33",
+   "gstin": "33AAGCV5518E1ZH",
+   "pan": "AAGCV5518E",
+   "gst_status": "Active",
+   "msme": {
+    "category": "small",
+    "udyam": "UDYAM-TN-14-0066231",
+    "registered_on": "2022-12-12"
+   },
+   "aato_cr": 11,
+   "bank": {
+    "account_masked": "XXXXXX8841",
+    "changed_on": null,
+    "change_verified": true
+   },
+   "performance": {
+    "quality_ppm": 1400,
+    "otif_pct": 88,
+    "financial_risk": 3,
+    "compliance_score": 76
+   },
+   "terms": {
+    "payment_days": 45,
+    "written_agreement": true,
+    "discount": null
+   },
+   "approved": true,
+   "categories": [
+    "machined components"
+   ],
+   "purchases_ty_to_date": 0
+  }
+ },
+ "cases": {
+  "S1": {
+   "id": "S1",
+   "title": "Die-cast gearbox housings: clean end-to-end run",
+   "story": "Production needs 4,000 aluminium die-cast housings. Three suppliers quoted. The cheapest supplier has poor quality and delivery, so the agents must pick on total value, not price. Goods arrive and the invoice matches.",
+   "learning_points": [
+    "Weighted supplier scorecard beats lowest-price buying for a strategic item",
+    "Inter-state purchase: IGST, e-invoice IRN check, TDS on goods above the Rs 50 lakh threshold",
+    "Treasury declines an early-payment discount whose annualised return is below the cost of funds"
+   ],
+   "request_text": "Need 4000 nos aluminium die-cast gearbox housings (ADC12, part HSG-ADC12-GB04) for the Q3 build plan, required by 5 Oct 2026. Budget about Rs 19 lakh. Line-stopper part.",
+   "case_id": "S1-web-approve",
+   "approval_pack": {
+    "case_id": "S1-web-approve",
+    "approver_role": "CFO",
+    "pr_no": "PR-26-0871",
+    "item": "Aluminium die-cast gearbox housing, ADC12, machined",
+    "qty": 4000,
+    "vendor_id": "V-102",
+    "vendor": "Tungabhadra Alloy Castings Ltd.",
+    "po_value_excl_gst": 1774000.0,
+    "score": 94.56,
+    "runner_up": "V-101",
+    "kraljic": "Strategic",
+    "warnings": [],
+    "negotiation_target": 432.43,
+    "question": "Approve PO to Tungabhadra Alloy Castings Ltd. for Rs 17,74,000 (excl. GST)?"
+   },
+   "steps_before_approval": 3,
+   "trace": [
+    {
+     "agent": "intake",
+     "title": "Procurement Analyst",
+     "framework": "LangGraph node",
+     "mandate": "Turn a requester's message into a complete, policy-ready purchase requisition.",
+     "tools": [
+      {
+       "tool": "parse_request",
+       "input": {
+        "text": "Need 4000 nos aluminium die-cast gearbox housings (ADC12, part HSG-ADC12-GB04) for the Q3 build plan, required by 5 Oct 2026. Budget about Rs 19 lakh. Line-stopper part."
+       },
+       "summary": "Extracted qty=4000.0 nos, need-by=2026-10-05, value=Rs 19,00,000, category=aluminium castings (offline rule-based parser)"
+      },
+      {
+       "tool": "budget_check",
+       "input": {
+        "cost_center": "CC-PRD-210",
+        "amount": 1900000
+       },
+       "summary": "Production - Die-casting line: remaining Rs 42,50,000 vs request Rs 19,00,000"
+      }
+     ],
+     "findings": [],
+     "decision": "Requisition structured and forwarded to Policy & Compliance",
+     "highlights": [
+      "4,000 nos | Rs 19,00,000",
+      "Direct material | HSN 7616",
+      "Need-by in 34 days"
+     ],
+     "rationale": "PR-26-0871 is a direct material request for 4,000 nos of Aluminium die-cast gearbox housing, ADC12, machined (HSN 7616), estimated at Rs 19,00,000 and needed in 34 days. Budget on CC-PRD-210 has Rs 42,50,000 available. The request is complete and consistent with the form.",
+     "rationale_source": "offline-template",
+     "guardrail": "n/a",
+     "elapsed_ms": 1.9
+    },
+    {
+     "agent": "policy",
+     "title": "Policy & Compliance Officer",
+     "framework": "LangGraph node",
+     "mandate": "Apply the procurement policy before any money is committed.",
+     "tools": [
+      {
+       "tool": "delegation_of_authority",
+       "input": {
+        "value": 1900000
+       },
+       "summary": "Approver for Rs 19,00,000: CFO"
+      },
+      {
+       "tool": "competitive_quote_rule",
+       "input": {
+        "value": 1900000,
+        "quotes": 3
+       },
+       "summary": "Needs 3 quote(s); received 3"
+      },
+      {
+       "tool": "split_purchase_scan",
+       "input": {
+        "window_days": 30,
+        "history": 0
+       },
+       "summary": "0 related PR(s); combined Rs 19,00,000"
+      },
+      {
+       "tool": "budget_check",
+       "input": {
+        "cost_center": "CC-PRD-210"
+       },
+       "summary": "Remaining Rs 42,50,000; OK"
+      },
+      {
+       "tool": "vendor_due_diligence",
+       "input": {
+        "vendor_id": "V-101"
+       },
+       "summary": "Deccan Precision Castings Pvt. Ltd.: clean"
+      },
+      {
+       "tool": "vendor_due_diligence",
+       "input": {
+        "vendor_id": "V-102"
+       },
+       "summary": "Tungabhadra Alloy Castings Ltd.: clean"
+      },
+      {
+       "tool": "vendor_due_diligence",
+       "input": {
+        "vendor_id": "V-103"
+       },
+       "summary": "Sabarmati Foundry Works: clean"
+      }
+     ],
+     "findings": [],
+     "decision": "Cleared for sourcing; approver = CFO",
+     "highlights": [
+      "Approver: CFO",
+      "Findings: 0 block / 0 warn"
+     ],
+     "rationale": "Policy checks passed. Approval authority: CFO. No warnings.",
+     "rationale_source": "offline-template",
+     "guardrail": "n/a",
+     "elapsed_ms": 0.2
+    },
+    {
+     "agent": "supplier_analyst",
+     "title": "Sourcing Crew (3 CrewAI agents)",
+     "framework": "CrewAI crew inside a LangGraph node",
+     "mandate": "Rank suppliers on total value, not just price.",
+     "tools": [
+      {
+       "tool": "kraljic_analysis",
+       "input": {
+        "case_id": "S1-web-approve"
+       },
+       "summary": "Strategic (spend Rs 2,10,88,000, risk score 3)"
+      },
+      {
+       "tool": "supplier_scorecard",
+       "input": {
+        "case_id": "S1-web-approve"
+       },
+       "summary": "Winner V-102 94.56 pts; runner-up V-101"
+      },
+      {
+       "tool": "should_cost_model",
+       "input": {
+        "case_id": "S1-web-approve"
+       },
+       "summary": "Should-cost Rs 432.43 vs quote Rs 438 (1.27% gap)"
+      }
+     ],
+     "findings": [],
+     "decision": "Recommend V-102 Tungabhadra Alloy Castings Ltd. at Rs 438/unit",
+     "highlights": [
+      "Kraljic: Strategic",
+      "Winner 94.56 pts",
+      "Target Rs 432.43"
+     ],
+     "rationale": "Ranking: V-102 Tungabhadra Alloy Castings Ltd.: 94.56 pts, landed Rs 443.50/unit, lead 28 days | V-101 Deccan Precision Castings Pvt. Ltd.: 86.04 pts, landed Rs 452/unit, lead 25 days | V-103 Sabarmati Foundry Works: 73.45 pts, landed Rs 422.50/unit, lead 21 days. The cheapest quote (V-103, Rs 422.50/unit) loses on quality, delivery or eligibility, so lowest price is not best value here. Margin over runner-up: 8.52 pts.",
+     "rationale_source": "CrewAI (offline expert LLM)",
+     "guardrail": "passed",
+     "elapsed_ms": 982.5,
+     "crew": [
+      {
+       "agent": "category_manager",
+       "title": "Category Manager",
+       "output": "Kraljic position: Strategic. Annual spend Rs 2.11 crore gives high profit impact; supply-risk score 3 gives high supply risk. Evaluate suppliers with weights: price 25%, quality 30%, delivery 20%, risk 20%, compliance 5%. Strategy levers: Long-term agreement with index-linked raw-material pricing (share commodity risk transparently); Develop the runner-up as a qualified second source for 20-30% of volume; Joint cost-reduction (VA/VE) targets and PPM improvement plan written into the contract."
+      },
+      {
+       "agent": "supplier_analyst",
+       "title": "Supplier Performance & Risk Analyst",
+       "output": "Ranking: V-102 Tungabhadra Alloy Castings Ltd.: 94.56 pts, landed Rs 443.50/unit, lead 28 days | V-101 Deccan Precision Castings Pvt. Ltd.: 86.04 pts, landed Rs 452/unit, lead 25 days | V-103 Sabarmati Foundry Works: 73.45 pts, landed Rs 422.50/unit, lead 21 days. The cheapest quote (V-103, Rs 422.50/unit) loses on quality, delivery or eligibility, so lowest price is not best value here. Margin over runner-up: 8.52 pts.\nRecommended vendor: V-102"
+      },
+      {
+       "agent": "negotiator",
+       "title": "Negotiation Strategist",
+       "output": "Should-cost Rs 432.43/unit (material Rs 226.10 + conversion Rs 120 + secondary ops Rs 40 + 12% overhead and margin) vs quote Rs 438: gap 1.27%. Verdict: negotiate. Target Rs 432.43/unit, open at Rs 428.11. Value at stake Rs 22,280 on this order, Rs 2,67,360 a year. BATNA: V-101 Deccan Precision Castings Pvt. Ltd. at Rs 452/unit landed (86.04 pts). Levers: Long-term agreement with index-linked raw-material pricing (share commodity risk transparently); Develop the runner-up as a qualified second source for 20-30% of volume; Joint cost-reduction (VA/VE) targets and PPM improvement plan written into the contract."
+      }
+     ],
+     "engine": "CrewAI (offline expert LLM)",
+     "crew_error": null,
+     "crew_tool_calls": [
+      "kraljic_analysis",
+      "supplier_scorecard",
+      "should_cost_model"
+     ]
+    },
+    {
+     "agent": "approver",
+     "title": "Human Approver (per DoA)",
+     "framework": "LangGraph interrupt (human-in-the-loop)",
+     "mandate": "Accountable human decision at the point of financial commitment.",
+     "tools": [
+      {
+       "tool": "approval_pack",
+       "input": {
+        "case_id": "S1-web-approve"
+       },
+       "summary": "Approve PO to Tungabhadra Alloy Castings Ltd. for Rs 17,74,000 (excl. GST)?"
+      }
+     ],
+     "findings": [],
+     "decision": "APPROVED by CFO",
+     "highlights": [
+      "Role required: CFO",
+      "Value Rs 17,74,000"
+     ],
+     "rationale": "Approved as recommended.",
+     "rationale_source": "human",
+     "guardrail": "n/a",
+     "elapsed_ms": 0.0
+    },
+    {
+     "agent": "buyer",
+     "title": "Buyer (PO Specialist)",
+     "framework": "LangGraph node",
+     "mandate": "Issue a compliant purchase order with the right commercial and statutory terms.",
+     "tools": [
+      {
+       "tool": "gst_estimate",
+       "input": {
+        "taxable": 1774000.0,
+        "rate": 18
+       },
+       "summary": "IGST @ 18% = Rs 3,19,320; PO total Rs 20,93,320"
+      },
+      {
+       "tool": "tds_preview",
+       "input": {
+        "vendor": "V-102"
+       },
+       "summary": "Threshold already crossed earlier this tax year; TDS on the full taxable value"
+      }
+     ],
+     "findings": [],
+     "decision": "PO-26-0871 issued (Rs 20,93,320 incl. GST)",
+     "highlights": [
+      "IGST Rs 3,19,320",
+      "Delivery by 2026-10-02",
+      "Non-MSE supplier"
+     ],
+     "rationale": "PO-26-0871 issued to Tungabhadra Alloy Castings Ltd. for 4,000 nos at Rs 438 (Rs 17,74,000 + IGST Rs 3,19,320). Delivery by 2026-10-02. Key terms: Payment: 60 days from invoice; Supplier must issue an e-invoice with IRN (AATO above Rs 5 crore); invoices without IRN will be rejected; Quote PO number on invoice; bill only accepted quantity; GSTIN of buyer 27AAKCM4821Q1ZU.",
+     "rationale_source": "offline-template",
+     "guardrail": "n/a",
+     "elapsed_ms": 0.2
+    },
+    {
+     "agent": "ap",
+     "title": "Accounts Payable Specialist",
+     "framework": "LangGraph node",
+     "mandate": "Pay only what is owed: match, de-duplicate and protect against payment fraud.",
+     "tools": [
+      {
+       "tool": "three_way_match",
+       "input": {
+        "po": "PO-26-0871",
+        "grn": "GRN-26-10-0112",
+        "invoice": "TAC/26-27/04417"
+       },
+       "summary": "MATCHED: price 438.0 vs 438.0 (+0.0%), qty invoiced 4,000 vs accepted 4,000"
+      },
+      {
+       "tool": "duplicate_check",
+       "input": {
+        "invoice_no": "TAC/26-27/04417"
+       },
+       "summary": "Checked against 1 prior invoice(s): no duplicate"
+      },
+      {
+       "tool": "bank_change_check",
+       "input": {
+        "vendor": "V-102"
+       },
+       "summary": "Bank details match master; no recent change"
+      }
+     ],
+     "findings": [],
+     "decision": "Matched - release to tax review",
+     "highlights": [
+      "Approved Rs 20,93,320",
+      "Disputed Rs 0"
+     ],
+     "rationale": "Invoice TAC/26-27/04417 matches PO PO-26-0871 and GRN-26-10-0112 within tolerance: 4,000 units at Rs 438. No duplicate, bank details unchanged. Approved for payment: Rs 20,93,320.",
+     "rationale_source": "offline-template",
+     "guardrail": "n/a",
+     "elapsed_ms": 0.2
+    },
+    {
+     "agent": "tax",
+     "title": "GST & TDS Specialist",
+     "framework": "LangGraph node",
+     "mandate": "Make sure the invoice is a valid tax document and withhold the right TDS.",
+     "tools": [
+      {
+       "tool": "gst_invoice_check",
+       "input": {
+        "invoice": "TAC/26-27/04417",
+        "supplier_state": "29",
+        "place_of_supply": "27"
+       },
+       "summary": "IGST @ 18% on Rs 17,74,000 = Rs 3,19,320; GSTIN checksum OK; no tax errors"
+      },
+      {
+       "tool": "einvoice_check",
+       "input": {
+        "supplier_aato_cr": 610
+       },
+       "summary": "E-invoice required (AATO Rs 610 cr); IRN present, reported 0 day(s) after invoice"
+      },
+      {
+       "tool": "itc_readiness",
+       "input": {
+        "in_gstr2b": true
+       },
+       "summary": "ITC claimable now: Rs 3,19,320"
+      },
+      {
+       "tool": "tds_on_goods",
+       "input": {
+        "cumulative_before": 11200000,
+        "this_taxable": 1774000.0
+       },
+       "summary": "TDS Rs 1,774 at 0.1% on Rs 17,74,000: Threshold already crossed earlier this tax year; TDS on the full taxable value"
+      }
+     ],
+     "findings": [],
+     "decision": "Valid tax invoice; ITC Rs 3,19,320; TDS Rs 1,774",
+     "highlights": [
+      "IGST 18%",
+      "ITC Rs 3,19,320",
+      "TDS Rs 1,774"
+     ],
+     "rationale": "Tax document check: IGST at 18% is correct for a supply from state 29 to place of supply 27; billed tax reconciles. E-invoice IRN verified. Claim ITC of Rs 3,19,320 on the accepted value. TDS: threshold already crossed earlier this tax year; TDS on the full taxable value - deduct Rs 1,774 under Income-tax Act 2025, s.393(1) Table Sl. 8(ii) (formerly s.194Q). Pay the supplier within 180 days of invoice date to keep the ITC.",
+     "rationale_source": "offline-template",
+     "guardrail": "n/a",
+     "elapsed_ms": 0.3
+    },
+    {
+     "agent": "treasury",
+     "title": "Treasury & Working-Capital Analyst",
+     "framework": "LangGraph node",
+     "mandate": "Pay at the best time: never late to MSEs, early only when it earns more than the cost of funds.",
+     "tools": [
+      {
+       "tool": "payment_timing",
+       "input": {
+        "invoice": "TAC/26-27/04417",
+        "net_payable": 2091546.0
+       },
+       "summary": "Due 2026-11-30; pay on 2026-11-30"
+      },
+      {
+       "tool": "discount_apr",
+       "input": {
+        "terms": "1.0% if paid within 15 days, else net 60"
+       },
+       "summary": "Discount worth 8.19% annualised vs 9.25% cost of funds -> skip"
+      }
+     ],
+     "findings": [],
+     "decision": "Schedule Rs 20,91,546 on 2026-11-30",
+     "highlights": [
+      "Pay on 2026-11-30",
+      "Net Rs 20,91,546",
+      "Discount skipped"
+     ],
+     "rationale": "Pay Rs 20,91,546 (after TDS Rs 1,774) on 2026-11-30. Contract terms: 60 days from invoice date -> 2026-11-30. Skip the early-payment discount (8.19% annualised is below the 9.25% cost of funds); hold cash until the due date.",
+     "rationale_source": "offline-template",
+     "guardrail": "n/a",
+     "elapsed_ms": 0.2
+    },
+    {
+     "agent": "controller",
+     "title": "Finance Controller",
+     "framework": "LangGraph node",
+     "mandate": "Summarise the case for the CFO with decisions, risks, money impact and an audit trail.",
+     "tools": [],
+     "findings": [],
+     "decision": "Case closed: COMPLETED",
+     "highlights": [
+      "Status COMPLETED",
+      "24 tool calls",
+      "1 human touchpoint(s)"
+     ],
+     "rationale": "- Case S1-web-approve - PR-26-0871: Aluminium die-cast gearbox housing, ADC12, machined (4,000 nos).\n- Sourcing: Tungabhadra Alloy Castings Ltd. selected (94.56 pts, Kraljic Strategic); approved by CFO; PO-26-0871 for Rs 20,93,320 incl. GST.\n- Invoice: matched; approved Rs 20,93,320.\n- Tax: ITC Rs 3,19,320 claimable; TDS Rs 1,774 (threshold already crossed earlier this tax year; TDS on the full taxable value).\n- Cash: pay Rs 20,91,546 on 2026-11-30. \n- Upside: should-cost gap worth Rs 2,67,360 a year on this part if negotiated to target.",
+     "rationale_source": "offline-template",
+     "guardrail": "n/a",
+     "elapsed_ms": 0.1
+    }
+   ],
+   "status": "COMPLETED",
+   "data": {
+    "requisition": {
+     "pr_no": "PR-26-0871",
+     "date": "2026-09-01",
+     "requester": "Anil Deshmukh",
+     "department": "Production Planning",
+     "cost_center": "CC-PRD-210",
+     "request_text": "Need 4000 nos aluminium die-cast gearbox housings (ADC12, part HSG-ADC12-GB04) for the Q3 build plan, required by 5 Oct 2026. Budget about Rs 19 lakh. Line-stopper part.",
+     "item": {
+      "code": "HSG-ADC12-GB04",
+      "description": "Aluminium die-cast gearbox housing, ADC12, machined",
+      "hsn": "7616",
+      "uom": "nos",
+      "qty": 4000,
+      "need_by": "2026-10-05"
+     },
+     "estimated_value": 1900000,
+     "category": "aluminium castings",
+     "criticality": "high",
+     "annual_volume_qty": 48000,
+     "single_source": false,
+     "justification": null,
+     "hsn": "7616",
+     "spend_class": "Direct material",
+     "days_to_need_by": 34,
+     "parse_method": "offline rule-based parser",
+     "budget": {
+      "remaining": 4250000,
+      "ok": true
+     },
+     "parsed": {
+      "item_description": "Need 4000 nos aluminium die-cast gearbox housings (ADC12, part HSG-ADC12-GB04) for the Q3 build plan, required by 5 Oct ",
+      "quantity": 4000.0,
+      "uom": "nos",
+      "need_by": "2026-10-05",
+      "estimated_value_inr": 1900000.0,
+      "category": "aluminium castings",
+      "urgent": false,
+      "sole_source_claimed": false
+     }
+    },
+    "policy": {
+     "decision": "PROCEED",
+     "approver": "CFO",
+     "quote_rule": {
+      "max": 2500000,
+      "min_quotes": 3,
+      "rfq_required": false
+     },
+     "findings": [],
+     "budget": {
+      "ok": true,
+      "cost_center": "CC-PRD-210",
+      "name": "Production - Die-casting line",
+      "remaining": 4250000,
+      "issues": []
+     },
+     "split": {
+      "related": [],
+      "combined_value": 1900000,
+      "issues": []
+     },
+     "vendor_diligence": {
+      "V-101": {
+       "vendor": "Deccan Precision Castings Pvt. Ltd.",
+       "gstin": {
+        "gstin": "27AADCD5172K1ZG",
+        "format_ok": true,
+        "checksum_ok": true,
+        "state_code": "27",
+        "state": "Maharashtra",
+        "pan_in_gstin": "AADCD5172K",
+        "pan_match": true,
+        "issues": []
+       },
+       "issues": [],
+       "clean": true
+      },
+      "V-102": {
+       "vendor": "Tungabhadra Alloy Castings Ltd.",
+       "gstin": {
+        "gstin": "29AABCT8834R1ZD",
+        "format_ok": true,
+        "checksum_ok": true,
+        "state_code": "29",
+        "state": "Karnataka",
+        "pan_in_gstin": "AABCT8834R",
+        "pan_match": true,
+        "issues": []
+       },
+       "issues": [],
+       "clean": true
+      },
+      "V-103": {
+       "vendor": "Sabarmati Foundry Works",
+       "gstin": {
+        "gstin": "24AAQFS2291M1ZM",
+        "format_ok": true,
+        "checksum_ok": true,
+        "state_code": "24",
+        "state": "Gujarat",
+        "pan_in_gstin": "AAQFS2291M",
+        "pan_match": true,
+        "issues": []
+       },
+       "issues": [],
+       "clean": true
+      }
+     },
+     "excluded_vendors": [],
+     "lead_time_risk_vendors": []
+    },
+    "sourcing": {
+     "kraljic": {
+      "quadrant": "Strategic",
+      "annual_spend": 21088000,
+      "profit_impact": "high",
+      "supply_risk_score": 3,
+      "supply_risk": "high",
+      "weights": {
+       "price": 0.25,
+       "quality": 0.3,
+       "delivery": 0.2,
+       "risk": 0.2,
+       "compliance": 0.05
+      },
+      "levers": [
+       "Long-term agreement with index-linked raw-material pricing (share commodity risk transparently)",
+       "Develop the runner-up as a qualified second source for 20-30% of volume",
+       "Joint cost-reduction (VA/VE) targets and PPM improvement plan written into the contract"
+      ]
+     },
+     "scorecard": {
+      "ranking": [
+       {
+        "vendor_id": "V-102",
+        "vendor": "Tungabhadra Alloy Castings Ltd.",
+        "unit_price": 438.0,
+        "landed_unit_cost": 443.5,
+        "lead_time_days": 28,
+        "msme": "none",
+        "state_code": "29",
+        "scores": {
+         "price": 95.26,
+         "quality": 89.5,
+         "delivery": 97.0,
+         "risk": 100.0,
+         "compliance": 90.0
+        },
+        "weighted_total": 94.56,
+        "eligible": true,
+        "note": ""
+       },
+       {
+        "vendor_id": "V-101",
+        "vendor": "Deccan Precision Castings Pvt. Ltd.",
+        "unit_price": 452.0,
+        "landed_unit_cost": 452.0,
+        "lead_time_days": 25,
+        "msme": "small",
+        "state_code": "27",
+        "scores": {
+         "price": 93.47,
+         "quality": 78.75,
+         "delivery": 94.0,
+         "risk": 80.0,
+         "compliance": 85.0
+        },
+        "weighted_total": 86.04,
+        "eligible": true,
+        "note": ""
+       },
+       {
+        "vendor_id": "V-103",
+        "vendor": "Sabarmati Foundry Works",
+        "unit_price": 415.0,
+        "landed_unit_cost": 422.5,
+        "lead_time_days": 21,
+        "msme": "micro",
+        "state_code": "24",
+        "scores": {
+         "price": 100.0,
+         "quality": 52.5,
+         "delivery": 86.0,
+         "risk": 60.0,
+         "compliance": 70.0
+        },
+        "weighted_total": 73.45,
+        "eligible": true,
+        "note": ""
+       }
+      ],
+      "recommended": {
+       "vendor_id": "V-102",
+       "vendor": "Tungabhadra Alloy Castings Ltd.",
+       "unit_price": 438.0,
+       "landed_unit_cost": 443.5,
+       "lead_time_days": 28,
+       "msme": "none",
+       "state_code": "29",
+       "scores": {
+        "price": 95.26,
+        "quality": 89.5,
+        "delivery": 97.0,
+        "risk": 100.0,
+        "compliance": 90.0
+       },
+       "weighted_total": 94.56,
+       "eligible": true,
+       "note": ""
+      },
+      "runner_up": {
+       "vendor_id": "V-101",
+       "vendor": "Deccan Precision Castings Pvt. Ltd.",
+       "unit_price": 452.0,
+       "landed_unit_cost": 452.0,
+       "lead_time_days": 25,
+       "msme": "small",
+       "state_code": "27",
+       "scores": {
+        "price": 93.47,
+        "quality": 78.75,
+        "delivery": 94.0,
+        "risk": 80.0,
+        "compliance": 85.0
+       },
+       "weighted_total": 86.04,
+       "eligible": true,
+       "note": ""
+      },
+      "cheapest": {
+       "vendor_id": "V-103",
+       "vendor": "Sabarmati Foundry Works",
+       "unit_price": 415.0,
+       "landed_unit_cost": 422.5,
+       "lead_time_days": 21,
+       "msme": "micro",
+       "state_code": "24",
+       "scores": {
+        "price": 100.0,
+        "quality": 52.5,
+        "delivery": 86.0,
+        "risk": 60.0,
+        "compliance": 70.0
+       },
+       "weighted_total": 73.45,
+       "eligible": true,
+       "note": ""
+      },
+      "margin_vs_runner_up": 8.52,
+      "weights": {
+       "price": 0.25,
+       "quality": 0.3,
+       "delivery": 0.2,
+       "risk": 0.2,
+       "compliance": 0.05
+      }
+     },
+     "negotiation": {
+      "vendor_id": "V-102",
+      "quoted_unit_price": 438.0,
+      "should_cost": {
+       "material_cost": 226.1,
+       "conversion": 120,
+       "secondary_ops": 40,
+       "overhead_margin_pct": 12,
+       "should_cost": 432.43,
+       "quoted": 438.0,
+       "gap_per_unit": 5.57,
+       "gap_pct": 1.27,
+       "saving_this_order": 22280.0,
+       "saving_annualised": 267360.0,
+       "verdict": "negotiate"
+      },
+      "batna": {
+       "vendor_id": "V-101",
+       "vendor": "Deccan Precision Castings Pvt. Ltd.",
+       "landed_unit_cost": 452.0,
+       "weighted_total": 86.04
+      },
+      "levers": [
+       "Long-term agreement with index-linked raw-material pricing (share commodity risk transparently)",
+       "Develop the runner-up as a qualified second source for 20-30% of volume",
+       "Joint cost-reduction (VA/VE) targets and PPM improvement plan written into the contract"
+      ],
+      "target_unit_price": 432.43,
+      "opening_ask": 428.11
+     },
+     "recommended_vendor": "V-102",
+     "recommended_quote": {
+      "vendor_id": "V-102",
+      "unit_price": 438.0,
+      "freight": 22000,
+      "lead_time_days": 28
+     },
+     "engine": "CrewAI (offline expert LLM)",
+     "crew": [
+      {
+       "agent": "category_manager",
+       "title": "Category Manager",
+       "output": "Kraljic position: Strategic. Annual spend Rs 2.11 crore gives high profit impact; supply-risk score 3 gives high supply risk. Evaluate suppliers with weights: price 25%, quality 30%, delivery 20%, risk 20%, compliance 5%. Strategy levers: Long-term agreement with index-linked raw-material pricing (share commodity risk transparently); Develop the runner-up as a qualified second source for 20-30% of volume; Joint cost-reduction (VA/VE) targets and PPM improvement plan written into the contract."
+      },
+      {
+       "agent": "supplier_analyst",
+       "title": "Supplier Performance & Risk Analyst",
+       "output": "Ranking: V-102 Tungabhadra Alloy Castings Ltd.: 94.56 pts, landed Rs 443.50/unit, lead 28 days | V-101 Deccan Precision Castings Pvt. Ltd.: 86.04 pts, landed Rs 452/unit, lead 25 days | V-103 Sabarmati Foundry Works: 73.45 pts, landed Rs 422.50/unit, lead 21 days. The cheapest quote (V-103, Rs 422.50/unit) loses on quality, delivery or eligibility, so lowest price is not best value here. Margin over runner-up: 8.52 pts.\nRecommended vendor: V-102"
+      },
+      {
+       "agent": "negotiator",
+       "title": "Negotiation Strategist",
+       "output": "Should-cost Rs 432.43/unit (material Rs 226.10 + conversion Rs 120 + secondary ops Rs 40 + 12% overhead and margin) vs quote Rs 438: gap 1.27%. Verdict: negotiate. Target Rs 432.43/unit, open at Rs 428.11. Value at stake Rs 22,280 on this order, Rs 2,67,360 a year. BATNA: V-101 Deccan Precision Castings Pvt. Ltd. at Rs 452/unit landed (86.04 pts). Levers: Long-term agreement with index-linked raw-material pricing (share commodity risk transparently); Develop the runner-up as a qualified second source for 20-30% of volume; Joint cost-reduction (VA/VE) targets and PPM improvement plan written into the contract."
+      }
+     ]
+    },
+    "approval": {
+     "case_id": "S1-web-approve",
+     "approver_role": "CFO",
+     "pr_no": "PR-26-0871",
+     "item": "Aluminium die-cast gearbox housing, ADC12, machined",
+     "qty": 4000,
+     "vendor_id": "V-102",
+     "vendor": "Tungabhadra Alloy Castings Ltd.",
+     "po_value_excl_gst": 1774000.0,
+     "score": 94.56,
+     "runner_up": "V-101",
+     "kraljic": "Strategic",
+     "warnings": [],
+     "negotiation_target": 432.43,
+     "question": "Approve PO to Tungabhadra Alloy Castings Ltd. for Rs 17,74,000 (excl. GST)?",
+     "approved": true,
+     "approved_by": "CFO",
+     "comment": "Approved as recommended."
+    },
+    "po": {
+     "po_no": "PO-26-0871",
+     "date": "2026-09-04",
+     "vendor_id": "V-102",
+     "vendor": "Tungabhadra Alloy Castings Ltd.",
+     "item": "Aluminium die-cast gearbox housing, ADC12, machined",
+     "hsn": "7616",
+     "qty": 4000,
+     "uom": "nos",
+     "unit_price": 438.0,
+     "freight": 22000,
+     "taxable": 1774000.0,
+     "tax": {
+      "tax_type": "IGST",
+      "rate_pct": 18,
+      "taxable": 1774000.0,
+      "cgst": 0.0,
+      "sgst": 0.0,
+      "igst": 319320.0,
+      "tax_total": 319320.0,
+      "invoice_total": 2093320.0
+     },
+     "delivery_by": "2026-10-02",
+     "terms": [
+      "Price Rs 438/nos, firm for this order",
+      "Payment: 60 days from invoice",
+      "Supplier must issue an e-invoice with IRN (AATO above Rs 5 crore); invoices without IRN will be rejected",
+      "Quote PO number on invoice; bill only accepted quantity; GSTIN of buyer 27AAKCM4821Q1ZU",
+      "Commercial note: negotiate towards Rs 432.43/unit on the next release"
+     ],
+     "tds_preview": {
+      "provision": "Income-tax Act 2025, s.393(1) Table Sl. 8(ii) (formerly s.194Q)",
+      "threshold": 5000000,
+      "cumulative_before": 11200000,
+      "cumulative_after": 12974000.0,
+      "this_taxable": 1774000.0,
+      "applicable": true,
+      "base": 1774000.0,
+      "rate_pct": 0.1,
+      "tds_amount": 1774,
+      "reason": "Threshold already crossed earlier this tax year; TDS on the full taxable value"
+     },
+     "approved_by": "CFO"
+    },
+    "ap": {
+     "status": "MATCHED",
+     "match": {
+      "status": "MATCHED",
+      "exceptions": [],
+      "po_price": 438.0,
+      "invoice_price": 438.0,
+      "price_variance_pct": 0.0,
+      "po_qty": 4000,
+      "accepted_qty": 4000,
+      "invoiced_qty": 4000,
+      "approved_taxable": 1774000.0,
+      "approved_tax": 319320.0,
+      "approved_total": 2093320.0,
+      "billed_taxable": 1774000.0,
+      "billed_total": 2093320.0,
+      "disputed_taxable": 0.0,
+      "disputed_total": 0.0
+     },
+     "duplicates": {
+      "checked_against": 1,
+      "issues": []
+     },
+     "bank": {
+      "issues": []
+     },
+     "findings": []
+    },
+    "tax": {
+     "gst": {
+      "gstin": {
+       "gstin": "29AABCT8834R1ZD",
+       "format_ok": true,
+       "checksum_ok": true,
+       "state_code": "29",
+       "state": "Karnataka",
+       "pan_in_gstin": "AABCT8834R",
+       "pan_match": true,
+       "issues": []
+      },
+      "expected": {
+       "tax_type": "IGST",
+       "rate_pct": 18,
+       "taxable": 1774000.0,
+       "cgst": 0.0,
+       "sgst": 0.0,
+       "igst": 319320.0,
+       "tax_total": 319320.0,
+       "invoice_total": 2093320.0
+      },
+      "billed": {
+       "cgst": 0,
+       "sgst": 0,
+       "igst": 319320.0
+      },
+      "issues": []
+     },
+     "einvoice": {
+      "required": true,
+      "supplier_aato_cr": 610,
+      "irn_present": true,
+      "irn_lag_days": 0,
+      "issues": []
+     },
+     "itc": {
+      "eligible_now": true,
+      "checks": {
+       "valid_tax_invoice": true,
+       "goods_received": true,
+       "reflected_in_gstr2b": true
+      },
+      "pay_within_days": 180,
+      "note": "ITC must be reversed if the supplier is not paid within 180 days of the invoice date."
+     },
+     "itc_amount": 319320.0,
+     "itc_on_hold": 0.0,
+     "tds": {
+      "provision": "Income-tax Act 2025, s.393(1) Table Sl. 8(ii) (formerly s.194Q)",
+      "threshold": 5000000,
+      "cumulative_before": 11200000,
+      "cumulative_after": 12974000.0,
+      "this_taxable": 1774000.0,
+      "applicable": true,
+      "base": 1774000.0,
+      "rate_pct": 0.1,
+      "tds_amount": 1774,
+      "reason": "Threshold already crossed earlier this tax year; TDS on the full taxable value"
+     },
+     "issues": [],
+     "blocked": false
+    },
+    "treasury": {
+     "plan": {
+      "invoice_no": "TAC/26-27/04417",
+      "payable": 2091546.0,
+      "due_date": "2026-11-30",
+      "pay_on": "2026-11-30",
+      "msme": {
+       "covered": false,
+       "due_date": null,
+       "days_allowed": null,
+       "basis": "Supplier category 'none' is outside MSMED Act Chapter V (only micro/small enterprises)"
+      },
+      "discount": {
+       "terms": "1.0% if paid within 15 days, else net 60",
+       "annualised_return_pct": 8.19,
+       "cost_of_funds_pct": 9.25,
+       "window_closes": "2026-10-16",
+       "window_open": true,
+       "amount": 20915.46,
+       "take": false
+      },
+      "take_discount": false,
+      "days_until_due": 51,
+      "reasons": [
+       "Contract terms: 60 days from invoice date -> 2026-11-30",
+       "Skip the early-payment discount (8.19% annualised is below the 9.25% cost of funds); hold cash until the due date"
+      ],
+      "itc_reversal_deadline": "2027-03-30"
+     },
+     "net_payable": 2091546.0,
+     "alerts": [],
+     "payment_run": [
+      {
+       "invoice_no": "TAC/26-27/04417",
+       "amount": 2091546.0,
+       "pay_on": "2026-11-30",
+       "priority": "Contractual"
+      }
+     ]
+    },
+    "memo": {
+     "status": "COMPLETED",
+     "bullets": [
+      "Case S1-web-approve - PR-26-0871: Aluminium die-cast gearbox housing, ADC12, machined (4,000 nos).",
+      "Sourcing: Tungabhadra Alloy Castings Ltd. selected (94.56 pts, Kraljic Strategic); approved by CFO; PO-26-0871 for Rs 20,93,320 incl. GST.",
+      "Invoice: matched; approved Rs 20,93,320.",
+      "Tax: ITC Rs 3,19,320 claimable; TDS Rs 1,774 (threshold already crossed earlier this tax year; TDS on the full taxable value).",
+      "Cash: pay Rs 20,91,546 on 2026-11-30. ",
+      "Upside: should-cost gap worth Rs 2,67,360 a year on this part if negotiated to target."
+     ],
+     "text": "- Case S1-web-approve - PR-26-0871: Aluminium die-cast gearbox housing, ADC12, machined (4,000 nos).\n- Sourcing: Tungabhadra Alloy Castings Ltd. selected (94.56 pts, Kraljic Strategic); approved by CFO; PO-26-0871 for Rs 20,93,320 incl. GST.\n- Invoice: matched; approved Rs 20,93,320.\n- Tax: ITC Rs 3,19,320 claimable; TDS Rs 1,774 (threshold already crossed earlier this tax year; TDS on the full taxable value).\n- Cash: pay Rs 20,91,546 on 2026-11-30. \n- Upside: should-cost gap worth Rs 2,67,360 a year on this part if negotiated to target.",
+     "kpis": {
+      "agents_involved": 10,
+      "tool_calls": 24,
+      "controls_flagged": 0,
+      "blocking_controls": 0,
+      "human_touchpoints": 1,
+      "touchless_invoice": true,
+      "agent_processing_ms": 985.5,
+      "po_value_incl_gst": 2093320.0,
+      "approved_payable": 2093320.0,
+      "disputed_amount_protected": 0.0,
+      "tds_withheld": 1774,
+      "itc_claimable": 319320.0,
+      "negotiation_value_this_order": 22280.0,
+      "negotiation_value_annual": 267360.0,
+      "msme_interest_accrued": 0.0,
+      "discount_decision": false
+     }
+    }
+   }
+  },
+  "S2": {
+   "id": "S2",
+   "title": "CNC shafts: invoice price variance and QC rejection",
+   "story": "The machining cell orders 2,500 hardened shafts. The supplier invoices 3.2% above the PO price and bills for all 2,500 pieces, although quality rejected 120. The agents must pay only what is owed, hold the rest and get a credit note.",
+   "learning_points": [
+    "3-way match (PO vs GRN vs invoice) with tolerance rules",
+    "Pay the undisputed amount on time; hold only the disputed part",
+    "GST credit note and input-tax-credit treatment for rejected and overcharged quantities",
+    "A quote that cannot meet the need-by date is excluded even if it is cheapest"
+   ],
+   "request_text": "Raise PR for 2500 EN8 transmission shafts, machined and induction hardened (drawing SFT-EN8-220), needed by 15 Oct 2026. Expected around Rs 7.4 lakh.",
+   "case_id": "S2-web-approve",
+   "approval_pack": {
+    "case_id": "S2-web-approve",
+    "approver_role": "Plant Head",
+    "pr_no": "PR-26-0904",
+    "item": "EN8 transmission shaft, machined and induction hardened",
+    "qty": 2500,
+    "vendor_id": "V-104",
+    "vendor": "Noyyal CNC Engineering Pvt. Ltd.",
+    "po_value_excl_gst": 710000.0,
+    "score": 92.34,
+    "runner_up": "V-102",
+    "kraljic": "Leverage",
+    "warnings": [],
+    "negotiation_target": 273.93,
+    "question": "Approve PO to Noyyal CNC Engineering Pvt. Ltd. for Rs 7,10,000 (excl. GST)?"
+   },
+   "steps_before_approval": 3,
+   "trace": [
+    {
+     "agent": "intake",
+     "title": "Procurement Analyst",
+     "framework": "LangGraph node",
+     "mandate": "Turn a requester's message into a complete, policy-ready purchase requisition.",
+     "tools": [
+      {
+       "tool": "parse_request",
+       "input": {
+        "text": "Raise PR for 2500 EN8 transmission shafts, machined and induction hardened (drawing SFT-EN8-220), needed by 15 Oct 2026. Expected around Rs 7.4 lakh."
+       },
+       "summary": "Extracted qty=2500.0 nos, need-by=2026-10-15, value=Rs 7,40,000, category=machined components (offline rule-based parser)"
+      },
+      {
+       "tool": "budget_check",
+       "input": {
+        "cost_center": "CC-PRD-230",
+        "amount": 740000
+       },
+       "summary": "Production - Machining cell: remaining Rs 37,30,000 vs request Rs 7,40,000"
+      }
+     ],
+     "findings": [],
+     "decision": "Requisition structured and forwarded to Policy & Compliance",
+     "highlights": [
+      "2,500 nos | Rs 7,40,000",
+      "Direct material | HSN 8483",
+      "Need-by in 35 days"
+     ],
+     "rationale": "PR-26-0904 is a direct material request for 2,500 nos of EN8 transmission shaft, machined and induction hardened (HSN 8483), estimated at Rs 7,40,000 and needed in 35 days. Budget on CC-PRD-230 has Rs 37,30,000 available. The request is complete and consistent with the form.",
+     "rationale_source": "offline-template",
+     "guardrail": "n/a",
+     "elapsed_ms": 0.4
+    },
+    {
+     "agent": "policy",
+     "title": "Policy & Compliance Officer",
+     "framework": "LangGraph node",
+     "mandate": "Apply the procurement policy before any money is committed.",
+     "tools": [
+      {
+       "tool": "delegation_of_authority",
+       "input": {
+        "value": 740000
+       },
+       "summary": "Approver for Rs 7,40,000: Plant Head"
+      },
+      {
+       "tool": "competitive_quote_rule",
+       "input": {
+        "value": 740000,
+        "quotes": 3
+       },
+       "summary": "Needs 3 quote(s); received 3"
+      },
+      {
+       "tool": "split_purchase_scan",
+       "input": {
+        "window_days": 30,
+        "history": 0
+       },
+       "summary": "0 related PR(s); combined Rs 7,40,000"
+      },
+      {
+       "tool": "budget_check",
+       "input": {
+        "cost_center": "CC-PRD-230"
+       },
+       "summary": "Remaining Rs 37,30,000; OK"
+      },
+      {
+       "tool": "vendor_due_diligence",
+       "input": {
+        "vendor_id": "V-104"
+       },
+       "summary": "Noyyal CNC Engineering Pvt. Ltd.: clean"
+      },
+      {
+       "tool": "vendor_due_diligence",
+       "input": {
+        "vendor_id": "V-102"
+       },
+       "summary": "Tungabhadra Alloy Castings Ltd.: clean"
+      },
+      {
+       "tool": "vendor_due_diligence",
+       "input": {
+        "vendor_id": "V-109"
+       },
+       "summary": "Vaigai Turned Components Pvt. Ltd.: clean"
+      }
+     ],
+     "findings": [],
+     "decision": "Cleared for sourcing; approver = Plant Head",
+     "highlights": [
+      "Approver: Plant Head",
+      "Findings: 0 block / 0 warn"
+     ],
+     "rationale": "Policy checks passed. Approval authority: Plant Head. No warnings. Excluded from sourcing on lead time: V-109.",
+     "rationale_source": "offline-template",
+     "guardrail": "n/a",
+     "elapsed_ms": 0.2
+    },
+    {
+     "agent": "supplier_analyst",
+     "title": "Sourcing Crew (3 CrewAI agents)",
+     "framework": "CrewAI crew inside a LangGraph node",
+     "mandate": "Rank suppliers on total value, not just price.",
+     "tools": [
+      {
+       "tool": "kraljic_analysis",
+       "input": {
+        "case_id": "S2-web-approve"
+       },
+       "summary": "Leverage (spend Rs 1,17,89,333, risk score 2)"
+      },
+      {
+       "tool": "supplier_scorecard",
+       "input": {
+        "case_id": "S2-web-approve"
+       },
+       "summary": "Winner V-104 92.34 pts; runner-up V-102"
+      },
+      {
+       "tool": "should_cost_model",
+       "input": {
+        "case_id": "S2-web-approve"
+       },
+       "summary": "Should-cost Rs 273.93 vs quote Rs 284 (3.55% gap)"
+      }
+     ],
+     "findings": [],
+     "decision": "Recommend V-104 Noyyal CNC Engineering Pvt. Ltd. at Rs 284/unit",
+     "highlights": [
+      "Kraljic: Leverage",
+      "Winner 92.34 pts",
+      "Target Rs 273.93"
+     ],
+     "rationale": "Ranking: V-104 Noyyal CNC Engineering Pvt. Ltd.: 92.34 pts, landed Rs 284/unit, lead 21 days | V-102 Tungabhadra Alloy Castings Ltd.: 91.77 pts, landed Rs 318/unit, lead 30 days | V-109 Vaigai Turned Components Pvt. Ltd.: 83.65 pts, landed Rs 282.20/unit, lead 35 days [excluded: lead time misses need-by date]. The cheapest quote (V-109, Rs 282.20/unit) loses on quality, delivery or eligibility, so lowest price is not best value here. Margin over runner-up: 0.57 pts.",
+     "rationale_source": "CrewAI (offline expert LLM)",
+     "guardrail": "passed",
+     "elapsed_ms": 31.9,
+     "crew": [
+      {
+       "agent": "category_manager",
+       "title": "Category Manager",
+       "output": "Kraljic position: Leverage. Annual spend Rs 1.18 crore gives high profit impact; supply-risk score 2 gives low supply risk. Evaluate suppliers with weights: price 40%, quality 25%, delivery 20%, risk 10%, compliance 5%. Strategy levers: Use competitive tension: share the target price and invite a best-and-final offer; Volume consolidation across plants for a tiered price; Trade payment-term flexibility for price only where the annualised maths favours us."
+      },
+      {
+       "agent": "supplier_analyst",
+       "title": "Supplier Performance & Risk Analyst",
+       "output": "Ranking: V-104 Noyyal CNC Engineering Pvt. Ltd.: 92.34 pts, landed Rs 284/unit, lead 21 days | V-102 Tungabhadra Alloy Castings Ltd.: 91.77 pts, landed Rs 318/unit, lead 30 days | V-109 Vaigai Turned Components Pvt. Ltd.: 83.65 pts, landed Rs 282.20/unit, lead 35 days [excluded: lead time misses need-by date]. The cheapest quote (V-109, Rs 282.20/unit) loses on quality, delivery or eligibility, so lowest price is not best value here. Margin over runner-up: 0.57 pts.\nRecommended vendor: V-104"
+      },
+      {
+       "agent": "negotiator",
+       "title": "Negotiation Strategist",
+       "output": "Should-cost Rs 273.93/unit (material Rs 115.20 + conversion Rs 95 + secondary ops Rs 28 + 15% overhead and margin) vs quote Rs 284: gap 3.55%. Verdict: negotiate. Target Rs 273.93/unit, open at Rs 271.19. Value at stake Rs 25,175 on this order, Rs 4,02,800 a year. BATNA: V-102 Tungabhadra Alloy Castings Ltd. at Rs 318/unit landed (91.77 pts). Levers: Use competitive tension: share the target price and invite a best-and-final offer; Volume consolidation across plants for a tiered price; Trade payment-term flexibility for price only where the annualised maths favours us."
+      }
+     ],
+     "engine": "CrewAI (offline expert LLM)",
+     "crew_error": null,
+     "crew_tool_calls": [
+      "kraljic_analysis",
+      "supplier_scorecard",
+      "should_cost_model"
+     ]
+    },
+    {
+     "agent": "approver",
+     "title": "Human Approver (per DoA)",
+     "framework": "LangGraph interrupt (human-in-the-loop)",
+     "mandate": "Accountable human decision at the point of financial commitment.",
+     "tools": [
+      {
+       "tool": "approval_pack",
+       "input": {
+        "case_id": "S2-web-approve"
+       },
+       "summary": "Approve PO to Noyyal CNC Engineering Pvt. Ltd. for Rs 7,10,000 (excl. GST)?"
+      }
+     ],
+     "findings": [],
+     "decision": "APPROVED by Plant Head",
+     "highlights": [
+      "Role required: Plant Head",
+      "Value Rs 7,10,000"
+     ],
+     "rationale": "Approved as recommended.",
+     "rationale_source": "human",
+     "guardrail": "n/a",
+     "elapsed_ms": 0.0
+    },
+    {
+     "agent": "buyer",
+     "title": "Buyer (PO Specialist)",
+     "framework": "LangGraph node",
+     "mandate": "Issue a compliant purchase order with the right commercial and statutory terms.",
+     "tools": [
+      {
+       "tool": "gst_estimate",
+       "input": {
+        "taxable": 710000.0,
+        "rate": 18
+       },
+       "summary": "IGST @ 18% = Rs 1,27,800; PO total Rs 8,37,800"
+      },
+      {
+       "tool": "tds_preview",
+       "input": {
+        "vendor": "V-104"
+       },
+       "summary": "Cumulative purchases still below Rs 50 lakh (headroom Rs 490,000); no TDS yet"
+      }
+     ],
+     "findings": [],
+     "decision": "PO-26-0904 issued (Rs 8,37,800 incl. GST)",
+     "highlights": [
+      "IGST Rs 1,27,800",
+      "Delivery by 2026-10-03",
+      "Non-MSE supplier"
+     ],
+     "rationale": "PO-26-0904 issued to Noyyal CNC Engineering Pvt. Ltd. for 2,500 nos at Rs 284 (Rs 7,10,000 + IGST Rs 1,27,800). Delivery by 2026-10-03. Key terms: Payment: 45 days from invoice; Supplier must issue an e-invoice with IRN (AATO above Rs 5 crore); invoices without IRN will be rejected; Quote PO number on invoice; bill only accepted quantity; GSTIN of buyer 27AAKCM4821Q1ZU.",
+     "rationale_source": "offline-template",
+     "guardrail": "n/a",
+     "elapsed_ms": 0.2
+    },
+    {
+     "agent": "ap",
+     "title": "Accounts Payable Specialist",
+     "framework": "LangGraph node",
+     "mandate": "Pay only what is owed: match, de-duplicate and protect against payment fraud.",
+     "tools": [
+      {
+       "tool": "three_way_match",
+       "input": {
+        "po": "PO-26-0904",
+        "grn": "GRN-26-10-0147",
+        "invoice": "NCE/2627/1182"
+       },
+       "summary": "EXCEPTION: price 293.1 vs 284.0 (+3.2%), qty invoiced 2,500 vs accepted 2,380"
+      },
+      {
+       "tool": "duplicate_check",
+       "input": {
+        "invoice_no": "NCE/2627/1182"
+       },
+       "summary": "Checked against 1 prior invoice(s): no duplicate"
+      },
+      {
+       "tool": "bank_change_check",
+       "input": {
+        "vendor": "V-104"
+       },
+       "summary": "Bank details match master; no recent change"
+      }
+     ],
+     "findings": [
+      {
+       "code": "PRICE_VARIANCE",
+       "severity": "HOLD",
+       "detail": "Invoice price 293.10 vs PO 284.00 (+3.20%, tolerance 1.0%)",
+       "amount": 21658.0
+      },
+      {
+       "code": "QTY_EXCEEDS_ACCEPTED",
+       "severity": "HOLD",
+       "detail": "Invoiced 2,500 but only 2,380 accepted at GRN (120 rejected)",
+       "amount": 35172.0
+      }
+     ],
+     "decision": "Exceptions - route to resolver",
+     "highlights": [
+      "Approved Rs 7,97,585.60",
+      "Disputed Rs 67,059.40"
+     ],
+     "rationale": "Invoice NCE/2627/1182 does not match: Invoice price 293.10 vs PO 284.00 (+3.20%, tolerance 1.0%). Invoiced 2,500 but only 2,380 accepted at GRN (120 rejected). Payable on the evidence: Rs 7,97,585.60; disputed Rs 67,059.40.",
+     "rationale_source": "offline-template",
+     "guardrail": "n/a",
+     "elapsed_ms": 0.1
+    },
+    {
+     "agent": "tax",
+     "title": "GST & TDS Specialist",
+     "framework": "LangGraph node",
+     "mandate": "Make sure the invoice is a valid tax document and withhold the right TDS.",
+     "tools": [
+      {
+       "tool": "gst_invoice_check",
+       "input": {
+        "invoice": "NCE/2627/1182",
+        "supplier_state": "33",
+        "place_of_supply": "27"
+       },
+       "summary": "IGST @ 18% on Rs 7,32,750 = Rs 1,31,895; GSTIN checksum OK; no tax errors"
+      },
+      {
+       "tool": "einvoice_check",
+       "input": {
+        "supplier_aato_cr": 92
+       },
+       "summary": "E-invoice required (AATO Rs 92 cr); IRN present, reported 0 day(s) after invoice"
+      },
+      {
+       "tool": "itc_readiness",
+       "input": {
+        "in_gstr2b": true
+       },
+       "summary": "ITC claimable now: Rs 1,21,665.60"
+      },
+      {
+       "tool": "tds_on_goods",
+       "input": {
+        "cumulative_before": 3800000,
+        "this_taxable": 675920.0
+       },
+       "summary": "TDS Rs 0 at 0.1% on Rs 0: Cumulative purchases still below Rs 50 lakh (headroom Rs 524,080); no TDS yet"
+      }
+     ],
+     "findings": [],
+     "decision": "Valid tax invoice; ITC Rs 1,21,665.60; TDS Rs 0",
+     "highlights": [
+      "IGST 18%",
+      "ITC Rs 1,21,665.60",
+      "TDS Rs 0"
+     ],
+     "rationale": "Tax document check: IGST at 18% is correct for a supply from state 33 to place of supply 27; billed tax reconciles. E-invoice IRN verified. Claim ITC of Rs 1,21,665.60 on the accepted value; do not claim the Rs 10,229.40 of tax on the disputed portion until the credit note arrives. TDS: cumulative purchases still below Rs 50 lakh (headroom Rs 524,080); no TDS yet. Pay the supplier within 180 days of invoice date to keep the ITC.",
+     "rationale_source": "offline-template",
+     "guardrail": "n/a",
+     "elapsed_ms": 0.2
+    },
+    {
+     "agent": "resolver",
+     "title": "Exception Resolver",
+     "framework": "LangGraph node",
+     "mandate": "Close invoice exceptions fast: split payable from disputed, request credit notes, assign owners.",
+     "tools": [
+      {
+       "tool": "route_exceptions",
+       "input": {
+        "count": 2
+       },
+       "summary": "2 action(s) assigned to owners"
+      },
+      {
+       "tool": "credit_note_request",
+       "input": {
+        "invoice": "NCE/2627/1182"
+       },
+       "summary": "Credit note for Rs 67,059.40 (Rs 56,830 + tax Rs 10,229.40)"
+      },
+      {
+       "tool": "draft_supplier_email",
+       "input": {
+        "to": "Noyyal CNC Engineering Pvt. Ltd."
+       },
+       "summary": "Supplier email drafted (partial approval + credit note request)"
+      }
+     ],
+     "findings": [
+      {
+       "code": "PRICE_VARIANCE",
+       "severity": "HOLD",
+       "detail": "Invoice price 293.10 vs PO 284.00 (+3.20%, tolerance 1.0%)",
+       "amount": 21658.0
+      },
+      {
+       "code": "QTY_EXCEEDS_ACCEPTED",
+       "severity": "HOLD",
+       "detail": "Invoiced 2,500 but only 2,380 accepted at GRN (120 rejected)",
+       "amount": 35172.0
+      }
+     ],
+     "decision": "Pay undisputed Rs 7,97,585.60; hold Rs 67,059.40 pending credit note",
+     "highlights": [
+      "Release Rs 7,97,585.60",
+      "Hold Rs 67,059.40",
+      "2 owner action(s)"
+     ],
+     "rationale": "Paying the undisputed Rs 7,97,585.60 on time protects the supplier relationship and our terms; Rs 67,059.40 stays on hold until the supplier issues a credit note. Buyer owns PRICE_VARIANCE (due 2026-10-13). Quality + Buyer owns QTY_EXCEEDS_ACCEPTED (due 2026-10-13).",
+     "rationale_source": "offline-template",
+     "guardrail": "n/a",
+     "elapsed_ms": 0.1,
+     "email_draft": "Subject: NCE/2627/1182 against PO-26-0904 - partial approval and credit note request\n\nDear Noyyal CNC Engineering Pvt. Ltd. team,\n\nWe have processed invoice NCE/2627/1182 dated 2026-10-06. We are releasing Rs 7,97,585.60 for the accepted quantity at the PO price, as per terms.\n\nThe balance is on hold for these reasons:\n- Unit price: invoiced Rs 293.10 against the PO price of Rs 284.\n- Quantity: 2,500 invoiced, 2,380 accepted after inspection (120 pcs rejected: case depth below spec (hardness)).\n\nPlease issue a GST credit note for Rs 67,059.40 (taxable Rs 56,830 plus tax) within 7 days, quoting the invoice number. Rejected parts are available for collection at our Chakan stores.\n\nRegards,\nAccounts Payable, Meridian Precision Components"
+    },
+    {
+     "agent": "treasury",
+     "title": "Treasury & Working-Capital Analyst",
+     "framework": "LangGraph node",
+     "mandate": "Pay at the best time: never late to MSEs, early only when it earns more than the cost of funds.",
+     "tools": [
+      {
+       "tool": "payment_timing",
+       "input": {
+        "invoice": "NCE/2627/1182",
+        "net_payable": 797585.6
+       },
+       "summary": "Due 2026-11-20; pay on 2026-11-20"
+      }
+     ],
+     "findings": [],
+     "decision": "Schedule Rs 7,97,585.60 on 2026-11-20",
+     "highlights": [
+      "Pay on 2026-11-20",
+      "Net Rs 7,97,585.60",
+      "No discount offered"
+     ],
+     "rationale": "Pay Rs 7,97,585.60 (after TDS Rs 0) on 2026-11-20. Contract terms: 45 days from invoice date -> 2026-11-20.",
+     "rationale_source": "offline-template",
+     "guardrail": "n/a",
+     "elapsed_ms": 0.1
+    },
+    {
+     "agent": "controller",
+     "title": "Finance Controller",
+     "framework": "LangGraph node",
+     "mandate": "Summarise the case for the CFO with decisions, risks, money impact and an audit trail.",
+     "tools": [],
+     "findings": [],
+     "decision": "Case closed: COMPLETED_WITH_HOLD",
+     "highlights": [
+      "Status COMPLETED_WITH_HOLD",
+      "26 tool calls",
+      "2 human touchpoint(s)"
+     ],
+     "rationale": "- Case S2-web-approve - PR-26-0904: EN8 transmission shaft, machined and induction hardened (2,500 nos).\n- Sourcing: Noyyal CNC Engineering Pvt. Ltd. selected (92.34 pts, Kraljic Leverage); approved by Plant Head; PO-26-0904 for Rs 8,37,800 incl. GST.\n- Invoice: exception; approved Rs 7,97,585.60, Rs 67,059.40 held for credit note.\n- Tax: ITC Rs 1,21,665.60 claimable; TDS Rs 0 (cumulative purchases still below Rs 50 lakh (headroom Rs 524,080); no TDS yet).\n- Cash: pay Rs 7,97,585.60 on 2026-11-20. \n- Upside: should-cost gap worth Rs 4,02,800 a year on this part if negotiated to target.",
+     "rationale_source": "offline-template",
+     "guardrail": "n/a",
+     "elapsed_ms": 0.1
+    }
+   ],
+   "status": "COMPLETED_WITH_HOLD",
+   "data": {
+    "requisition": {
+     "pr_no": "PR-26-0904",
+     "date": "2026-09-10",
+     "requester": "Priya Nair",
+     "department": "Machining Cell",
+     "cost_center": "CC-PRD-230",
+     "request_text": "Raise PR for 2500 EN8 transmission shafts, machined and induction hardened (drawing SFT-EN8-220), needed by 15 Oct 2026. Expected around Rs 7.4 lakh.",
+     "item": {
+      "code": "SFT-EN8-220",
+      "description": "EN8 transmission shaft, machined and induction hardened",
+      "hsn": "8483",
+      "uom": "nos",
+      "qty": 2500,
+      "need_by": "2026-10-15"
+     },
+     "estimated_value": 740000,
+     "category": "machined components",
+     "criticality": "medium",
+     "annual_volume_qty": 40000,
+     "single_source": false,
+     "justification": null,
+     "hsn": "8483",
+     "spend_class": "Direct material",
+     "days_to_need_by": 35,
+     "parse_method": "offline rule-based parser",
+     "budget": {
+      "remaining": 3730000,
+      "ok": true
+     },
+     "parsed": {
+      "item_description": "Raise PR for 2500 EN8 transmission shafts, machined and induction hardened (drawing SFT-EN8-220), needed by 15 Oct 2026.",
+      "quantity": 2500.0,
+      "uom": "nos",
+      "need_by": "2026-10-15",
+      "estimated_value_inr": 740000.0,
+      "category": "machined components",
+      "urgent": false,
+      "sole_source_claimed": false
+     }
+    },
+    "policy": {
+     "decision": "PROCEED",
+     "approver": "Plant Head",
+     "quote_rule": {
+      "max": 2500000,
+      "min_quotes": 3,
+      "rfq_required": false
+     },
+     "findings": [],
+     "budget": {
+      "ok": true,
+      "cost_center": "CC-PRD-230",
+      "name": "Production - Machining cell",
+      "remaining": 3730000,
+      "issues": []
+     },
+     "split": {
+      "related": [],
+      "combined_value": 740000,
+      "issues": []
+     },
+     "vendor_diligence": {
+      "V-104": {
+       "vendor": "Noyyal CNC Engineering Pvt. Ltd.",
+       "gstin": {
+        "gstin": "33AAFCN6620H1ZN",
+        "format_ok": true,
+        "checksum_ok": true,
+        "state_code": "33",
+        "state": "Tamil Nadu",
+        "pan_in_gstin": "AAFCN6620H",
+        "pan_match": true,
+        "issues": []
+       },
+       "issues": [],
+       "clean": true
+      },
+      "V-102": {
+       "vendor": "Tungabhadra Alloy Castings Ltd.",
+       "gstin": {
+        "gstin": "29AABCT8834R1ZD",
+        "format_ok": true,
+        "checksum_ok": true,
+        "state_code": "29",
+        "state": "Karnataka",
+        "pan_in_gstin": "AABCT8834R",
+        "pan_match": true,
+        "issues": []
+       },
+       "issues": [],
+       "clean": true
+      },
+      "V-109": {
+       "vendor": "Vaigai Turned Components Pvt. Ltd.",
+       "gstin": {
+        "gstin": "33AAGCV5518E1ZH",
+        "format_ok": true,
+        "checksum_ok": true,
+        "state_code": "33",
+        "state": "Tamil Nadu",
+        "pan_in_gstin": "AAGCV5518E",
+        "pan_match": true,
+        "issues": []
+       },
+       "issues": [],
+       "clean": true
+      }
+     },
+     "excluded_vendors": [],
+     "lead_time_risk_vendors": [
+      "V-109"
+     ]
+    },
+    "sourcing": {
+     "kraljic": {
+      "quadrant": "Leverage",
+      "annual_spend": 11789333,
+      "profit_impact": "high",
+      "supply_risk_score": 2,
+      "supply_risk": "low",
+      "weights": {
+       "price": 0.4,
+       "quality": 0.25,
+       "delivery": 0.2,
+       "risk": 0.1,
+       "compliance": 0.05
+      },
+      "levers": [
+       "Use competitive tension: share the target price and invite a best-and-final offer",
+       "Volume consolidation across plants for a tiered price",
+       "Trade payment-term flexibility for price only where the annualised maths favours us"
+      ]
+     },
+     "scorecard": {
+      "ranking": [
+       {
+        "vendor_id": "V-104",
+        "vendor": "Noyyal CNC Engineering Pvt. Ltd.",
+        "unit_price": 284.0,
+        "landed_unit_cost": 284.0,
+        "lead_time_days": 21,
+        "msme": "medium",
+        "state_code": "33",
+        "scores": {
+         "price": 99.37,
+         "quality": 84.75,
+         "delivery": 95.0,
+         "risk": 80.0,
+         "compliance": 88.0
+        },
+        "weighted_total": 92.34,
+        "eligible": true,
+        "note": ""
+       },
+       {
+        "vendor_id": "V-102",
+        "vendor": "Tungabhadra Alloy Castings Ltd.",
+        "unit_price": 318.0,
+        "landed_unit_cost": 318.0,
+        "lead_time_days": 30,
+        "msme": "none",
+        "state_code": "29",
+        "scores": {
+         "price": 88.74,
+         "quality": 89.5,
+         "delivery": 97.0,
+         "risk": 100.0,
+         "compliance": 90.0
+        },
+        "weighted_total": 91.77,
+        "eligible": true,
+        "note": ""
+       },
+       {
+        "vendor_id": "V-109",
+        "vendor": "Vaigai Turned Components Pvt. Ltd.",
+        "unit_price": 279.0,
+        "landed_unit_cost": 282.2,
+        "lead_time_days": 35,
+        "msme": "small",
+        "state_code": "33",
+        "scores": {
+         "price": 100.0,
+         "quality": 65.0,
+         "delivery": 88.0,
+         "risk": 60.0,
+         "compliance": 76.0
+        },
+        "weighted_total": 83.65,
+        "eligible": false,
+        "note": "excluded: lead time misses need-by date"
+       }
+      ],
+      "recommended": {
+       "vendor_id": "V-104",
+       "vendor": "Noyyal CNC Engineering Pvt. Ltd.",
+       "unit_price": 284.0,
+       "landed_unit_cost": 284.0,
+       "lead_time_days": 21,
+       "msme": "medium",
+       "state_code": "33",
+       "scores": {
+        "price": 99.37,
+        "quality": 84.75,
+        "delivery": 95.0,
+        "risk": 80.0,
+        "compliance": 88.0
+       },
+       "weighted_total": 92.34,
+       "eligible": true,
+       "note": ""
+      },
+      "runner_up": {
+       "vendor_id": "V-102",
+       "vendor": "Tungabhadra Alloy Castings Ltd.",
+       "unit_price": 318.0,
+       "landed_unit_cost": 318.0,
+       "lead_time_days": 30,
+       "msme": "none",
+       "state_code": "29",
+       "scores": {
+        "price": 88.74,
+        "quality": 89.5,
+        "delivery": 97.0,
+        "risk": 100.0,
+        "compliance": 90.0
+       },
+       "weighted_total": 91.77,
+       "eligible": true,
+       "note": ""
+      },
+      "cheapest": {
+       "vendor_id": "V-109",
+       "vendor": "Vaigai Turned Components Pvt. Ltd.",
+       "unit_price": 279.0,
+       "landed_unit_cost": 282.2,
+       "lead_time_days": 35,
+       "msme": "small",
+       "state_code": "33",
+       "scores": {
+        "price": 100.0,
+        "quality": 65.0,
+        "delivery": 88.0,
+        "risk": 60.0,
+        "compliance": 76.0
+       },
+       "weighted_total": 83.65,
+       "eligible": false,
+       "note": "excluded: lead time misses need-by date"
+      },
+      "margin_vs_runner_up": 0.57,
+      "weights": {
+       "price": 0.4,
+       "quality": 0.25,
+       "delivery": 0.2,
+       "risk": 0.1,
+       "compliance": 0.05
+      }
+     },
+     "negotiation": {
+      "vendor_id": "V-104",
+      "quoted_unit_price": 284.0,
+      "should_cost": {
+       "material_cost": 115.2,
+       "conversion": 95,
+       "secondary_ops": 28,
+       "overhead_margin_pct": 15,
+       "should_cost": 273.93,
+       "quoted": 284.0,
+       "gap_per_unit": 10.07,
+       "gap_pct": 3.55,
+       "saving_this_order": 25175.0,
+       "saving_annualised": 402800.0,
+       "verdict": "negotiate"
+      },
+      "batna": {
+       "vendor_id": "V-102",
+       "vendor": "Tungabhadra Alloy Castings Ltd.",
+       "landed_unit_cost": 318.0,
+       "weighted_total": 91.77
+      },
+      "levers": [
+       "Use competitive tension: share the target price and invite a best-and-final offer",
+       "Volume consolidation across plants for a tiered price",
+       "Trade payment-term flexibility for price only where the annualised maths favours us"
+      ],
+      "target_unit_price": 273.93,
+      "opening_ask": 271.19
+     },
+     "recommended_vendor": "V-104",
+     "recommended_quote": {
+      "vendor_id": "V-104",
+      "unit_price": 284.0,
+      "freight": 0,
+      "lead_time_days": 21
+     },
+     "engine": "CrewAI (offline expert LLM)",
+     "crew": [
+      {
+       "agent": "category_manager",
+       "title": "Category Manager",
+       "output": "Kraljic position: Leverage. Annual spend Rs 1.18 crore gives high profit impact; supply-risk score 2 gives low supply risk. Evaluate suppliers with weights: price 40%, quality 25%, delivery 20%, risk 10%, compliance 5%. Strategy levers: Use competitive tension: share the target price and invite a best-and-final offer; Volume consolidation across plants for a tiered price; Trade payment-term flexibility for price only where the annualised maths favours us."
+      },
+      {
+       "agent": "supplier_analyst",
+       "title": "Supplier Performance & Risk Analyst",
+       "output": "Ranking: V-104 Noyyal CNC Engineering Pvt. Ltd.: 92.34 pts, landed Rs 284/unit, lead 21 days | V-102 Tungabhadra Alloy Castings Ltd.: 91.77 pts, landed Rs 318/unit, lead 30 days | V-109 Vaigai Turned Components Pvt. Ltd.: 83.65 pts, landed Rs 282.20/unit, lead 35 days [excluded: lead time misses need-by date]. The cheapest quote (V-109, Rs 282.20/unit) loses on quality, delivery or eligibility, so lowest price is not best value here. Margin over runner-up: 0.57 pts.\nRecommended vendor: V-104"
+      },
+      {
+       "agent": "negotiator",
+       "title": "Negotiation Strategist",
+       "output": "Should-cost Rs 273.93/unit (material Rs 115.20 + conversion Rs 95 + secondary ops Rs 28 + 15% overhead and margin) vs quote Rs 284: gap 3.55%. Verdict: negotiate. Target Rs 273.93/unit, open at Rs 271.19. Value at stake Rs 25,175 on this order, Rs 4,02,800 a year. BATNA: V-102 Tungabhadra Alloy Castings Ltd. at Rs 318/unit landed (91.77 pts). Levers: Use competitive tension: share the target price and invite a best-and-final offer; Volume consolidation across plants for a tiered price; Trade payment-term flexibility for price only where the annualised maths favours us."
+      }
+     ]
+    },
+    "approval": {
+     "case_id": "S2-web-approve",
+     "approver_role": "Plant Head",
+     "pr_no": "PR-26-0904",
+     "item": "EN8 transmission shaft, machined and induction hardened",
+     "qty": 2500,
+     "vendor_id": "V-104",
+     "vendor": "Noyyal CNC Engineering Pvt. Ltd.",
+     "po_value_excl_gst": 710000.0,
+     "score": 92.34,
+     "runner_up": "V-102",
+     "kraljic": "Leverage",
+     "warnings": [],
+     "negotiation_target": 273.93,
+     "question": "Approve PO to Noyyal CNC Engineering Pvt. Ltd. for Rs 7,10,000 (excl. GST)?",
+     "approved": true,
+     "approved_by": "Plant Head",
+     "comment": "Approved as recommended."
+    },
+    "po": {
+     "po_no": "PO-26-0904",
+     "date": "2026-09-12",
+     "vendor_id": "V-104",
+     "vendor": "Noyyal CNC Engineering Pvt. Ltd.",
+     "item": "EN8 transmission shaft, machined and induction hardened",
+     "hsn": "8483",
+     "qty": 2500,
+     "uom": "nos",
+     "unit_price": 284.0,
+     "freight": 0,
+     "taxable": 710000.0,
+     "tax": {
+      "tax_type": "IGST",
+      "rate_pct": 18,
+      "taxable": 710000.0,
+      "cgst": 0.0,
+      "sgst": 0.0,
+      "igst": 127800.0,
+      "tax_total": 127800.0,
+      "invoice_total": 837800.0
+     },
+     "delivery_by": "2026-10-03",
+     "terms": [
+      "Price Rs 284/nos, firm for this order",
+      "Payment: 45 days from invoice",
+      "Supplier must issue an e-invoice with IRN (AATO above Rs 5 crore); invoices without IRN will be rejected",
+      "Quote PO number on invoice; bill only accepted quantity; GSTIN of buyer 27AAKCM4821Q1ZU",
+      "Commercial note: negotiate towards Rs 273.93/unit on the next release"
+     ],
+     "tds_preview": {
+      "provision": "Income-tax Act 2025, s.393(1) Table Sl. 8(ii) (formerly s.194Q)",
+      "threshold": 5000000,
+      "cumulative_before": 3800000,
+      "cumulative_after": 4510000.0,
+      "this_taxable": 710000.0,
+      "applicable": false,
+      "base": 0.0,
+      "rate_pct": 0.1,
+      "tds_amount": 0,
+      "reason": "Cumulative purchases still below Rs 50 lakh (headroom Rs 490,000); no TDS yet"
+     },
+     "approved_by": "Plant Head"
+    },
+    "ap": {
+     "status": "EXCEPTION",
+     "match": {
+      "status": "EXCEPTION",
+      "exceptions": [
+       {
+        "code": "PRICE_VARIANCE",
+        "severity": "HOLD",
+        "detail": "Invoice price 293.10 vs PO 284.00 (+3.20%, tolerance 1.0%)",
+        "amount": 21658.0
+       },
+       {
+        "code": "QTY_EXCEEDS_ACCEPTED",
+        "severity": "HOLD",
+        "detail": "Invoiced 2,500 but only 2,380 accepted at GRN (120 rejected)",
+        "amount": 35172.0
+       }
+      ],
+      "po_price": 284.0,
+      "invoice_price": 293.1,
+      "price_variance_pct": 3.2,
+      "po_qty": 2500,
+      "accepted_qty": 2380,
+      "invoiced_qty": 2500,
+      "approved_taxable": 675920.0,
+      "approved_tax": 121665.6,
+      "approved_total": 797585.6,
+      "billed_taxable": 732750.0,
+      "billed_total": 864645.0,
+      "disputed_taxable": 56830.0,
+      "disputed_total": 67059.4
+     },
+     "duplicates": {
+      "checked_against": 1,
+      "issues": []
+     },
+     "bank": {
+      "issues": []
+     },
+     "findings": [
+      {
+       "code": "PRICE_VARIANCE",
+       "severity": "HOLD",
+       "detail": "Invoice price 293.10 vs PO 284.00 (+3.20%, tolerance 1.0%)",
+       "amount": 21658.0
+      },
+      {
+       "code": "QTY_EXCEEDS_ACCEPTED",
+       "severity": "HOLD",
+       "detail": "Invoiced 2,500 but only 2,380 accepted at GRN (120 rejected)",
+       "amount": 35172.0
+      }
+     ]
+    },
+    "tax": {
+     "gst": {
+      "gstin": {
+       "gstin": "33AAFCN6620H1ZN",
+       "format_ok": true,
+       "checksum_ok": true,
+       "state_code": "33",
+       "state": "Tamil Nadu",
+       "pan_in_gstin": "AAFCN6620H",
+       "pan_match": true,
+       "issues": []
+      },
+      "expected": {
+       "tax_type": "IGST",
+       "rate_pct": 18,
+       "taxable": 732750.0,
+       "cgst": 0.0,
+       "sgst": 0.0,
+       "igst": 131895.0,
+       "tax_total": 131895.0,
+       "invoice_total": 864645.0
+      },
+      "billed": {
+       "cgst": 0,
+       "sgst": 0,
+       "igst": 131895.0
+      },
+      "issues": []
+     },
+     "einvoice": {
+      "required": true,
+      "supplier_aato_cr": 92,
+      "irn_present": true,
+      "irn_lag_days": 0,
+      "issues": []
+     },
+     "itc": {
+      "eligible_now": true,
+      "checks": {
+       "valid_tax_invoice": true,
+       "goods_received": true,
+       "reflected_in_gstr2b": true
+      },
+      "pay_within_days": 180,
+      "note": "ITC must be reversed if the supplier is not paid within 180 days of the invoice date."
+     },
+     "itc_amount": 121665.6,
+     "itc_on_hold": 10229.4,
+     "tds": {
+      "provision": "Income-tax Act 2025, s.393(1) Table Sl. 8(ii) (formerly s.194Q)",
+      "threshold": 5000000,
+      "cumulative_before": 3800000,
+      "cumulative_after": 4475920.0,
+      "this_taxable": 675920.0,
+      "applicable": false,
+      "base": 0.0,
+      "rate_pct": 0.1,
+      "tds_amount": 0,
+      "reason": "Cumulative purchases still below Rs 50 lakh (headroom Rs 524,080); no TDS yet"
+     },
+     "issues": [],
+     "blocked": false
+    },
+    "resolution": {
+     "hard_stop": false,
+     "actions": [
+      {
+       "code": "PRICE_VARIANCE",
+       "owner": "Buyer",
+       "detail": "Invoice price 293.10 vs PO 284.00 (+3.20%, tolerance 1.0%)",
+       "sla": "2026-10-13"
+      },
+      {
+       "code": "QTY_EXCEEDS_ACCEPTED",
+       "owner": "Quality + Buyer",
+       "detail": "Invoiced 2,500 but only 2,380 accepted at GRN (120 rejected)",
+       "sla": "2026-10-13"
+      }
+     ],
+     "credit_note": {
+      "requested_from": "Noyyal CNC Engineering Pvt. Ltd.",
+      "against_invoice": "NCE/2627/1182",
+      "taxable": 56830.0,
+      "tax": 10229.4,
+      "total": 67059.4,
+      "basis": "CGST Act s.34 credit note for rejected quantity and price above PO"
+     },
+     "email_draft": "Subject: NCE/2627/1182 against PO-26-0904 - partial approval and credit note request\n\nDear Noyyal CNC Engineering Pvt. Ltd. team,\n\nWe have processed invoice NCE/2627/1182 dated 2026-10-06. We are releasing Rs 7,97,585.60 for the accepted quantity at the PO price, as per terms.\n\nThe balance is on hold for these reasons:\n- Unit price: invoiced Rs 293.10 against the PO price of Rs 284.\n- Quantity: 2,500 invoiced, 2,380 accepted after inspection (120 pcs rejected: case depth below spec (hardness)).\n\nPlease issue a GST credit note for Rs 67,059.40 (taxable Rs 56,830 plus tax) within 7 days, quoting the invoice number. Rejected parts are available for collection at our Chakan stores.\n\nRegards,\nAccounts Payable, Meridian Precision Components",
+     "release_amount": 797585.6
+    },
+    "treasury": {
+     "plan": {
+      "invoice_no": "NCE/2627/1182",
+      "payable": 797585.6,
+      "due_date": "2026-11-20",
+      "pay_on": "2026-11-20",
+      "msme": {
+       "covered": false,
+       "due_date": null,
+       "days_allowed": null,
+       "basis": "Supplier category 'medium' is outside MSMED Act Chapter V (only micro/small enterprises)"
+      },
+      "discount": null,
+      "take_discount": false,
+      "days_until_due": 41,
+      "reasons": [
+       "Contract terms: 45 days from invoice date -> 2026-11-20"
+      ],
+      "itc_reversal_deadline": "2027-04-04"
+     },
+     "net_payable": 797585.6,
+     "alerts": [],
+     "payment_run": [
+      {
+       "invoice_no": "NCE/2627/1182",
+       "amount": 797585.6,
+       "pay_on": "2026-11-20",
+       "priority": "Contractual"
+      }
+     ]
+    },
+    "memo": {
+     "status": "COMPLETED_WITH_HOLD",
+     "bullets": [
+      "Case S2-web-approve - PR-26-0904: EN8 transmission shaft, machined and induction hardened (2,500 nos).",
+      "Sourcing: Noyyal CNC Engineering Pvt. Ltd. selected (92.34 pts, Kraljic Leverage); approved by Plant Head; PO-26-0904 for Rs 8,37,800 incl. GST.",
+      "Invoice: exception; approved Rs 7,97,585.60, Rs 67,059.40 held for credit note.",
+      "Tax: ITC Rs 1,21,665.60 claimable; TDS Rs 0 (cumulative purchases still below Rs 50 lakh (headroom Rs 524,080); no TDS yet).",
+      "Cash: pay Rs 7,97,585.60 on 2026-11-20. ",
+      "Upside: should-cost gap worth Rs 4,02,800 a year on this part if negotiated to target."
+     ],
+     "text": "- Case S2-web-approve - PR-26-0904: EN8 transmission shaft, machined and induction hardened (2,500 nos).\n- Sourcing: Noyyal CNC Engineering Pvt. Ltd. selected (92.34 pts, Kraljic Leverage); approved by Plant Head; PO-26-0904 for Rs 8,37,800 incl. GST.\n- Invoice: exception; approved Rs 7,97,585.60, Rs 67,059.40 held for credit note.\n- Tax: ITC Rs 1,21,665.60 claimable; TDS Rs 0 (cumulative purchases still below Rs 50 lakh (headroom Rs 524,080); no TDS yet).\n- Cash: pay Rs 7,97,585.60 on 2026-11-20. \n- Upside: should-cost gap worth Rs 4,02,800 a year on this part if negotiated to target.",
+     "kpis": {
+      "agents_involved": 11,
+      "tool_calls": 26,
+      "controls_flagged": 4,
+      "blocking_controls": 0,
+      "human_touchpoints": 2,
+      "touchless_invoice": false,
+      "agent_processing_ms": 33.2,
+      "po_value_incl_gst": 837800.0,
+      "approved_payable": 797585.6,
+      "disputed_amount_protected": 67059.4,
+      "tds_withheld": 0,
+      "itc_claimable": 121665.6,
+      "negotiation_value_this_order": 25175.0,
+      "negotiation_value_annual": 402800.0,
+      "msme_interest_accrued": 0.0,
+      "discount_decision": null
+     }
+    }
+   }
+  },
+  "S3": {
+   "id": "S3",
+   "title": "Panel retrofit: split purchase and vendor fraud red flags",
+   "story": "Maintenance raises a second 'urgent, sole-source' PR for a control-panel retrofit nine days after phase 1, each just under the Rs 25 lakh competitive-bidding limit. The vendor's GSTIN fails its checksum, its PAN does not match, and its bank account was changed by email six days ago. The agents must stop the case, not optimise it.",
+   "learning_points": [
+    "Split-purchase detection across requisitions (threshold avoidance)",
+    "Vendor due diligence: GSTIN checksum, PAN match, unverified bank change (business email compromise)",
+    "Hard stops that no single approver can override; escalation instead of approval"
+   ],
+   "request_text": "URGENT - Line 3 control panel retrofit phase 2 (PLC + VFD panel, 1 lot). Voltline already did phase 1 survey, sole source. Rs 23.8 lakh. Please approve fast.",
+   "case_id": "S3-web-approve",
+   "approval_pack": null,
+   "steps_before_approval": 3,
+   "trace": [
+    {
+     "agent": "intake",
+     "title": "Procurement Analyst",
+     "framework": "LangGraph node",
+     "mandate": "Turn a requester's message into a complete, policy-ready purchase requisition.",
+     "tools": [
+      {
+       "tool": "parse_request",
+       "input": {
+        "text": "URGENT - Line 3 control panel retrofit phase 2 (PLC + VFD panel, 1 lot). Voltline already did phase 1 survey, sole source. Rs 23.8 lakh. Please approve fast."
+       },
+       "summary": "Extracted qty=1.0 lot, need-by=None, value=Rs 23,80,000, category=electrical panels (offline rule-based parser)"
+      },
+      {
+       "tool": "budget_check",
+       "input": {
+        "cost_center": "CC-MNT-410",
+        "amount": 2380000
+       },
+       "summary": "Maintenance - Electrical: remaining Rs 32,60,000 vs request Rs 23,80,000"
+      }
+     ],
+     "findings": [
+      {
+       "code": "URGENCY_LANGUAGE",
+       "severity": "INFO",
+       "detail": "Request pressures for speed; urgency is a common lever in policy bypass"
+      },
+      {
+       "code": "SOLE_SOURCE_CLAIMED",
+       "severity": "INFO",
+       "detail": "Requester names a single supplier"
+      }
+     ],
+     "decision": "Requisition structured and forwarded to Policy & Compliance",
+     "highlights": [
+      "1 lot | Rs 23,80,000",
+      "Capex / maintenance | HSN 8537",
+      "Need-by in 17 days"
+     ],
+     "rationale": "PR-26-0961 is a capex / maintenance request for 1 lot of Electrical control panel retrofit, Line 3, phase 2 (PLC + VFD panel) (HSN 8537), estimated at Rs 23,80,000 and needed in 17 days. Budget on CC-MNT-410 has Rs 32,60,000 available. Flags for the policy officer: URGENCY_LANGUAGE, SOLE_SOURCE_CLAIMED.",
+     "rationale_source": "offline-template",
+     "guardrail": "n/a",
+     "elapsed_ms": 0.2
+    },
+    {
+     "agent": "policy",
+     "title": "Policy & Compliance Officer",
+     "framework": "LangGraph node",
+     "mandate": "Apply the procurement policy before any money is committed.",
+     "tools": [
+      {
+       "tool": "delegation_of_authority",
+       "input": {
+        "value": 2380000
+       },
+       "summary": "Approver for Rs 23,80,000: Managing Director"
+      },
+      {
+       "tool": "competitive_quote_rule",
+       "input": {
+        "value": 2380000,
+        "quotes": 1
+       },
+       "summary": "Needs 3 quote(s); received 1"
+      },
+      {
+       "tool": "split_purchase_scan",
+       "input": {
+        "window_days": 30,
+        "history": 1
+       },
+       "summary": "1 related PR(s); combined Rs 48,30,000"
+      },
+      {
+       "tool": "budget_check",
+       "input": {
+        "cost_center": "CC-MNT-410"
+       },
+       "summary": "Remaining Rs 32,60,000; issue raised"
+      },
+      {
+       "tool": "vendor_due_diligence",
+       "input": {
+        "vendor_id": "V-105"
+       },
+       "summary": "Voltline Switchgear Solutions Pvt. Ltd.: GSTIN_CHECKSUM_INVALID, PAN_MISMATCH, BANK_CHANGE_UNVERIFIED"
+      }
+     ],
+     "findings": [
+      {
+       "code": "SINGLE_SOURCE_WEAK_JUSTIFICATION",
+       "severity": "WARN",
+       "detail": "Sole-source request; justification does not cite OEM lock-in, IP or a documented capability gap"
+      },
+      {
+       "code": "QUOTES_INSUFFICIENT",
+       "severity": "BLOCK",
+       "detail": "1 quote(s) received; policy needs 3 for Rs 23,80,000"
+      },
+      {
+       "code": "BUDGET_AT_RISK",
+       "severity": "WARN",
+       "detail": "With pending requisitions (Rs 24,50,000) the cost center would need Rs 48,30,000 vs Rs 32,60,000 remaining"
+      },
+      {
+       "code": "SPLIT_PURCHASE_SUSPECTED",
+       "severity": "BLOCK",
+       "detail": "1 related PR(s) within 30 days; combined value Rs 48,30,000 falls in a stricter band (min 3 quotes, competitive RFQ)"
+      },
+      {
+       "code": "GSTIN_CHECKSUM_INVALID",
+       "severity": "BLOCK",
+       "detail": "Check digit is '4', expected 'Z': GSTIN is mistyped or fabricated"
+      },
+      {
+       "code": "PAN_MISMATCH",
+       "severity": "BLOCK",
+       "detail": "PAN inside GSTIN (AAHCV3371L) differs from vendor-master PAN (AAHCV3317L)"
+      },
+      {
+       "code": "BANK_CHANGE_UNVERIFIED",
+       "severity": "BLOCK",
+       "detail": "Bank account changed 6 days ago via email request from vendor contact, no call-back verification"
+      }
+     ],
+     "decision": "BLOCKED - escalate, do not source",
+     "highlights": [
+      "Approver: Managing Director",
+      "Findings: 5 block / 2 warn"
+     ],
+     "rationale": "STOP. This requisition cannot proceed. 1 quote(s) received; policy needs 3 for Rs 23,80,000. 1 related PR(s) within 30 days; combined value Rs 48,30,000 falls in a stricter band (min 3 quotes, competitive RFQ). Check digit is '4', expected 'Z': GSTIN is mistyped or fabricated. PAN inside GSTIN (AAHCV3371L) differs from vendor-master PAN (AAHCV3317L). Bank account changed 6 days ago via email request from vendor contact, no call-back verification. Route to the Procurement Head and Internal Audit; the bank change must be verified by call-back on a number from the vendor master before any payment, and the related requisitions must be consolidated and re-sourced competitively.",
+     "rationale_source": "offline-template",
+     "guardrail": "n/a",
+     "elapsed_ms": 0.2
+    },
+    {
+     "agent": "controller",
+     "title": "Finance Controller",
+     "framework": "LangGraph node",
+     "mandate": "Summarise the case for the CFO with decisions, risks, money impact and an audit trail.",
+     "tools": [],
+     "findings": [],
+     "decision": "Case closed: ESCALATED",
+     "highlights": [
+      "Status ESCALATED",
+      "7 tool calls",
+      "1 human touchpoint(s)"
+     ],
+     "rationale": "- Case S3-web-approve - PR-26-0961: Electrical control panel retrofit, Line 3, phase 2 (PLC + VFD panel) (1 lot).\n- Outcome: ESCALATED. No PO, no payment. Hard stops: QUOTES_INSUFFICIENT; SPLIT_PURCHASE_SUSPECTED; GSTIN_CHECKSUM_INVALID; PAN_MISMATCH; BANK_CHANGE_UNVERIFIED.\n- Required before re-submission: call-back verification of the vendor's bank change using master-data contacts; correct GSTIN/PAN on the vendor master after GST portal verification; consolidate the related requisitions and run a competitive RFQ; budget re-validation for the cost center.\n- Internal Audit notified: pattern matches threshold-splitting plus a bank-change request (business email compromise risk).",
+     "rationale_source": "offline-template",
+     "guardrail": "n/a",
+     "elapsed_ms": 0.1
+    }
+   ],
+   "status": "ESCALATED",
+   "data": {
+    "requisition": {
+     "pr_no": "PR-26-0961",
+     "date": "2026-10-03",
+     "requester": "Rohit Kale",
+     "department": "Maintenance - Electrical",
+     "cost_center": "CC-MNT-410",
+     "request_text": "URGENT - Line 3 control panel retrofit phase 2 (PLC + VFD panel, 1 lot). Voltline already did phase 1 survey, sole source. Rs 23.8 lakh. Please approve fast.",
+     "item": {
+      "code": "SRV-PNL-L3-P2",
+      "description": "Electrical control panel retrofit, Line 3, phase 2 (PLC + VFD panel)",
+      "hsn": "8537",
+      "uom": "lot",
+      "qty": 1,
+      "need_by": "2026-10-20"
+     },
+     "estimated_value": 2380000,
+     "category": "electrical panels",
+     "criticality": "medium",
+     "annual_volume_qty": 2,
+     "single_source": true,
+     "justification": "Vendor already familiar with the line from phase 1 survey.",
+     "hsn": "8537",
+     "spend_class": "Capex / maintenance",
+     "days_to_need_by": 17,
+     "parse_method": "offline rule-based parser",
+     "budget": {
+      "remaining": 3260000,
+      "ok": true
+     },
+     "parsed": {
+      "item_description": "URGENT - Line 3 control panel retrofit phase 2 (PLC + VFD panel, 1 lot). Voltline already did phase 1 survey, sole sourc",
+      "quantity": 1.0,
+      "uom": "lot",
+      "need_by": null,
+      "estimated_value_inr": 2380000.0,
+      "category": "electrical panels",
+      "urgent": true,
+      "sole_source_claimed": true
+     }
+    },
+    "policy": {
+     "decision": "BLOCK",
+     "approver": "Managing Director",
+     "quote_rule": {
+      "max": 2500000,
+      "min_quotes": 3,
+      "rfq_required": false
+     },
+     "findings": [
+      {
+       "code": "SINGLE_SOURCE_WEAK_JUSTIFICATION",
+       "severity": "WARN",
+       "detail": "Sole-source request; justification does not cite OEM lock-in, IP or a documented capability gap"
+      },
+      {
+       "code": "QUOTES_INSUFFICIENT",
+       "severity": "BLOCK",
+       "detail": "1 quote(s) received; policy needs 3 for Rs 23,80,000"
+      },
+      {
+       "code": "BUDGET_AT_RISK",
+       "severity": "WARN",
+       "detail": "With pending requisitions (Rs 24,50,000) the cost center would need Rs 48,30,000 vs Rs 32,60,000 remaining"
+      },
+      {
+       "code": "SPLIT_PURCHASE_SUSPECTED",
+       "severity": "BLOCK",
+       "detail": "1 related PR(s) within 30 days; combined value Rs 48,30,000 falls in a stricter band (min 3 quotes, competitive RFQ)"
+      },
+      {
+       "code": "GSTIN_CHECKSUM_INVALID",
+       "severity": "BLOCK",
+       "detail": "Check digit is '4', expected 'Z': GSTIN is mistyped or fabricated"
+      },
+      {
+       "code": "PAN_MISMATCH",
+       "severity": "BLOCK",
+       "detail": "PAN inside GSTIN (AAHCV3371L) differs from vendor-master PAN (AAHCV3317L)"
+      },
+      {
+       "code": "BANK_CHANGE_UNVERIFIED",
+       "severity": "BLOCK",
+       "detail": "Bank account changed 6 days ago via email request from vendor contact, no call-back verification"
+      }
+     ],
+     "budget": {
+      "ok": false,
+      "cost_center": "CC-MNT-410",
+      "name": "Maintenance - Electrical",
+      "remaining": 3260000,
+      "issues": [
+       {
+        "code": "BUDGET_AT_RISK",
+        "severity": "WARN",
+        "detail": "With pending requisitions (Rs 24,50,000) the cost center would need Rs 48,30,000 vs Rs 32,60,000 remaining"
+       }
+      ]
+     },
+     "split": {
+      "related": [
+       {
+        "pr_no": "PR-26-0950",
+        "date": "2026-09-24",
+        "requester": "Rohit Kale",
+        "cost_center": "CC-MNT-410",
+        "vendor_id": "V-105",
+        "category": "electrical panels",
+        "description": "Line 3 control panel retrofit phase 1",
+        "value": 2450000,
+        "status": "pending approval"
+       }
+      ],
+      "combined_value": 4830000,
+      "issues": [
+       {
+        "code": "SPLIT_PURCHASE_SUSPECTED",
+        "severity": "BLOCK",
+        "detail": "1 related PR(s) within 30 days; combined value Rs 48,30,000 falls in a stricter band (min 3 quotes, competitive RFQ)"
+       }
+      ]
+     },
+     "vendor_diligence": {
+      "V-105": {
+       "vendor": "Voltline Switchgear Solutions Pvt. Ltd.",
+       "gstin": {
+        "gstin": "06AAHCV3371L1Z4",
+        "format_ok": true,
+        "checksum_ok": false,
+        "state_code": "06",
+        "state": "Haryana",
+        "pan_in_gstin": "AAHCV3371L",
+        "pan_match": false,
+        "issues": [
+         {
+          "code": "GSTIN_CHECKSUM_INVALID",
+          "severity": "BLOCK",
+          "detail": "Check digit is '4', expected 'Z': GSTIN is mistyped or fabricated"
+         },
+         {
+          "code": "PAN_MISMATCH",
+          "severity": "BLOCK",
+          "detail": "PAN inside GSTIN (AAHCV3371L) differs from vendor-master PAN (AAHCV3317L)"
+         }
+        ]
+       },
+       "issues": [
+        {
+         "code": "GSTIN_CHECKSUM_INVALID",
+         "severity": "BLOCK",
+         "detail": "Check digit is '4', expected 'Z': GSTIN is mistyped or fabricated"
+        },
+        {
+         "code": "PAN_MISMATCH",
+         "severity": "BLOCK",
+         "detail": "PAN inside GSTIN (AAHCV3371L) differs from vendor-master PAN (AAHCV3317L)"
+        },
+        {
+         "code": "BANK_CHANGE_UNVERIFIED",
+         "severity": "BLOCK",
+         "detail": "Bank account changed 6 days ago via email request from vendor contact, no call-back verification"
+        }
+       ],
+       "clean": false
+      }
+     },
+     "excluded_vendors": [],
+     "lead_time_risk_vendors": []
+    },
+    "memo": {
+     "status": "ESCALATED",
+     "bullets": [
+      "Case S3-web-approve - PR-26-0961: Electrical control panel retrofit, Line 3, phase 2 (PLC + VFD panel) (1 lot).",
+      "Outcome: ESCALATED. No PO, no payment. Hard stops: QUOTES_INSUFFICIENT; SPLIT_PURCHASE_SUSPECTED; GSTIN_CHECKSUM_INVALID; PAN_MISMATCH; BANK_CHANGE_UNVERIFIED.",
+      "Required before re-submission: call-back verification of the vendor's bank change using master-data contacts; correct GSTIN/PAN on the vendor master after GST portal verification; consolidate the related requisitions and run a competitive RFQ; budget re-validation for the cost center.",
+      "Internal Audit notified: pattern matches threshold-splitting plus a bank-change request (business email compromise risk)."
+     ],
+     "text": "- Case S3-web-approve - PR-26-0961: Electrical control panel retrofit, Line 3, phase 2 (PLC + VFD panel) (1 lot).\n- Outcome: ESCALATED. No PO, no payment. Hard stops: QUOTES_INSUFFICIENT; SPLIT_PURCHASE_SUSPECTED; GSTIN_CHECKSUM_INVALID; PAN_MISMATCH; BANK_CHANGE_UNVERIFIED.\n- Required before re-submission: call-back verification of the vendor's bank change using master-data contacts; correct GSTIN/PAN on the vendor master after GST portal verification; consolidate the related requisitions and run a competitive RFQ; budget re-validation for the cost center.\n- Internal Audit notified: pattern matches threshold-splitting plus a bank-change request (business email compromise risk).",
+     "kpis": {
+      "agents_involved": 2,
+      "tool_calls": 7,
+      "controls_flagged": 9,
+      "blocking_controls": 5,
+      "human_touchpoints": 1,
+      "touchless_invoice": false,
+      "agent_processing_ms": 0.4,
+      "po_value_incl_gst": null,
+      "approved_payable": null,
+      "disputed_amount_protected": null,
+      "tds_withheld": null,
+      "itc_claimable": null,
+      "negotiation_value_this_order": null,
+      "negotiation_value_annual": null,
+      "msme_interest_accrued": 0.0,
+      "discount_decision": null
+     }
+    }
+   }
+  },
+  "S4": {
+   "id": "S4",
+   "title": "Packaging from a micro enterprise: MSME 45-day clock and TDS threshold",
+   "story": "Logistics replenishes VCI bags from a micro-enterprise supplier on a 30-day written agreement. This purchase pushes the supplier past Rs 50 lakh for the tax year, so TDS starts. Meanwhile an earlier invoice from the same supplier has been stuck in approvals and is already overdue under the MSMED Act.",
+   "learning_points": [
+    "TDS on purchase of goods applies only to the amount above Rs 50 lakh per seller per tax year",
+    "MSMED Act s.15/16: payment due within the agreed term (max 45 days); compound interest at 3x the RBI Bank Rate if late",
+    "Income-tax Act 2025 s.37(2)(g) (old s.43B(h)): late MSE dues are deductible only when paid",
+    "Treasury prioritises statutory deadlines over cash-holding"
+   ],
+   "request_text": "October replenishment: 86000 VCI poly bags 600x900 mm, 50 micron. Need by 10 Oct 2026. Approx Rs 8.6 lakh.",
+   "case_id": "S4-web-approve",
+   "approval_pack": {
+    "case_id": "S4-web-approve",
+    "approver_role": "Plant Head",
+    "pr_no": "PR-26-0972",
+    "item": "VCI poly bags 600 x 900 mm, 50 micron",
+    "qty": 86000,
+    "vendor_id": "V-106",
+    "vendor": "Godavari Packaging Industries",
+    "po_value_excl_gst": 860000.0,
+    "score": 94.1,
+    "runner_up": "V-108",
+    "kraljic": "Non-critical",
+    "warnings": [],
+    "negotiation_target": 10.0,
+    "question": "Approve PO to Godavari Packaging Industries for Rs 8,60,000 (excl. GST)?"
+   },
+   "steps_before_approval": 3,
+   "trace": [
+    {
+     "agent": "intake",
+     "title": "Procurement Analyst",
+     "framework": "LangGraph node",
+     "mandate": "Turn a requester's message into a complete, policy-ready purchase requisition.",
+     "tools": [
+      {
+       "tool": "parse_request",
+       "input": {
+        "text": "October replenishment: 86000 VCI poly bags 600x900 mm, 50 micron. Need by 10 Oct 2026. Approx Rs 8.6 lakh."
+       },
+       "summary": "Extracted qty=86000.0 nos, need-by=2026-10-10, value=Rs 8,60,000, category=packaging (offline rule-based parser)"
+      },
+      {
+       "tool": "budget_check",
+       "input": {
+        "cost_center": "CC-LOG-520",
+        "amount": 860000
+       },
+       "summary": "Logistics - Packaging: remaining Rs 41,70,000 vs request Rs 8,60,000"
+      }
+     ],
+     "findings": [],
+     "decision": "Requisition structured and forwarded to Policy & Compliance",
+     "highlights": [
+      "86,000 nos | Rs 8,60,000",
+      "Indirect - consumables | HSN 3923",
+      "Need-by in 11 days"
+     ],
+     "rationale": "PR-26-0972 is a indirect - consumables request for 86,000 nos of VCI poly bags 600 x 900 mm, 50 micron (HSN 3923), estimated at Rs 8,60,000 and needed in 11 days. Budget on CC-LOG-520 has Rs 41,70,000 available. The request is complete and consistent with the form.",
+     "rationale_source": "offline-template",
+     "guardrail": "n/a",
+     "elapsed_ms": 0.2
+    },
+    {
+     "agent": "policy",
+     "title": "Policy & Compliance Officer",
+     "framework": "LangGraph node",
+     "mandate": "Apply the procurement policy before any money is committed.",
+     "tools": [
+      {
+       "tool": "delegation_of_authority",
+       "input": {
+        "value": 860000
+       },
+       "summary": "Approver for Rs 8,60,000: Plant Head"
+      },
+      {
+       "tool": "competitive_quote_rule",
+       "input": {
+        "value": 860000,
+        "quotes": 3
+       },
+       "summary": "Needs 3 quote(s); received 3"
+      },
+      {
+       "tool": "split_purchase_scan",
+       "input": {
+        "window_days": 30,
+        "history": 0
+       },
+       "summary": "0 related PR(s); combined Rs 8,60,000"
+      },
+      {
+       "tool": "budget_check",
+       "input": {
+        "cost_center": "CC-LOG-520"
+       },
+       "summary": "Remaining Rs 41,70,000; OK"
+      },
+      {
+       "tool": "vendor_due_diligence",
+       "input": {
+        "vendor_id": "V-106"
+       },
+       "summary": "Godavari Packaging Industries: clean"
+      },
+      {
+       "tool": "vendor_due_diligence",
+       "input": {
+        "vendor_id": "V-107"
+       },
+       "summary": "Mula Industrial Supplies: clean"
+      },
+      {
+       "tool": "vendor_due_diligence",
+       "input": {
+        "vendor_id": "V-108"
+       },
+       "summary": "Pavana Polymers Pvt. Ltd.: clean"
+      }
+     ],
+     "findings": [],
+     "decision": "Cleared for sourcing; approver = Plant Head",
+     "highlights": [
+      "Approver: Plant Head",
+      "Findings: 0 block / 0 warn"
+     ],
+     "rationale": "Policy checks passed. Approval authority: Plant Head. No warnings. Excluded from sourcing on lead time: V-107.",
+     "rationale_source": "offline-template",
+     "guardrail": "n/a",
+     "elapsed_ms": 0.1
+    },
+    {
+     "agent": "supplier_analyst",
+     "title": "Sourcing Crew (3 CrewAI agents)",
+     "framework": "CrewAI crew inside a LangGraph node",
+     "mandate": "Rank suppliers on total value, not just price.",
+     "tools": [
+      {
+       "tool": "kraljic_analysis",
+       "input": {
+        "case_id": "S4-web-approve"
+       },
+       "summary": "Non-critical (spend Rs 91,20,000, risk score 1)"
+      },
+      {
+       "tool": "supplier_scorecard",
+       "input": {
+        "case_id": "S4-web-approve"
+       },
+       "summary": "Winner V-106 94.1 pts; runner-up V-108"
+      },
+      {
+       "tool": "should_cost_model",
+       "input": {
+        "case_id": "S4-web-approve"
+       },
+       "summary": "Should-cost Rs 9.97 vs quote Rs 10 (0.3% gap)"
+      }
+     ],
+     "findings": [],
+     "decision": "Recommend V-106 Godavari Packaging Industries at Rs 10/unit",
+     "highlights": [
+      "Kraljic: Non-critical",
+      "Winner 94.1 pts",
+      "Target Rs 10"
+     ],
+     "rationale": "Ranking: V-106 Godavari Packaging Industries: 94.1 pts, landed Rs 10/unit, lead 7 days | V-108 Pavana Polymers Pvt. Ltd.: 86.55 pts, landed Rs 9.80/unit, lead 9 days | V-107 Mula Industrial Supplies: 88.31 pts, landed Rs 10.60/unit, lead 10 days [excluded: lead time misses need-by date]. The cheapest quote (V-108, Rs 9.80/unit) loses on quality, delivery or eligibility, so lowest price is not best value here. Margin over runner-up: 7.55 pts.",
+     "rationale_source": "CrewAI (offline expert LLM)",
+     "guardrail": "passed",
+     "elapsed_ms": 25.1,
+     "crew": [
+      {
+       "agent": "category_manager",
+       "title": "Category Manager",
+       "output": "Kraljic position: Non-critical. Annual spend Rs 91.20 lakh gives low profit impact; supply-risk score 1 gives low supply risk. Evaluate suppliers with weights: price 35%, quality 20%, delivery 25%, risk 10%, compliance 10%. Strategy levers: Rate contract / catalogue buying to cut transaction cost; Bundle with similar items; automate re-orders."
+      },
+      {
+       "agent": "supplier_analyst",
+       "title": "Supplier Performance & Risk Analyst",
+       "output": "Ranking: V-106 Godavari Packaging Industries: 94.1 pts, landed Rs 10/unit, lead 7 days | V-108 Pavana Polymers Pvt. Ltd.: 86.55 pts, landed Rs 9.80/unit, lead 9 days | V-107 Mula Industrial Supplies: 88.31 pts, landed Rs 10.60/unit, lead 10 days [excluded: lead time misses need-by date]. The cheapest quote (V-108, Rs 9.80/unit) loses on quality, delivery or eligibility, so lowest price is not best value here. Margin over runner-up: 7.55 pts.\nRecommended vendor: V-106"
+      },
+      {
+       "agent": "negotiator",
+       "title": "Negotiation Strategist",
+       "output": "Should-cost Rs 9.97/unit (material Rs 6.40 + conversion Rs 1.90 + secondary ops Rs 0.60 + 12% overhead and margin) vs quote Rs 10: gap 0.3%. Verdict: price is fair (within 1% of should-cost). BATNA: V-108 Pavana Polymers Pvt. Ltd. at Rs 9.80/unit landed (86.55 pts). Levers: Rate contract / catalogue buying to cut transaction cost; Bundle with similar items; automate re-orders."
+      }
+     ],
+     "engine": "CrewAI (offline expert LLM)",
+     "crew_error": null,
+     "crew_tool_calls": [
+      "kraljic_analysis",
+      "supplier_scorecard",
+      "should_cost_model"
+     ]
+    },
+    {
+     "agent": "approver",
+     "title": "Human Approver (per DoA)",
+     "framework": "LangGraph interrupt (human-in-the-loop)",
+     "mandate": "Accountable human decision at the point of financial commitment.",
+     "tools": [
+      {
+       "tool": "approval_pack",
+       "input": {
+        "case_id": "S4-web-approve"
+       },
+       "summary": "Approve PO to Godavari Packaging Industries for Rs 8,60,000 (excl. GST)?"
+      }
+     ],
+     "findings": [],
+     "decision": "APPROVED by Plant Head",
+     "highlights": [
+      "Role required: Plant Head",
+      "Value Rs 8,60,000"
+     ],
+     "rationale": "Approved as recommended.",
+     "rationale_source": "human",
+     "guardrail": "n/a",
+     "elapsed_ms": 0.0
+    },
+    {
+     "agent": "buyer",
+     "title": "Buyer (PO Specialist)",
+     "framework": "LangGraph node",
+     "mandate": "Issue a compliant purchase order with the right commercial and statutory terms.",
+     "tools": [
+      {
+       "tool": "gst_estimate",
+       "input": {
+        "taxable": 860000.0,
+        "rate": 18
+       },
+       "summary": "CGST+SGST @ 18% = Rs 1,54,800; PO total Rs 10,14,800"
+      },
+      {
+       "tool": "tds_preview",
+       "input": {
+        "vendor": "V-106"
+       },
+       "summary": "This invoice crosses the Rs 50 lakh threshold; TDS only on the amount above it"
+      }
+     ],
+     "findings": [],
+     "decision": "PO-26-0972 issued (Rs 10,14,800 incl. GST)",
+     "highlights": [
+      "CGST+SGST Rs 1,54,800",
+      "Delivery by 2026-10-07",
+      "MSME clause added"
+     ],
+     "rationale": "PO-26-0972 issued to Godavari Packaging Industries for 86,000 nos at Rs 10 (Rs 8,60,000 + CGST+SGST Rs 1,54,800). Delivery by 2026-10-07. Key terms: Payment: 30 days from invoice; MSMED Act clause: supplier is a micro enterprise (UDYAM-MH-20-0033815); payment within 30 days of acceptance; Quote PO number on invoice; bill only accepted quantity; GSTIN of buyer 27AAKCM4821Q1ZU.",
+     "rationale_source": "offline-template",
+     "guardrail": "n/a",
+     "elapsed_ms": 0.1
+    },
+    {
+     "agent": "ap",
+     "title": "Accounts Payable Specialist",
+     "framework": "LangGraph node",
+     "mandate": "Pay only what is owed: match, de-duplicate and protect against payment fraud.",
+     "tools": [
+      {
+       "tool": "three_way_match",
+       "input": {
+        "po": "PO-26-0972",
+        "grn": "GRN-26-10-0163",
+        "invoice": "GPI/26-27/311"
+       },
+       "summary": "MATCHED: price 10.0 vs 10.0 (+0.0%), qty invoiced 86,000 vs accepted 86,000"
+      },
+      {
+       "tool": "duplicate_check",
+       "input": {
+        "invoice_no": "GPI/26-27/311"
+       },
+       "summary": "Checked against 1 prior invoice(s): no duplicate"
+      },
+      {
+       "tool": "bank_change_check",
+       "input": {
+        "vendor": "V-106"
+       },
+       "summary": "Bank details match master; no recent change"
+      }
+     ],
+     "findings": [],
+     "decision": "Matched - release to tax review",
+     "highlights": [
+      "Approved Rs 10,14,800",
+      "Disputed Rs 0"
+     ],
+     "rationale": "Invoice GPI/26-27/311 matches PO PO-26-0972 and GRN-26-10-0163 within tolerance: 86,000 units at Rs 10. No duplicate, bank details unchanged. Approved for payment: Rs 10,14,800.",
+     "rationale_source": "offline-template",
+     "guardrail": "n/a",
+     "elapsed_ms": 0.1
+    },
+    {
+     "agent": "tax",
+     "title": "GST & TDS Specialist",
+     "framework": "LangGraph node",
+     "mandate": "Make sure the invoice is a valid tax document and withhold the right TDS.",
+     "tools": [
+      {
+       "tool": "gst_invoice_check",
+       "input": {
+        "invoice": "GPI/26-27/311",
+        "supplier_state": "27",
+        "place_of_supply": "27"
+       },
+       "summary": "CGST+SGST @ 18% on Rs 8,60,000 = Rs 1,54,800; GSTIN checksum OK; no tax errors"
+      },
+      {
+       "tool": "einvoice_check",
+       "input": {
+        "supplier_aato_cr": 3.6
+       },
+       "summary": "E-invoice not required (AATO up to Rs 5 cr)"
+      },
+      {
+       "tool": "itc_readiness",
+       "input": {
+        "in_gstr2b": true
+       },
+       "summary": "ITC claimable now: Rs 1,54,800"
+      },
+      {
+       "tool": "tds_on_goods",
+       "input": {
+        "cumulative_before": 4620000,
+        "this_taxable": 860000.0
+       },
+       "summary": "TDS Rs 480 at 0.1% on Rs 4,80,000: This invoice crosses the Rs 50 lakh threshold; TDS only on the amount above it"
+      }
+     ],
+     "findings": [],
+     "decision": "Valid tax invoice; ITC Rs 1,54,800; TDS Rs 480",
+     "highlights": [
+      "CGST+SGST 18%",
+      "ITC Rs 1,54,800",
+      "TDS Rs 480"
+     ],
+     "rationale": "Tax document check: CGST+SGST at 18% is correct for a supply from state 27 to place of supply 27; billed tax reconciles. E-invoice not mandatory for this supplier. Claim ITC of Rs 1,54,800 on the accepted value. TDS: this invoice crosses the Rs 50 lakh threshold; TDS only on the amount above it - deduct Rs 480 under Income-tax Act 2025, s.393(1) Table Sl. 8(ii) (formerly s.194Q). Pay the supplier within 180 days of invoice date to keep the ITC.",
+     "rationale_source": "offline-template",
+     "guardrail": "n/a",
+     "elapsed_ms": 0.1
+    },
+    {
+     "agent": "treasury",
+     "title": "Treasury & Working-Capital Analyst",
+     "framework": "LangGraph node",
+     "mandate": "Pay at the best time: never late to MSEs, early only when it earns more than the cost of funds.",
+     "tools": [
+      {
+       "tool": "payment_timing",
+       "input": {
+        "invoice": "GPI/26-27/311",
+        "net_payable": 1014320.0
+       },
+       "summary": "Due 2026-11-06; pay on 2026-11-06"
+      },
+      {
+       "tool": "msme_open_items_scan",
+       "input": {
+        "vendor": "V-106",
+        "open_items": 1
+       },
+       "summary": "1 overdue MSME invoice(s); interest accrued Rs 4,620.87"
+      }
+     ],
+     "findings": [
+      {
+       "code": "MSME_OVERDUE",
+       "severity": "HIGH",
+       "detail": "GPI/26-27/279 overdue 13 days since 2026-09-27; interest Rs 4,620.87 at 17.25% (not tax-deductible); Rs 6,40,000 disallowed under s.37(2)(g) if still unpaid on 2027-03-31"
+      }
+     ],
+     "decision": "Schedule Rs 10,14,320 on 2026-11-06; pay 1 overdue MSME invoice(s) today",
+     "highlights": [
+      "Pay on 2026-11-06",
+      "Net Rs 10,14,320",
+      "No discount offered"
+     ],
+     "rationale": "Pay Rs 10,14,320 (after TDS Rs 480) on 2026-11-06. Contract terms: 30 days from invoice date -> 2026-11-06. MSMED Act s.15 (micro enterprise): Written agreement of 30 days, capped at 45 -> pay by 2026-11-07. URGENT: GPI/26-27/279 overdue 13 days since 2026-09-27; interest Rs 4,620.87 at 17.25% (not tax-deductible); Rs 6,40,000 disallowed under s.37(2)(g) if still unpaid on 2027-03-31.",
+     "rationale_source": "offline-template",
+     "guardrail": "n/a",
+     "elapsed_ms": 0.2
+    },
+    {
+     "agent": "controller",
+     "title": "Finance Controller",
+     "framework": "LangGraph node",
+     "mandate": "Summarise the case for the CFO with decisions, risks, money impact and an audit trail.",
+     "tools": [],
+     "findings": [],
+     "decision": "Case closed: COMPLETED",
+     "highlights": [
+      "Status COMPLETED",
+      "24 tool calls",
+      "1 human touchpoint(s)"
+     ],
+     "rationale": "- Case S4-web-approve - PR-26-0972: VCI poly bags 600 x 900 mm, 50 micron (86,000 nos).\n- Sourcing: Godavari Packaging Industries selected (94.1 pts, Kraljic Non-critical); approved by Plant Head; PO-26-0972 for Rs 10,14,800 incl. GST.\n- Invoice: matched; approved Rs 10,14,800.\n- Tax: ITC Rs 1,54,800 claimable; TDS Rs 480 (this invoice crosses the Rs 50 lakh threshold; TDS only on the amount above it).\n- Cash: pay Rs 10,14,320 on 2026-11-06. Overdue MSME invoice GPI/26-27/279 (13 days late, interest Rs 4,620.87) must be paid today.",
+     "rationale_source": "offline-template",
+     "guardrail": "n/a",
+     "elapsed_ms": 0.1
+    }
+   ],
+   "status": "COMPLETED",
+   "data": {
+    "requisition": {
+     "pr_no": "PR-26-0972",
+     "date": "2026-09-29",
+     "requester": "Sneha Patil",
+     "department": "Logistics - Packaging",
+     "cost_center": "CC-LOG-520",
+     "request_text": "October replenishment: 86000 VCI poly bags 600x900 mm, 50 micron. Need by 10 Oct 2026. Approx Rs 8.6 lakh.",
+     "item": {
+      "code": "PKG-VCI-600900",
+      "description": "VCI poly bags 600 x 900 mm, 50 micron",
+      "hsn": "3923",
+      "uom": "nos",
+      "qty": 86000,
+      "need_by": "2026-10-10"
+     },
+     "estimated_value": 860000,
+     "category": "packaging",
+     "criticality": "low",
+     "annual_volume_qty": 900000,
+     "single_source": false,
+     "justification": null,
+     "hsn": "3923",
+     "spend_class": "Indirect - consumables",
+     "days_to_need_by": 11,
+     "parse_method": "offline rule-based parser",
+     "budget": {
+      "remaining": 4170000,
+      "ok": true
+     },
+     "parsed": {
+      "item_description": "October replenishment: 86000 VCI poly bags 600x900 mm, 50 micron. Need by 10 Oct 2026. Approx Rs 8.6 lakh.",
+      "quantity": 86000.0,
+      "uom": "nos",
+      "need_by": "2026-10-10",
+      "estimated_value_inr": 860000.0,
+      "category": "packaging",
+      "urgent": false,
+      "sole_source_claimed": false
+     }
+    },
+    "policy": {
+     "decision": "PROCEED",
+     "approver": "Plant Head",
+     "quote_rule": {
+      "max": 2500000,
+      "min_quotes": 3,
+      "rfq_required": false
+     },
+     "findings": [],
+     "budget": {
+      "ok": true,
+      "cost_center": "CC-LOG-520",
+      "name": "Logistics - Packaging",
+      "remaining": 4170000,
+      "issues": []
+     },
+     "split": {
+      "related": [],
+      "combined_value": 860000,
+      "issues": []
+     },
+     "vendor_diligence": {
+      "V-106": {
+       "vendor": "Godavari Packaging Industries",
+       "gstin": {
+        "gstin": "27ABJPK7745D1ZI",
+        "format_ok": true,
+        "checksum_ok": true,
+        "state_code": "27",
+        "state": "Maharashtra",
+        "pan_in_gstin": "ABJPK7745D",
+        "pan_match": true,
+        "issues": []
+       },
+       "issues": [],
+       "clean": true
+      },
+      "V-107": {
+       "vendor": "Mula Industrial Supplies",
+       "gstin": {
+        "gstin": "27AAKFM9032B1ZE",
+        "format_ok": true,
+        "checksum_ok": true,
+        "state_code": "27",
+        "state": "Maharashtra",
+        "pan_in_gstin": "AAKFM9032B",
+        "pan_match": true,
+        "issues": []
+       },
+       "issues": [],
+       "clean": true
+      },
+      "V-108": {
+       "vendor": "Pavana Polymers Pvt. Ltd.",
+       "gstin": {
+        "gstin": "27AADCP4410N1ZB",
+        "format_ok": true,
+        "checksum_ok": true,
+        "state_code": "27",
+        "state": "Maharashtra",
+        "pan_in_gstin": "AADCP4410N",
+        "pan_match": true,
+        "issues": []
+       },
+       "issues": [],
+       "clean": true
+      }
+     },
+     "excluded_vendors": [],
+     "lead_time_risk_vendors": [
+      "V-107"
+     ]
+    },
+    "sourcing": {
+     "kraljic": {
+      "quadrant": "Non-critical",
+      "annual_spend": 9120000,
+      "profit_impact": "low",
+      "supply_risk_score": 1,
+      "supply_risk": "low",
+      "weights": {
+       "price": 0.35,
+       "quality": 0.2,
+       "delivery": 0.25,
+       "risk": 0.1,
+       "compliance": 0.1
+      },
+      "levers": [
+       "Rate contract / catalogue buying to cut transaction cost",
+       "Bundle with similar items; automate re-orders"
+      ]
+     },
+     "scorecard": {
+      "ranking": [
+       {
+        "vendor_id": "V-106",
+        "vendor": "Godavari Packaging Industries",
+        "unit_price": 10.0,
+        "landed_unit_cost": 10.0,
+        "lead_time_days": 7,
+        "msme": "micro",
+        "state_code": "27",
+        "scores": {
+         "price": 98.0,
+         "quality": 92.5,
+         "delivery": 98.0,
+         "risk": 80.0,
+         "compliance": 88.0
+        },
+        "weighted_total": 94.1,
+        "eligible": true,
+        "note": ""
+       },
+       {
+        "vendor_id": "V-108",
+        "vendor": "Pavana Polymers Pvt. Ltd.",
+        "unit_price": 9.8,
+        "landed_unit_cost": 9.8,
+        "lead_time_days": 9,
+        "msme": "small",
+        "state_code": "27",
+        "scores": {
+         "price": 100.0,
+         "quality": 77.5,
+         "delivery": 89.0,
+         "risk": 60.0,
+         "compliance": 78.0
+        },
+        "weighted_total": 86.55,
+        "eligible": true,
+        "note": ""
+       },
+       {
+        "vendor_id": "V-107",
+        "vendor": "Mula Industrial Supplies",
+        "unit_price": 10.6,
+        "landed_unit_cost": 10.6,
+        "lead_time_days": 10,
+        "msme": "small",
+        "state_code": "27",
+        "scores": {
+         "price": 92.45,
+         "quality": 83.75,
+         "delivery": 92.0,
+         "risk": 80.0,
+         "compliance": 82.0
+        },
+        "weighted_total": 88.31,
+        "eligible": false,
+        "note": "excluded: lead time misses need-by date"
+       }
+      ],
+      "recommended": {
+       "vendor_id": "V-106",
+       "vendor": "Godavari Packaging Industries",
+       "unit_price": 10.0,
+       "landed_unit_cost": 10.0,
+       "lead_time_days": 7,
+       "msme": "micro",
+       "state_code": "27",
+       "scores": {
+        "price": 98.0,
+        "quality": 92.5,
+        "delivery": 98.0,
+        "risk": 80.0,
+        "compliance": 88.0
+       },
+       "weighted_total": 94.1,
+       "eligible": true,
+       "note": ""
+      },
+      "runner_up": {
+       "vendor_id": "V-108",
+       "vendor": "Pavana Polymers Pvt. Ltd.",
+       "unit_price": 9.8,
+       "landed_unit_cost": 9.8,
+       "lead_time_days": 9,
+       "msme": "small",
+       "state_code": "27",
+       "scores": {
+        "price": 100.0,
+        "quality": 77.5,
+        "delivery": 89.0,
+        "risk": 60.0,
+        "compliance": 78.0
+       },
+       "weighted_total": 86.55,
+       "eligible": true,
+       "note": ""
+      },
+      "cheapest": {
+       "vendor_id": "V-108",
+       "vendor": "Pavana Polymers Pvt. Ltd.",
+       "unit_price": 9.8,
+       "landed_unit_cost": 9.8,
+       "lead_time_days": 9,
+       "msme": "small",
+       "state_code": "27",
+       "scores": {
+        "price": 100.0,
+        "quality": 77.5,
+        "delivery": 89.0,
+        "risk": 60.0,
+        "compliance": 78.0
+       },
+       "weighted_total": 86.55,
+       "eligible": true,
+       "note": ""
+      },
+      "margin_vs_runner_up": 7.55,
+      "weights": {
+       "price": 0.35,
+       "quality": 0.2,
+       "delivery": 0.25,
+       "risk": 0.1,
+       "compliance": 0.1
+      }
+     },
+     "negotiation": {
+      "vendor_id": "V-106",
+      "quoted_unit_price": 10.0,
+      "should_cost": {
+       "material_cost": 6.4,
+       "conversion": 1.9,
+       "secondary_ops": 0.6,
+       "overhead_margin_pct": 12,
+       "should_cost": 9.97,
+       "quoted": 10.0,
+       "gap_per_unit": 0.03,
+       "gap_pct": 0.3,
+       "saving_this_order": 0.0,
+       "saving_annualised": 0.0,
+       "verdict": "price is fair (within 1% of should-cost)"
+      },
+      "batna": {
+       "vendor_id": "V-108",
+       "vendor": "Pavana Polymers Pvt. Ltd.",
+       "landed_unit_cost": 9.8,
+       "weighted_total": 86.55
+      },
+      "levers": [
+       "Rate contract / catalogue buying to cut transaction cost",
+       "Bundle with similar items; automate re-orders"
+      ],
+      "target_unit_price": 10.0,
+      "opening_ask": null
+     },
+     "recommended_vendor": "V-106",
+     "recommended_quote": {
+      "vendor_id": "V-106",
+      "unit_price": 10.0,
+      "freight": 0,
+      "lead_time_days": 7
+     },
+     "engine": "CrewAI (offline expert LLM)",
+     "crew": [
+      {
+       "agent": "category_manager",
+       "title": "Category Manager",
+       "output": "Kraljic position: Non-critical. Annual spend Rs 91.20 lakh gives low profit impact; supply-risk score 1 gives low supply risk. Evaluate suppliers with weights: price 35%, quality 20%, delivery 25%, risk 10%, compliance 10%. Strategy levers: Rate contract / catalogue buying to cut transaction cost; Bundle with similar items; automate re-orders."
+      },
+      {
+       "agent": "supplier_analyst",
+       "title": "Supplier Performance & Risk Analyst",
+       "output": "Ranking: V-106 Godavari Packaging Industries: 94.1 pts, landed Rs 10/unit, lead 7 days | V-108 Pavana Polymers Pvt. Ltd.: 86.55 pts, landed Rs 9.80/unit, lead 9 days | V-107 Mula Industrial Supplies: 88.31 pts, landed Rs 10.60/unit, lead 10 days [excluded: lead time misses need-by date]. The cheapest quote (V-108, Rs 9.80/unit) loses on quality, delivery or eligibility, so lowest price is not best value here. Margin over runner-up: 7.55 pts.\nRecommended vendor: V-106"
+      },
+      {
+       "agent": "negotiator",
+       "title": "Negotiation Strategist",
+       "output": "Should-cost Rs 9.97/unit (material Rs 6.40 + conversion Rs 1.90 + secondary ops Rs 0.60 + 12% overhead and margin) vs quote Rs 10: gap 0.3%. Verdict: price is fair (within 1% of should-cost). BATNA: V-108 Pavana Polymers Pvt. Ltd. at Rs 9.80/unit landed (86.55 pts). Levers: Rate contract / catalogue buying to cut transaction cost; Bundle with similar items; automate re-orders."
+      }
+     ]
+    },
+    "approval": {
+     "case_id": "S4-web-approve",
+     "approver_role": "Plant Head",
+     "pr_no": "PR-26-0972",
+     "item": "VCI poly bags 600 x 900 mm, 50 micron",
+     "qty": 86000,
+     "vendor_id": "V-106",
+     "vendor": "Godavari Packaging Industries",
+     "po_value_excl_gst": 860000.0,
+     "score": 94.1,
+     "runner_up": "V-108",
+     "kraljic": "Non-critical",
+     "warnings": [],
+     "negotiation_target": 10.0,
+     "question": "Approve PO to Godavari Packaging Industries for Rs 8,60,000 (excl. GST)?",
+     "approved": true,
+     "approved_by": "Plant Head",
+     "comment": "Approved as recommended."
+    },
+    "po": {
+     "po_no": "PO-26-0972",
+     "date": "2026-09-30",
+     "vendor_id": "V-106",
+     "vendor": "Godavari Packaging Industries",
+     "item": "VCI poly bags 600 x 900 mm, 50 micron",
+     "hsn": "3923",
+     "qty": 86000,
+     "uom": "nos",
+     "unit_price": 10.0,
+     "freight": 0,
+     "taxable": 860000.0,
+     "tax": {
+      "tax_type": "CGST+SGST",
+      "rate_pct": 18,
+      "taxable": 860000.0,
+      "cgst": 77400.0,
+      "sgst": 77400.0,
+      "igst": 0.0,
+      "tax_total": 154800.0,
+      "invoice_total": 1014800.0
+     },
+     "delivery_by": "2026-10-07",
+     "terms": [
+      "Price Rs 10/nos, firm for this order",
+      "Payment: 30 days from invoice",
+      "MSMED Act clause: supplier is a micro enterprise (UDYAM-MH-20-0033815); payment within 30 days of acceptance",
+      "Quote PO number on invoice; bill only accepted quantity; GSTIN of buyer 27AAKCM4821Q1ZU"
+     ],
+     "tds_preview": {
+      "provision": "Income-tax Act 2025, s.393(1) Table Sl. 8(ii) (formerly s.194Q)",
+      "threshold": 5000000,
+      "cumulative_before": 4620000,
+      "cumulative_after": 5480000.0,
+      "this_taxable": 860000.0,
+      "applicable": true,
+      "base": 480000.0,
+      "rate_pct": 0.1,
+      "tds_amount": 480,
+      "reason": "This invoice crosses the Rs 50 lakh threshold; TDS only on the amount above it"
+     },
+     "approved_by": "Plant Head"
+    },
+    "ap": {
+     "status": "MATCHED",
+     "match": {
+      "status": "MATCHED",
+      "exceptions": [],
+      "po_price": 10.0,
+      "invoice_price": 10.0,
+      "price_variance_pct": 0.0,
+      "po_qty": 86000,
+      "accepted_qty": 86000,
+      "invoiced_qty": 86000,
+      "approved_taxable": 860000.0,
+      "approved_tax": 154800.0,
+      "approved_total": 1014800.0,
+      "billed_taxable": 860000.0,
+      "billed_total": 1014800.0,
+      "disputed_taxable": 0.0,
+      "disputed_total": 0.0
+     },
+     "duplicates": {
+      "checked_against": 1,
+      "issues": []
+     },
+     "bank": {
+      "issues": []
+     },
+     "findings": []
+    },
+    "tax": {
+     "gst": {
+      "gstin": {
+       "gstin": "27ABJPK7745D1ZI",
+       "format_ok": true,
+       "checksum_ok": true,
+       "state_code": "27",
+       "state": "Maharashtra",
+       "pan_in_gstin": "ABJPK7745D",
+       "pan_match": true,
+       "issues": []
+      },
+      "expected": {
+       "tax_type": "CGST+SGST",
+       "rate_pct": 18,
+       "taxable": 860000.0,
+       "cgst": 77400.0,
+       "sgst": 77400.0,
+       "igst": 0.0,
+       "tax_total": 154800.0,
+       "invoice_total": 1014800.0
+      },
+      "billed": {
+       "cgst": 77400.0,
+       "sgst": 77400.0,
+       "igst": 0
+      },
+      "issues": []
+     },
+     "einvoice": {
+      "required": false,
+      "supplier_aato_cr": 3.6,
+      "irn_present": false,
+      "irn_lag_days": null,
+      "issues": []
+     },
+     "itc": {
+      "eligible_now": true,
+      "checks": {
+       "valid_tax_invoice": true,
+       "goods_received": true,
+       "reflected_in_gstr2b": true
+      },
+      "pay_within_days": 180,
+      "note": "ITC must be reversed if the supplier is not paid within 180 days of the invoice date."
+     },
+     "itc_amount": 154800.0,
+     "itc_on_hold": 0.0,
+     "tds": {
+      "provision": "Income-tax Act 2025, s.393(1) Table Sl. 8(ii) (formerly s.194Q)",
+      "threshold": 5000000,
+      "cumulative_before": 4620000,
+      "cumulative_after": 5480000.0,
+      "this_taxable": 860000.0,
+      "applicable": true,
+      "base": 480000.0,
+      "rate_pct": 0.1,
+      "tds_amount": 480,
+      "reason": "This invoice crosses the Rs 50 lakh threshold; TDS only on the amount above it"
+     },
+     "issues": [],
+     "blocked": false
+    },
+    "treasury": {
+     "plan": {
+      "invoice_no": "GPI/26-27/311",
+      "payable": 1014320.0,
+      "due_date": "2026-11-06",
+      "pay_on": "2026-11-06",
+      "msme": {
+       "covered": true,
+       "due_date": "2026-11-07",
+       "days_allowed": 30,
+       "basis": "Written agreement of 30 days, capped at 45"
+      },
+      "discount": null,
+      "take_discount": false,
+      "days_until_due": 27,
+      "reasons": [
+       "Contract terms: 30 days from invoice date -> 2026-11-06",
+       "MSMED Act s.15 (micro enterprise): Written agreement of 30 days, capped at 45 -> pay by 2026-11-07"
+      ],
+      "itc_reversal_deadline": "2027-04-05"
+     },
+     "net_payable": 1014320.0,
+     "alerts": [
+      {
+       "invoice_no": "GPI/26-27/279",
+       "total": 755200.0,
+       "status": "unpaid - stuck awaiting PO amendment approval",
+       "msme_due": "2026-09-27",
+       "overdue_days": 13,
+       "days_to_due": 0,
+       "severity": "CRITICAL",
+       "interest_accrued": 4620.87,
+       "interest_rate_pct": 17.25,
+       "interest_tax_deductible": false,
+       "disallowance_if_unpaid_at_year_end": 640000.0,
+       "action": "Pay in the next payment run with statutory interest; fix the approval bottleneck"
+      }
+     ],
+     "payment_run": [
+      {
+       "invoice_no": "GPI/26-27/279",
+       "amount": 759820.87,
+       "pay_on": "2026-10-10",
+       "priority": "MSME-OVERDUE (pay now, incl. statutory interest)"
+      },
+      {
+       "invoice_no": "GPI/26-27/311",
+       "amount": 1014320.0,
+       "pay_on": "2026-11-06",
+       "priority": "MSME-statutory"
+      }
+     ]
+    },
+    "memo": {
+     "status": "COMPLETED",
+     "bullets": [
+      "Case S4-web-approve - PR-26-0972: VCI poly bags 600 x 900 mm, 50 micron (86,000 nos).",
+      "Sourcing: Godavari Packaging Industries selected (94.1 pts, Kraljic Non-critical); approved by Plant Head; PO-26-0972 for Rs 10,14,800 incl. GST.",
+      "Invoice: matched; approved Rs 10,14,800.",
+      "Tax: ITC Rs 1,54,800 claimable; TDS Rs 480 (this invoice crosses the Rs 50 lakh threshold; TDS only on the amount above it).",
+      "Cash: pay Rs 10,14,320 on 2026-11-06. Overdue MSME invoice GPI/26-27/279 (13 days late, interest Rs 4,620.87) must be paid today."
+     ],
+     "text": "- Case S4-web-approve - PR-26-0972: VCI poly bags 600 x 900 mm, 50 micron (86,000 nos).\n- Sourcing: Godavari Packaging Industries selected (94.1 pts, Kraljic Non-critical); approved by Plant Head; PO-26-0972 for Rs 10,14,800 incl. GST.\n- Invoice: matched; approved Rs 10,14,800.\n- Tax: ITC Rs 1,54,800 claimable; TDS Rs 480 (this invoice crosses the Rs 50 lakh threshold; TDS only on the amount above it).\n- Cash: pay Rs 10,14,320 on 2026-11-06. Overdue MSME invoice GPI/26-27/279 (13 days late, interest Rs 4,620.87) must be paid today.",
+     "kpis": {
+      "agents_involved": 10,
+      "tool_calls": 24,
+      "controls_flagged": 1,
+      "blocking_controls": 0,
+      "human_touchpoints": 1,
+      "touchless_invoice": true,
+      "agent_processing_ms": 25.9,
+      "po_value_incl_gst": 1014800.0,
+      "approved_payable": 1014800.0,
+      "disputed_amount_protected": 0.0,
+      "tds_withheld": 480,
+      "itc_claimable": 154800.0,
+      "negotiation_value_this_order": 0.0,
+      "negotiation_value_annual": 0.0,
+      "msme_interest_accrued": 4620.87,
+      "discount_decision": null
+     }
+    }
+   }
+  },
+  "S1-reject": {
+   "id": "S1",
+   "title": "Die-cast gearbox housings: clean end-to-end run",
+   "story": "Production needs 4,000 aluminium die-cast housings. Three suppliers quoted. The cheapest supplier has poor quality and delivery, so the agents must pick on total value, not price. Goods arrive and the invoice matches.",
+   "learning_points": [
+    "Weighted supplier scorecard beats lowest-price buying for a strategic item",
+    "Inter-state purchase: IGST, e-invoice IRN check, TDS on goods above the Rs 50 lakh threshold",
+    "Treasury declines an early-payment discount whose annualised return is below the cost of funds"
+   ],
+   "request_text": "Need 4000 nos aluminium die-cast gearbox housings (ADC12, part HSG-ADC12-GB04) for the Q3 build plan, required by 5 Oct 2026. Budget about Rs 19 lakh. Line-stopper part.",
+   "case_id": "S1-web-reject",
+   "approval_pack": {
+    "case_id": "S1-web-reject",
+    "approver_role": "CFO",
+    "pr_no": "PR-26-0871",
+    "item": "Aluminium die-cast gearbox housing, ADC12, machined",
+    "qty": 4000,
+    "vendor_id": "V-102",
+    "vendor": "Tungabhadra Alloy Castings Ltd.",
+    "po_value_excl_gst": 1774000.0,
+    "score": 94.56,
+    "runner_up": "V-101",
+    "kraljic": "Strategic",
+    "warnings": [],
+    "negotiation_target": 432.43,
+    "question": "Approve PO to Tungabhadra Alloy Castings Ltd. for Rs 17,74,000 (excl. GST)?"
+   },
+   "steps_before_approval": 3,
+   "trace": [
+    {
+     "agent": "intake",
+     "title": "Procurement Analyst",
+     "framework": "LangGraph node",
+     "mandate": "Turn a requester's message into a complete, policy-ready purchase requisition.",
+     "tools": [
+      {
+       "tool": "parse_request",
+       "input": {
+        "text": "Need 4000 nos aluminium die-cast gearbox housings (ADC12, part HSG-ADC12-GB04) for the Q3 build plan, required by 5 Oct 2026. Budget about Rs 19 lakh. Line-stopper part."
+       },
+       "summary": "Extracted qty=4000.0 nos, need-by=2026-10-05, value=Rs 19,00,000, category=aluminium castings (offline rule-based parser)"
+      },
+      {
+       "tool": "budget_check",
+       "input": {
+        "cost_center": "CC-PRD-210",
+        "amount": 1900000
+       },
+       "summary": "Production - Die-casting line: remaining Rs 42,50,000 vs request Rs 19,00,000"
+      }
+     ],
+     "findings": [],
+     "decision": "Requisition structured and forwarded to Policy & Compliance",
+     "highlights": [
+      "4,000 nos | Rs 19,00,000",
+      "Direct material | HSN 7616",
+      "Need-by in 34 days"
+     ],
+     "rationale": "PR-26-0871 is a direct material request for 4,000 nos of Aluminium die-cast gearbox housing, ADC12, machined (HSN 7616), estimated at Rs 19,00,000 and needed in 34 days. Budget on CC-PRD-210 has Rs 42,50,000 available. The request is complete and consistent with the form.",
+     "rationale_source": "offline-template",
+     "guardrail": "n/a",
+     "elapsed_ms": 0.2
+    },
+    {
+     "agent": "policy",
+     "title": "Policy & Compliance Officer",
+     "framework": "LangGraph node",
+     "mandate": "Apply the procurement policy before any money is committed.",
+     "tools": [
+      {
+       "tool": "delegation_of_authority",
+       "input": {
+        "value": 1900000
+       },
+       "summary": "Approver for Rs 19,00,000: CFO"
+      },
+      {
+       "tool": "competitive_quote_rule",
+       "input": {
+        "value": 1900000,
+        "quotes": 3
+       },
+       "summary": "Needs 3 quote(s); received 3"
+      },
+      {
+       "tool": "split_purchase_scan",
+       "input": {
+        "window_days": 30,
+        "history": 0
+       },
+       "summary": "0 related PR(s); combined Rs 19,00,000"
+      },
+      {
+       "tool": "budget_check",
+       "input": {
+        "cost_center": "CC-PRD-210"
+       },
+       "summary": "Remaining Rs 42,50,000; OK"
+      },
+      {
+       "tool": "vendor_due_diligence",
+       "input": {
+        "vendor_id": "V-101"
+       },
+       "summary": "Deccan Precision Castings Pvt. Ltd.: clean"
+      },
+      {
+       "tool": "vendor_due_diligence",
+       "input": {
+        "vendor_id": "V-102"
+       },
+       "summary": "Tungabhadra Alloy Castings Ltd.: clean"
+      },
+      {
+       "tool": "vendor_due_diligence",
+       "input": {
+        "vendor_id": "V-103"
+       },
+       "summary": "Sabarmati Foundry Works: clean"
+      }
+     ],
+     "findings": [],
+     "decision": "Cleared for sourcing; approver = CFO",
+     "highlights": [
+      "Approver: CFO",
+      "Findings: 0 block / 0 warn"
+     ],
+     "rationale": "Policy checks passed. Approval authority: CFO. No warnings.",
+     "rationale_source": "offline-template",
+     "guardrail": "n/a",
+     "elapsed_ms": 0.1
+    },
+    {
+     "agent": "supplier_analyst",
+     "title": "Sourcing Crew (3 CrewAI agents)",
+     "framework": "CrewAI crew inside a LangGraph node",
+     "mandate": "Rank suppliers on total value, not just price.",
+     "tools": [
+      {
+       "tool": "kraljic_analysis",
+       "input": {
+        "case_id": "S1-web-reject"
+       },
+       "summary": "Strategic (spend Rs 2,10,88,000, risk score 3)"
+      },
+      {
+       "tool": "supplier_scorecard",
+       "input": {
+        "case_id": "S1-web-reject"
+       },
+       "summary": "Winner V-102 94.56 pts; runner-up V-101"
+      },
+      {
+       "tool": "should_cost_model",
+       "input": {
+        "case_id": "S1-web-reject"
+       },
+       "summary": "Should-cost Rs 432.43 vs quote Rs 438 (1.27% gap)"
+      }
+     ],
+     "findings": [],
+     "decision": "Recommend V-102 Tungabhadra Alloy Castings Ltd. at Rs 438/unit",
+     "highlights": [
+      "Kraljic: Strategic",
+      "Winner 94.56 pts",
+      "Target Rs 432.43"
+     ],
+     "rationale": "Ranking: V-102 Tungabhadra Alloy Castings Ltd.: 94.56 pts, landed Rs 443.50/unit, lead 28 days | V-101 Deccan Precision Castings Pvt. Ltd.: 86.04 pts, landed Rs 452/unit, lead 25 days | V-103 Sabarmati Foundry Works: 73.45 pts, landed Rs 422.50/unit, lead 21 days. The cheapest quote (V-103, Rs 422.50/unit) loses on quality, delivery or eligibility, so lowest price is not best value here. Margin over runner-up: 8.52 pts.",
+     "rationale_source": "CrewAI (offline expert LLM)",
+     "guardrail": "passed",
+     "elapsed_ms": 19.4,
+     "crew": [
+      {
+       "agent": "category_manager",
+       "title": "Category Manager",
+       "output": "Kraljic position: Strategic. Annual spend Rs 2.11 crore gives high profit impact; supply-risk score 3 gives high supply risk. Evaluate suppliers with weights: price 25%, quality 30%, delivery 20%, risk 20%, compliance 5%. Strategy levers: Long-term agreement with index-linked raw-material pricing (share commodity risk transparently); Develop the runner-up as a qualified second source for 20-30% of volume; Joint cost-reduction (VA/VE) targets and PPM improvement plan written into the contract."
+      },
+      {
+       "agent": "supplier_analyst",
+       "title": "Supplier Performance & Risk Analyst",
+       "output": "Ranking: V-102 Tungabhadra Alloy Castings Ltd.: 94.56 pts, landed Rs 443.50/unit, lead 28 days | V-101 Deccan Precision Castings Pvt. Ltd.: 86.04 pts, landed Rs 452/unit, lead 25 days | V-103 Sabarmati Foundry Works: 73.45 pts, landed Rs 422.50/unit, lead 21 days. The cheapest quote (V-103, Rs 422.50/unit) loses on quality, delivery or eligibility, so lowest price is not best value here. Margin over runner-up: 8.52 pts.\nRecommended vendor: V-102"
+      },
+      {
+       "agent": "negotiator",
+       "title": "Negotiation Strategist",
+       "output": "Should-cost Rs 432.43/unit (material Rs 226.10 + conversion Rs 120 + secondary ops Rs 40 + 12% overhead and margin) vs quote Rs 438: gap 1.27%. Verdict: negotiate. Target Rs 432.43/unit, open at Rs 428.11. Value at stake Rs 22,280 on this order, Rs 2,67,360 a year. BATNA: V-101 Deccan Precision Castings Pvt. Ltd. at Rs 452/unit landed (86.04 pts). Levers: Long-term agreement with index-linked raw-material pricing (share commodity risk transparently); Develop the runner-up as a qualified second source for 20-30% of volume; Joint cost-reduction (VA/VE) targets and PPM improvement plan written into the contract."
+      }
+     ],
+     "engine": "CrewAI (offline expert LLM)",
+     "crew_error": null,
+     "crew_tool_calls": [
+      "kraljic_analysis",
+      "supplier_scorecard",
+      "should_cost_model"
+     ]
+    },
+    {
+     "agent": "approver",
+     "title": "Human Approver (per DoA)",
+     "framework": "LangGraph interrupt (human-in-the-loop)",
+     "mandate": "Accountable human decision at the point of financial commitment.",
+     "tools": [
+      {
+       "tool": "approval_pack",
+       "input": {
+        "case_id": "S1-web-reject"
+       },
+       "summary": "Approve PO to Tungabhadra Alloy Castings Ltd. for Rs 17,74,000 (excl. GST)?"
+      }
+     ],
+     "findings": [],
+     "decision": "REJECTED by CFO",
+     "highlights": [
+      "Role required: CFO",
+      "Value Rs 17,74,000"
+     ],
+     "rationale": "Defer: Q3 volume forecast is under review.",
+     "rationale_source": "human",
+     "guardrail": "n/a",
+     "elapsed_ms": 0.0
+    },
+    {
+     "agent": "controller",
+     "title": "Finance Controller",
+     "framework": "LangGraph node",
+     "mandate": "Summarise the case for the CFO with decisions, risks, money impact and an audit trail.",
+     "tools": [],
+     "findings": [],
+     "decision": "Case closed: REJECTED",
+     "highlights": [
+      "Status REJECTED",
+      "13 tool calls",
+      "1 human touchpoint(s)"
+     ],
+     "rationale": "- Case S1-web-reject - PR-26-0871: Aluminium die-cast gearbox housing, ADC12, machined (4,000 nos).\n- Outcome: REJECTED by CFO. Defer: Q3 volume forecast is under review.",
+     "rationale_source": "offline-template",
+     "guardrail": "n/a",
+     "elapsed_ms": 0.0
+    }
+   ],
+   "status": "REJECTED",
+   "data": {
+    "requisition": {
+     "pr_no": "PR-26-0871",
+     "date": "2026-09-01",
+     "requester": "Anil Deshmukh",
+     "department": "Production Planning",
+     "cost_center": "CC-PRD-210",
+     "request_text": "Need 4000 nos aluminium die-cast gearbox housings (ADC12, part HSG-ADC12-GB04) for the Q3 build plan, required by 5 Oct 2026. Budget about Rs 19 lakh. Line-stopper part.",
+     "item": {
+      "code": "HSG-ADC12-GB04",
+      "description": "Aluminium die-cast gearbox housing, ADC12, machined",
+      "hsn": "7616",
+      "uom": "nos",
+      "qty": 4000,
+      "need_by": "2026-10-05"
+     },
+     "estimated_value": 1900000,
+     "category": "aluminium castings",
+     "criticality": "high",
+     "annual_volume_qty": 48000,
+     "single_source": false,
+     "justification": null,
+     "hsn": "7616",
+     "spend_class": "Direct material",
+     "days_to_need_by": 34,
+     "parse_method": "offline rule-based parser",
+     "budget": {
+      "remaining": 4250000,
+      "ok": true
+     },
+     "parsed": {
+      "item_description": "Need 4000 nos aluminium die-cast gearbox housings (ADC12, part HSG-ADC12-GB04) for the Q3 build plan, required by 5 Oct ",
+      "quantity": 4000.0,
+      "uom": "nos",
+      "need_by": "2026-10-05",
+      "estimated_value_inr": 1900000.0,
+      "category": "aluminium castings",
+      "urgent": false,
+      "sole_source_claimed": false
+     }
+    },
+    "policy": {
+     "decision": "PROCEED",
+     "approver": "CFO",
+     "quote_rule": {
+      "max": 2500000,
+      "min_quotes": 3,
+      "rfq_required": false
+     },
+     "findings": [],
+     "budget": {
+      "ok": true,
+      "cost_center": "CC-PRD-210",
+      "name": "Production - Die-casting line",
+      "remaining": 4250000,
+      "issues": []
+     },
+     "split": {
+      "related": [],
+      "combined_value": 1900000,
+      "issues": []
+     },
+     "vendor_diligence": {
+      "V-101": {
+       "vendor": "Deccan Precision Castings Pvt. Ltd.",
+       "gstin": {
+        "gstin": "27AADCD5172K1ZG",
+        "format_ok": true,
+        "checksum_ok": true,
+        "state_code": "27",
+        "state": "Maharashtra",
+        "pan_in_gstin": "AADCD5172K",
+        "pan_match": true,
+        "issues": []
+       },
+       "issues": [],
+       "clean": true
+      },
+      "V-102": {
+       "vendor": "Tungabhadra Alloy Castings Ltd.",
+       "gstin": {
+        "gstin": "29AABCT8834R1ZD",
+        "format_ok": true,
+        "checksum_ok": true,
+        "state_code": "29",
+        "state": "Karnataka",
+        "pan_in_gstin": "AABCT8834R",
+        "pan_match": true,
+        "issues": []
+       },
+       "issues": [],
+       "clean": true
+      },
+      "V-103": {
+       "vendor": "Sabarmati Foundry Works",
+       "gstin": {
+        "gstin": "24AAQFS2291M1ZM",
+        "format_ok": true,
+        "checksum_ok": true,
+        "state_code": "24",
+        "state": "Gujarat",
+        "pan_in_gstin": "AAQFS2291M",
+        "pan_match": true,
+        "issues": []
+       },
+       "issues": [],
+       "clean": true
+      }
+     },
+     "excluded_vendors": [],
+     "lead_time_risk_vendors": []
+    },
+    "sourcing": {
+     "kraljic": {
+      "quadrant": "Strategic",
+      "annual_spend": 21088000,
+      "profit_impact": "high",
+      "supply_risk_score": 3,
+      "supply_risk": "high",
+      "weights": {
+       "price": 0.25,
+       "quality": 0.3,
+       "delivery": 0.2,
+       "risk": 0.2,
+       "compliance": 0.05
+      },
+      "levers": [
+       "Long-term agreement with index-linked raw-material pricing (share commodity risk transparently)",
+       "Develop the runner-up as a qualified second source for 20-30% of volume",
+       "Joint cost-reduction (VA/VE) targets and PPM improvement plan written into the contract"
+      ]
+     },
+     "scorecard": {
+      "ranking": [
+       {
+        "vendor_id": "V-102",
+        "vendor": "Tungabhadra Alloy Castings Ltd.",
+        "unit_price": 438.0,
+        "landed_unit_cost": 443.5,
+        "lead_time_days": 28,
+        "msme": "none",
+        "state_code": "29",
+        "scores": {
+         "price": 95.26,
+         "quality": 89.5,
+         "delivery": 97.0,
+         "risk": 100.0,
+         "compliance": 90.0
+        },
+        "weighted_total": 94.56,
+        "eligible": true,
+        "note": ""
+       },
+       {
+        "vendor_id": "V-101",
+        "vendor": "Deccan Precision Castings Pvt. Ltd.",
+        "unit_price": 452.0,
+        "landed_unit_cost": 452.0,
+        "lead_time_days": 25,
+        "msme": "small",
+        "state_code": "27",
+        "scores": {
+         "price": 93.47,
+         "quality": 78.75,
+         "delivery": 94.0,
+         "risk": 80.0,
+         "compliance": 85.0
+        },
+        "weighted_total": 86.04,
+        "eligible": true,
+        "note": ""
+       },
+       {
+        "vendor_id": "V-103",
+        "vendor": "Sabarmati Foundry Works",
+        "unit_price": 415.0,
+        "landed_unit_cost": 422.5,
+        "lead_time_days": 21,
+        "msme": "micro",
+        "state_code": "24",
+        "scores": {
+         "price": 100.0,
+         "quality": 52.5,
+         "delivery": 86.0,
+         "risk": 60.0,
+         "compliance": 70.0
+        },
+        "weighted_total": 73.45,
+        "eligible": true,
+        "note": ""
+       }
+      ],
+      "recommended": {
+       "vendor_id": "V-102",
+       "vendor": "Tungabhadra Alloy Castings Ltd.",
+       "unit_price": 438.0,
+       "landed_unit_cost": 443.5,
+       "lead_time_days": 28,
+       "msme": "none",
+       "state_code": "29",
+       "scores": {
+        "price": 95.26,
+        "quality": 89.5,
+        "delivery": 97.0,
+        "risk": 100.0,
+        "compliance": 90.0
+       },
+       "weighted_total": 94.56,
+       "eligible": true,
+       "note": ""
+      },
+      "runner_up": {
+       "vendor_id": "V-101",
+       "vendor": "Deccan Precision Castings Pvt. Ltd.",
+       "unit_price": 452.0,
+       "landed_unit_cost": 452.0,
+       "lead_time_days": 25,
+       "msme": "small",
+       "state_code": "27",
+       "scores": {
+        "price": 93.47,
+        "quality": 78.75,
+        "delivery": 94.0,
+        "risk": 80.0,
+        "compliance": 85.0
+       },
+       "weighted_total": 86.04,
+       "eligible": true,
+       "note": ""
+      },
+      "cheapest": {
+       "vendor_id": "V-103",
+       "vendor": "Sabarmati Foundry Works",
+       "unit_price": 415.0,
+       "landed_unit_cost": 422.5,
+       "lead_time_days": 21,
+       "msme": "micro",
+       "state_code": "24",
+       "scores": {
+        "price": 100.0,
+        "quality": 52.5,
+        "delivery": 86.0,
+        "risk": 60.0,
+        "compliance": 70.0
+       },
+       "weighted_total": 73.45,
+       "eligible": true,
+       "note": ""
+      },
+      "margin_vs_runner_up": 8.52,
+      "weights": {
+       "price": 0.25,
+       "quality": 0.3,
+       "delivery": 0.2,
+       "risk": 0.2,
+       "compliance": 0.05
+      }
+     },
+     "negotiation": {
+      "vendor_id": "V-102",
+      "quoted_unit_price": 438.0,
+      "should_cost": {
+       "material_cost": 226.1,
+       "conversion": 120,
+       "secondary_ops": 40,
+       "overhead_margin_pct": 12,
+       "should_cost": 432.43,
+       "quoted": 438.0,
+       "gap_per_unit": 5.57,
+       "gap_pct": 1.27,
+       "saving_this_order": 22280.0,
+       "saving_annualised": 267360.0,
+       "verdict": "negotiate"
+      },
+      "batna": {
+       "vendor_id": "V-101",
+       "vendor": "Deccan Precision Castings Pvt. Ltd.",
+       "landed_unit_cost": 452.0,
+       "weighted_total": 86.04
+      },
+      "levers": [
+       "Long-term agreement with index-linked raw-material pricing (share commodity risk transparently)",
+       "Develop the runner-up as a qualified second source for 20-30% of volume",
+       "Joint cost-reduction (VA/VE) targets and PPM improvement plan written into the contract"
+      ],
+      "target_unit_price": 432.43,
+      "opening_ask": 428.11
+     },
+     "recommended_vendor": "V-102",
+     "recommended_quote": {
+      "vendor_id": "V-102",
+      "unit_price": 438.0,
+      "freight": 22000,
+      "lead_time_days": 28
+     },
+     "engine": "CrewAI (offline expert LLM)",
+     "crew": [
+      {
+       "agent": "category_manager",
+       "title": "Category Manager",
+       "output": "Kraljic position: Strategic. Annual spend Rs 2.11 crore gives high profit impact; supply-risk score 3 gives high supply risk. Evaluate suppliers with weights: price 25%, quality 30%, delivery 20%, risk 20%, compliance 5%. Strategy levers: Long-term agreement with index-linked raw-material pricing (share commodity risk transparently); Develop the runner-up as a qualified second source for 20-30% of volume; Joint cost-reduction (VA/VE) targets and PPM improvement plan written into the contract."
+      },
+      {
+       "agent": "supplier_analyst",
+       "title": "Supplier Performance & Risk Analyst",
+       "output": "Ranking: V-102 Tungabhadra Alloy Castings Ltd.: 94.56 pts, landed Rs 443.50/unit, lead 28 days | V-101 Deccan Precision Castings Pvt. Ltd.: 86.04 pts, landed Rs 452/unit, lead 25 days | V-103 Sabarmati Foundry Works: 73.45 pts, landed Rs 422.50/unit, lead 21 days. The cheapest quote (V-103, Rs 422.50/unit) loses on quality, delivery or eligibility, so lowest price is not best value here. Margin over runner-up: 8.52 pts.\nRecommended vendor: V-102"
+      },
+      {
+       "agent": "negotiator",
+       "title": "Negotiation Strategist",
+       "output": "Should-cost Rs 432.43/unit (material Rs 226.10 + conversion Rs 120 + secondary ops Rs 40 + 12% overhead and margin) vs quote Rs 438: gap 1.27%. Verdict: negotiate. Target Rs 432.43/unit, open at Rs 428.11. Value at stake Rs 22,280 on this order, Rs 2,67,360 a year. BATNA: V-101 Deccan Precision Castings Pvt. Ltd. at Rs 452/unit landed (86.04 pts). Levers: Long-term agreement with index-linked raw-material pricing (share commodity risk transparently); Develop the runner-up as a qualified second source for 20-30% of volume; Joint cost-reduction (VA/VE) targets and PPM improvement plan written into the contract."
+      }
+     ]
+    },
+    "approval": {
+     "case_id": "S1-web-reject",
+     "approver_role": "CFO",
+     "pr_no": "PR-26-0871",
+     "item": "Aluminium die-cast gearbox housing, ADC12, machined",
+     "qty": 4000,
+     "vendor_id": "V-102",
+     "vendor": "Tungabhadra Alloy Castings Ltd.",
+     "po_value_excl_gst": 1774000.0,
+     "score": 94.56,
+     "runner_up": "V-101",
+     "kraljic": "Strategic",
+     "warnings": [],
+     "negotiation_target": 432.43,
+     "question": "Approve PO to Tungabhadra Alloy Castings Ltd. for Rs 17,74,000 (excl. GST)?",
+     "approved": false,
+     "approved_by": "CFO",
+     "comment": "Defer: Q3 volume forecast is under review."
+    },
+    "memo": {
+     "status": "REJECTED",
+     "bullets": [
+      "Case S1-web-reject - PR-26-0871: Aluminium die-cast gearbox housing, ADC12, machined (4,000 nos).",
+      "Outcome: REJECTED by CFO. Defer: Q3 volume forecast is under review."
+     ],
+     "text": "- Case S1-web-reject - PR-26-0871: Aluminium die-cast gearbox housing, ADC12, machined (4,000 nos).\n- Outcome: REJECTED by CFO. Defer: Q3 volume forecast is under review.",
+     "kpis": {
+      "agents_involved": 6,
+      "tool_calls": 13,
+      "controls_flagged": 0,
+      "blocking_controls": 0,
+      "human_touchpoints": 1,
+      "touchless_invoice": false,
+      "agent_processing_ms": 19.7,
+      "po_value_incl_gst": null,
+      "approved_payable": null,
+      "disputed_amount_protected": null,
+      "tds_withheld": null,
+      "itc_claimable": null,
+      "negotiation_value_this_order": 22280.0,
+      "negotiation_value_annual": 267360.0,
+      "msme_interest_accrued": 0.0,
+      "discount_decision": null
+     }
+    }
+   }
+  },
+  "S2-reject": {
+   "id": "S2",
+   "title": "CNC shafts: invoice price variance and QC rejection",
+   "story": "The machining cell orders 2,500 hardened shafts. The supplier invoices 3.2% above the PO price and bills for all 2,500 pieces, although quality rejected 120. The agents must pay only what is owed, hold the rest and get a credit note.",
+   "learning_points": [
+    "3-way match (PO vs GRN vs invoice) with tolerance rules",
+    "Pay the undisputed amount on time; hold only the disputed part",
+    "GST credit note and input-tax-credit treatment for rejected and overcharged quantities",
+    "A quote that cannot meet the need-by date is excluded even if it is cheapest"
+   ],
+   "request_text": "Raise PR for 2500 EN8 transmission shafts, machined and induction hardened (drawing SFT-EN8-220), needed by 15 Oct 2026. Expected around Rs 7.4 lakh.",
+   "case_id": "S2-web-reject",
+   "approval_pack": {
+    "case_id": "S2-web-reject",
+    "approver_role": "Plant Head",
+    "pr_no": "PR-26-0904",
+    "item": "EN8 transmission shaft, machined and induction hardened",
+    "qty": 2500,
+    "vendor_id": "V-104",
+    "vendor": "Noyyal CNC Engineering Pvt. Ltd.",
+    "po_value_excl_gst": 710000.0,
+    "score": 92.34,
+    "runner_up": "V-102",
+    "kraljic": "Leverage",
+    "warnings": [],
+    "negotiation_target": 273.93,
+    "question": "Approve PO to Noyyal CNC Engineering Pvt. Ltd. for Rs 7,10,000 (excl. GST)?"
+   },
+   "steps_before_approval": 3,
+   "trace": [
+    {
+     "agent": "intake",
+     "title": "Procurement Analyst",
+     "framework": "LangGraph node",
+     "mandate": "Turn a requester's message into a complete, policy-ready purchase requisition.",
+     "tools": [
+      {
+       "tool": "parse_request",
+       "input": {
+        "text": "Raise PR for 2500 EN8 transmission shafts, machined and induction hardened (drawing SFT-EN8-220), needed by 15 Oct 2026. Expected around Rs 7.4 lakh."
+       },
+       "summary": "Extracted qty=2500.0 nos, need-by=2026-10-15, value=Rs 7,40,000, category=machined components (offline rule-based parser)"
+      },
+      {
+       "tool": "budget_check",
+       "input": {
+        "cost_center": "CC-PRD-230",
+        "amount": 740000
+       },
+       "summary": "Production - Machining cell: remaining Rs 37,30,000 vs request Rs 7,40,000"
+      }
+     ],
+     "findings": [],
+     "decision": "Requisition structured and forwarded to Policy & Compliance",
+     "highlights": [
+      "2,500 nos | Rs 7,40,000",
+      "Direct material | HSN 8483",
+      "Need-by in 35 days"
+     ],
+     "rationale": "PR-26-0904 is a direct material request for 2,500 nos of EN8 transmission shaft, machined and induction hardened (HSN 8483), estimated at Rs 7,40,000 and needed in 35 days. Budget on CC-PRD-230 has Rs 37,30,000 available. The request is complete and consistent with the form.",
+     "rationale_source": "offline-template",
+     "guardrail": "n/a",
+     "elapsed_ms": 0.2
+    },
+    {
+     "agent": "policy",
+     "title": "Policy & Compliance Officer",
+     "framework": "LangGraph node",
+     "mandate": "Apply the procurement policy before any money is committed.",
+     "tools": [
+      {
+       "tool": "delegation_of_authority",
+       "input": {
+        "value": 740000
+       },
+       "summary": "Approver for Rs 7,40,000: Plant Head"
+      },
+      {
+       "tool": "competitive_quote_rule",
+       "input": {
+        "value": 740000,
+        "quotes": 3
+       },
+       "summary": "Needs 3 quote(s); received 3"
+      },
+      {
+       "tool": "split_purchase_scan",
+       "input": {
+        "window_days": 30,
+        "history": 0
+       },
+       "summary": "0 related PR(s); combined Rs 7,40,000"
+      },
+      {
+       "tool": "budget_check",
+       "input": {
+        "cost_center": "CC-PRD-230"
+       },
+       "summary": "Remaining Rs 37,30,000; OK"
+      },
+      {
+       "tool": "vendor_due_diligence",
+       "input": {
+        "vendor_id": "V-104"
+       },
+       "summary": "Noyyal CNC Engineering Pvt. Ltd.: clean"
+      },
+      {
+       "tool": "vendor_due_diligence",
+       "input": {
+        "vendor_id": "V-102"
+       },
+       "summary": "Tungabhadra Alloy Castings Ltd.: clean"
+      },
+      {
+       "tool": "vendor_due_diligence",
+       "input": {
+        "vendor_id": "V-109"
+       },
+       "summary": "Vaigai Turned Components Pvt. Ltd.: clean"
+      }
+     ],
+     "findings": [],
+     "decision": "Cleared for sourcing; approver = Plant Head",
+     "highlights": [
+      "Approver: Plant Head",
+      "Findings: 0 block / 0 warn"
+     ],
+     "rationale": "Policy checks passed. Approval authority: Plant Head. No warnings. Excluded from sourcing on lead time: V-109.",
+     "rationale_source": "offline-template",
+     "guardrail": "n/a",
+     "elapsed_ms": 0.1
+    },
+    {
+     "agent": "supplier_analyst",
+     "title": "Sourcing Crew (3 CrewAI agents)",
+     "framework": "CrewAI crew inside a LangGraph node",
+     "mandate": "Rank suppliers on total value, not just price.",
+     "tools": [
+      {
+       "tool": "kraljic_analysis",
+       "input": {
+        "case_id": "S2-web-reject"
+       },
+       "summary": "Leverage (spend Rs 1,17,89,333, risk score 2)"
+      },
+      {
+       "tool": "supplier_scorecard",
+       "input": {
+        "case_id": "S2-web-reject"
+       },
+       "summary": "Winner V-104 92.34 pts; runner-up V-102"
+      },
+      {
+       "tool": "should_cost_model",
+       "input": {
+        "case_id": "S2-web-reject"
+       },
+       "summary": "Should-cost Rs 273.93 vs quote Rs 284 (3.55% gap)"
+      }
+     ],
+     "findings": [],
+     "decision": "Recommend V-104 Noyyal CNC Engineering Pvt. Ltd. at Rs 284/unit",
+     "highlights": [
+      "Kraljic: Leverage",
+      "Winner 92.34 pts",
+      "Target Rs 273.93"
+     ],
+     "rationale": "Ranking: V-104 Noyyal CNC Engineering Pvt. Ltd.: 92.34 pts, landed Rs 284/unit, lead 21 days | V-102 Tungabhadra Alloy Castings Ltd.: 91.77 pts, landed Rs 318/unit, lead 30 days | V-109 Vaigai Turned Components Pvt. Ltd.: 83.65 pts, landed Rs 282.20/unit, lead 35 days [excluded: lead time misses need-by date]. The cheapest quote (V-109, Rs 282.20/unit) loses on quality, delivery or eligibility, so lowest price is not best value here. Margin over runner-up: 0.57 pts.",
+     "rationale_source": "CrewAI (offline expert LLM)",
+     "guardrail": "passed",
+     "elapsed_ms": 19.5,
+     "crew": [
+      {
+       "agent": "category_manager",
+       "title": "Category Manager",
+       "output": "Kraljic position: Leverage. Annual spend Rs 1.18 crore gives high profit impact; supply-risk score 2 gives low supply risk. Evaluate suppliers with weights: price 40%, quality 25%, delivery 20%, risk 10%, compliance 5%. Strategy levers: Use competitive tension: share the target price and invite a best-and-final offer; Volume consolidation across plants for a tiered price; Trade payment-term flexibility for price only where the annualised maths favours us."
+      },
+      {
+       "agent": "supplier_analyst",
+       "title": "Supplier Performance & Risk Analyst",
+       "output": "Ranking: V-104 Noyyal CNC Engineering Pvt. Ltd.: 92.34 pts, landed Rs 284/unit, lead 21 days | V-102 Tungabhadra Alloy Castings Ltd.: 91.77 pts, landed Rs 318/unit, lead 30 days | V-109 Vaigai Turned Components Pvt. Ltd.: 83.65 pts, landed Rs 282.20/unit, lead 35 days [excluded: lead time misses need-by date]. The cheapest quote (V-109, Rs 282.20/unit) loses on quality, delivery or eligibility, so lowest price is not best value here. Margin over runner-up: 0.57 pts.\nRecommended vendor: V-104"
+      },
+      {
+       "agent": "negotiator",
+       "title": "Negotiation Strategist",
+       "output": "Should-cost Rs 273.93/unit (material Rs 115.20 + conversion Rs 95 + secondary ops Rs 28 + 15% overhead and margin) vs quote Rs 284: gap 3.55%. Verdict: negotiate. Target Rs 273.93/unit, open at Rs 271.19. Value at stake Rs 25,175 on this order, Rs 4,02,800 a year. BATNA: V-102 Tungabhadra Alloy Castings Ltd. at Rs 318/unit landed (91.77 pts). Levers: Use competitive tension: share the target price and invite a best-and-final offer; Volume consolidation across plants for a tiered price; Trade payment-term flexibility for price only where the annualised maths favours us."
+      }
+     ],
+     "engine": "CrewAI (offline expert LLM)",
+     "crew_error": null,
+     "crew_tool_calls": [
+      "kraljic_analysis",
+      "supplier_scorecard",
+      "should_cost_model"
+     ]
+    },
+    {
+     "agent": "approver",
+     "title": "Human Approver (per DoA)",
+     "framework": "LangGraph interrupt (human-in-the-loop)",
+     "mandate": "Accountable human decision at the point of financial commitment.",
+     "tools": [
+      {
+       "tool": "approval_pack",
+       "input": {
+        "case_id": "S2-web-reject"
+       },
+       "summary": "Approve PO to Noyyal CNC Engineering Pvt. Ltd. for Rs 7,10,000 (excl. GST)?"
+      }
+     ],
+     "findings": [],
+     "decision": "REJECTED by Plant Head",
+     "highlights": [
+      "Role required: Plant Head",
+      "Value Rs 7,10,000"
+     ],
+     "rationale": "Hold: re-quote after the drawing revision.",
+     "rationale_source": "human",
+     "guardrail": "n/a",
+     "elapsed_ms": 0.0
+    },
+    {
+     "agent": "controller",
+     "title": "Finance Controller",
+     "framework": "LangGraph node",
+     "mandate": "Summarise the case for the CFO with decisions, risks, money impact and an audit trail.",
+     "tools": [],
+     "findings": [],
+     "decision": "Case closed: REJECTED",
+     "highlights": [
+      "Status REJECTED",
+      "13 tool calls",
+      "1 human touchpoint(s)"
+     ],
+     "rationale": "- Case S2-web-reject - PR-26-0904: EN8 transmission shaft, machined and induction hardened (2,500 nos).\n- Outcome: REJECTED by Plant Head. Hold: re-quote after the drawing revision.",
+     "rationale_source": "offline-template",
+     "guardrail": "n/a",
+     "elapsed_ms": 0.0
+    }
+   ],
+   "status": "REJECTED",
+   "data": {
+    "requisition": {
+     "pr_no": "PR-26-0904",
+     "date": "2026-09-10",
+     "requester": "Priya Nair",
+     "department": "Machining Cell",
+     "cost_center": "CC-PRD-230",
+     "request_text": "Raise PR for 2500 EN8 transmission shafts, machined and induction hardened (drawing SFT-EN8-220), needed by 15 Oct 2026. Expected around Rs 7.4 lakh.",
+     "item": {
+      "code": "SFT-EN8-220",
+      "description": "EN8 transmission shaft, machined and induction hardened",
+      "hsn": "8483",
+      "uom": "nos",
+      "qty": 2500,
+      "need_by": "2026-10-15"
+     },
+     "estimated_value": 740000,
+     "category": "machined components",
+     "criticality": "medium",
+     "annual_volume_qty": 40000,
+     "single_source": false,
+     "justification": null,
+     "hsn": "8483",
+     "spend_class": "Direct material",
+     "days_to_need_by": 35,
+     "parse_method": "offline rule-based parser",
+     "budget": {
+      "remaining": 3730000,
+      "ok": true
+     },
+     "parsed": {
+      "item_description": "Raise PR for 2500 EN8 transmission shafts, machined and induction hardened (drawing SFT-EN8-220), needed by 15 Oct 2026.",
+      "quantity": 2500.0,
+      "uom": "nos",
+      "need_by": "2026-10-15",
+      "estimated_value_inr": 740000.0,
+      "category": "machined components",
+      "urgent": false,
+      "sole_source_claimed": false
+     }
+    },
+    "policy": {
+     "decision": "PROCEED",
+     "approver": "Plant Head",
+     "quote_rule": {
+      "max": 2500000,
+      "min_quotes": 3,
+      "rfq_required": false
+     },
+     "findings": [],
+     "budget": {
+      "ok": true,
+      "cost_center": "CC-PRD-230",
+      "name": "Production - Machining cell",
+      "remaining": 3730000,
+      "issues": []
+     },
+     "split": {
+      "related": [],
+      "combined_value": 740000,
+      "issues": []
+     },
+     "vendor_diligence": {
+      "V-104": {
+       "vendor": "Noyyal CNC Engineering Pvt. Ltd.",
+       "gstin": {
+        "gstin": "33AAFCN6620H1ZN",
+        "format_ok": true,
+        "checksum_ok": true,
+        "state_code": "33",
+        "state": "Tamil Nadu",
+        "pan_in_gstin": "AAFCN6620H",
+        "pan_match": true,
+        "issues": []
+       },
+       "issues": [],
+       "clean": true
+      },
+      "V-102": {
+       "vendor": "Tungabhadra Alloy Castings Ltd.",
+       "gstin": {
+        "gstin": "29AABCT8834R1ZD",
+        "format_ok": true,
+        "checksum_ok": true,
+        "state_code": "29",
+        "state": "Karnataka",
+        "pan_in_gstin": "AABCT8834R",
+        "pan_match": true,
+        "issues": []
+       },
+       "issues": [],
+       "clean": true
+      },
+      "V-109": {
+       "vendor": "Vaigai Turned Components Pvt. Ltd.",
+       "gstin": {
+        "gstin": "33AAGCV5518E1ZH",
+        "format_ok": true,
+        "checksum_ok": true,
+        "state_code": "33",
+        "state": "Tamil Nadu",
+        "pan_in_gstin": "AAGCV5518E",
+        "pan_match": true,
+        "issues": []
+       },
+       "issues": [],
+       "clean": true
+      }
+     },
+     "excluded_vendors": [],
+     "lead_time_risk_vendors": [
+      "V-109"
+     ]
+    },
+    "sourcing": {
+     "kraljic": {
+      "quadrant": "Leverage",
+      "annual_spend": 11789333,
+      "profit_impact": "high",
+      "supply_risk_score": 2,
+      "supply_risk": "low",
+      "weights": {
+       "price": 0.4,
+       "quality": 0.25,
+       "delivery": 0.2,
+       "risk": 0.1,
+       "compliance": 0.05
+      },
+      "levers": [
+       "Use competitive tension: share the target price and invite a best-and-final offer",
+       "Volume consolidation across plants for a tiered price",
+       "Trade payment-term flexibility for price only where the annualised maths favours us"
+      ]
+     },
+     "scorecard": {
+      "ranking": [
+       {
+        "vendor_id": "V-104",
+        "vendor": "Noyyal CNC Engineering Pvt. Ltd.",
+        "unit_price": 284.0,
+        "landed_unit_cost": 284.0,
+        "lead_time_days": 21,
+        "msme": "medium",
+        "state_code": "33",
+        "scores": {
+         "price": 99.37,
+         "quality": 84.75,
+         "delivery": 95.0,
+         "risk": 80.0,
+         "compliance": 88.0
+        },
+        "weighted_total": 92.34,
+        "eligible": true,
+        "note": ""
+       },
+       {
+        "vendor_id": "V-102",
+        "vendor": "Tungabhadra Alloy Castings Ltd.",
+        "unit_price": 318.0,
+        "landed_unit_cost": 318.0,
+        "lead_time_days": 30,
+        "msme": "none",
+        "state_code": "29",
+        "scores": {
+         "price": 88.74,
+         "quality": 89.5,
+         "delivery": 97.0,
+         "risk": 100.0,
+         "compliance": 90.0
+        },
+        "weighted_total": 91.77,
+        "eligible": true,
+        "note": ""
+       },
+       {
+        "vendor_id": "V-109",
+        "vendor": "Vaigai Turned Components Pvt. Ltd.",
+        "unit_price": 279.0,
+        "landed_unit_cost": 282.2,
+        "lead_time_days": 35,
+        "msme": "small",
+        "state_code": "33",
+        "scores": {
+         "price": 100.0,
+         "quality": 65.0,
+         "delivery": 88.0,
+         "risk": 60.0,
+         "compliance": 76.0
+        },
+        "weighted_total": 83.65,
+        "eligible": false,
+        "note": "excluded: lead time misses need-by date"
+       }
+      ],
+      "recommended": {
+       "vendor_id": "V-104",
+       "vendor": "Noyyal CNC Engineering Pvt. Ltd.",
+       "unit_price": 284.0,
+       "landed_unit_cost": 284.0,
+       "lead_time_days": 21,
+       "msme": "medium",
+       "state_code": "33",
+       "scores": {
+        "price": 99.37,
+        "quality": 84.75,
+        "delivery": 95.0,
+        "risk": 80.0,
+        "compliance": 88.0
+       },
+       "weighted_total": 92.34,
+       "eligible": true,
+       "note": ""
+      },
+      "runner_up": {
+       "vendor_id": "V-102",
+       "vendor": "Tungabhadra Alloy Castings Ltd.",
+       "unit_price": 318.0,
+       "landed_unit_cost": 318.0,
+       "lead_time_days": 30,
+       "msme": "none",
+       "state_code": "29",
+       "scores": {
+        "price": 88.74,
+        "quality": 89.5,
+        "delivery": 97.0,
+        "risk": 100.0,
+        "compliance": 90.0
+       },
+       "weighted_total": 91.77,
+       "eligible": true,
+       "note": ""
+      },
+      "cheapest": {
+       "vendor_id": "V-109",
+       "vendor": "Vaigai Turned Components Pvt. Ltd.",
+       "unit_price": 279.0,
+       "landed_unit_cost": 282.2,
+       "lead_time_days": 35,
+       "msme": "small",
+       "state_code": "33",
+       "scores": {
+        "price": 100.0,
+        "quality": 65.0,
+        "delivery": 88.0,
+        "risk": 60.0,
+        "compliance": 76.0
+       },
+       "weighted_total": 83.65,
+       "eligible": false,
+       "note": "excluded: lead time misses need-by date"
+      },
+      "margin_vs_runner_up": 0.57,
+      "weights": {
+       "price": 0.4,
+       "quality": 0.25,
+       "delivery": 0.2,
+       "risk": 0.1,
+       "compliance": 0.05
+      }
+     },
+     "negotiation": {
+      "vendor_id": "V-104",
+      "quoted_unit_price": 284.0,
+      "should_cost": {
+       "material_cost": 115.2,
+       "conversion": 95,
+       "secondary_ops": 28,
+       "overhead_margin_pct": 15,
+       "should_cost": 273.93,
+       "quoted": 284.0,
+       "gap_per_unit": 10.07,
+       "gap_pct": 3.55,
+       "saving_this_order": 25175.0,
+       "saving_annualised": 402800.0,
+       "verdict": "negotiate"
+      },
+      "batna": {
+       "vendor_id": "V-102",
+       "vendor": "Tungabhadra Alloy Castings Ltd.",
+       "landed_unit_cost": 318.0,
+       "weighted_total": 91.77
+      },
+      "levers": [
+       "Use competitive tension: share the target price and invite a best-and-final offer",
+       "Volume consolidation across plants for a tiered price",
+       "Trade payment-term flexibility for price only where the annualised maths favours us"
+      ],
+      "target_unit_price": 273.93,
+      "opening_ask": 271.19
+     },
+     "recommended_vendor": "V-104",
+     "recommended_quote": {
+      "vendor_id": "V-104",
+      "unit_price": 284.0,
+      "freight": 0,
+      "lead_time_days": 21
+     },
+     "engine": "CrewAI (offline expert LLM)",
+     "crew": [
+      {
+       "agent": "category_manager",
+       "title": "Category Manager",
+       "output": "Kraljic position: Leverage. Annual spend Rs 1.18 crore gives high profit impact; supply-risk score 2 gives low supply risk. Evaluate suppliers with weights: price 40%, quality 25%, delivery 20%, risk 10%, compliance 5%. Strategy levers: Use competitive tension: share the target price and invite a best-and-final offer; Volume consolidation across plants for a tiered price; Trade payment-term flexibility for price only where the annualised maths favours us."
+      },
+      {
+       "agent": "supplier_analyst",
+       "title": "Supplier Performance & Risk Analyst",
+       "output": "Ranking: V-104 Noyyal CNC Engineering Pvt. Ltd.: 92.34 pts, landed Rs 284/unit, lead 21 days | V-102 Tungabhadra Alloy Castings Ltd.: 91.77 pts, landed Rs 318/unit, lead 30 days | V-109 Vaigai Turned Components Pvt. Ltd.: 83.65 pts, landed Rs 282.20/unit, lead 35 days [excluded: lead time misses need-by date]. The cheapest quote (V-109, Rs 282.20/unit) loses on quality, delivery or eligibility, so lowest price is not best value here. Margin over runner-up: 0.57 pts.\nRecommended vendor: V-104"
+      },
+      {
+       "agent": "negotiator",
+       "title": "Negotiation Strategist",
+       "output": "Should-cost Rs 273.93/unit (material Rs 115.20 + conversion Rs 95 + secondary ops Rs 28 + 15% overhead and margin) vs quote Rs 284: gap 3.55%. Verdict: negotiate. Target Rs 273.93/unit, open at Rs 271.19. Value at stake Rs 25,175 on this order, Rs 4,02,800 a year. BATNA: V-102 Tungabhadra Alloy Castings Ltd. at Rs 318/unit landed (91.77 pts). Levers: Use competitive tension: share the target price and invite a best-and-final offer; Volume consolidation across plants for a tiered price; Trade payment-term flexibility for price only where the annualised maths favours us."
+      }
+     ]
+    },
+    "approval": {
+     "case_id": "S2-web-reject",
+     "approver_role": "Plant Head",
+     "pr_no": "PR-26-0904",
+     "item": "EN8 transmission shaft, machined and induction hardened",
+     "qty": 2500,
+     "vendor_id": "V-104",
+     "vendor": "Noyyal CNC Engineering Pvt. Ltd.",
+     "po_value_excl_gst": 710000.0,
+     "score": 92.34,
+     "runner_up": "V-102",
+     "kraljic": "Leverage",
+     "warnings": [],
+     "negotiation_target": 273.93,
+     "question": "Approve PO to Noyyal CNC Engineering Pvt. Ltd. for Rs 7,10,000 (excl. GST)?",
+     "approved": false,
+     "approved_by": "Plant Head",
+     "comment": "Hold: re-quote after the drawing revision."
+    },
+    "memo": {
+     "status": "REJECTED",
+     "bullets": [
+      "Case S2-web-reject - PR-26-0904: EN8 transmission shaft, machined and induction hardened (2,500 nos).",
+      "Outcome: REJECTED by Plant Head. Hold: re-quote after the drawing revision."
+     ],
+     "text": "- Case S2-web-reject - PR-26-0904: EN8 transmission shaft, machined and induction hardened (2,500 nos).\n- Outcome: REJECTED by Plant Head. Hold: re-quote after the drawing revision.",
+     "kpis": {
+      "agents_involved": 6,
+      "tool_calls": 13,
+      "controls_flagged": 0,
+      "blocking_controls": 0,
+      "human_touchpoints": 1,
+      "touchless_invoice": false,
+      "agent_processing_ms": 19.8,
+      "po_value_incl_gst": null,
+      "approved_payable": null,
+      "disputed_amount_protected": null,
+      "tds_withheld": null,
+      "itc_claimable": null,
+      "negotiation_value_this_order": 25175.0,
+      "negotiation_value_annual": 402800.0,
+      "msme_interest_accrued": 0.0,
+      "discount_decision": null
+     }
+    }
+   }
+  },
+  "S4-reject": {
+   "id": "S4",
+   "title": "Packaging from a micro enterprise: MSME 45-day clock and TDS threshold",
+   "story": "Logistics replenishes VCI bags from a micro-enterprise supplier on a 30-day written agreement. This purchase pushes the supplier past Rs 50 lakh for the tax year, so TDS starts. Meanwhile an earlier invoice from the same supplier has been stuck in approvals and is already overdue under the MSMED Act.",
+   "learning_points": [
+    "TDS on purchase of goods applies only to the amount above Rs 50 lakh per seller per tax year",
+    "MSMED Act s.15/16: payment due within the agreed term (max 45 days); compound interest at 3x the RBI Bank Rate if late",
+    "Income-tax Act 2025 s.37(2)(g) (old s.43B(h)): late MSE dues are deductible only when paid",
+    "Treasury prioritises statutory deadlines over cash-holding"
+   ],
+   "request_text": "October replenishment: 86000 VCI poly bags 600x900 mm, 50 micron. Need by 10 Oct 2026. Approx Rs 8.6 lakh.",
+   "case_id": "S4-web-reject",
+   "approval_pack": {
+    "case_id": "S4-web-reject",
+    "approver_role": "Plant Head",
+    "pr_no": "PR-26-0972",
+    "item": "VCI poly bags 600 x 900 mm, 50 micron",
+    "qty": 86000,
+    "vendor_id": "V-106",
+    "vendor": "Godavari Packaging Industries",
+    "po_value_excl_gst": 860000.0,
+    "score": 94.1,
+    "runner_up": "V-108",
+    "kraljic": "Non-critical",
+    "warnings": [],
+    "negotiation_target": 10.0,
+    "question": "Approve PO to Godavari Packaging Industries for Rs 8,60,000 (excl. GST)?"
+   },
+   "steps_before_approval": 3,
+   "trace": [
+    {
+     "agent": "intake",
+     "title": "Procurement Analyst",
+     "framework": "LangGraph node",
+     "mandate": "Turn a requester's message into a complete, policy-ready purchase requisition.",
+     "tools": [
+      {
+       "tool": "parse_request",
+       "input": {
+        "text": "October replenishment: 86000 VCI poly bags 600x900 mm, 50 micron. Need by 10 Oct 2026. Approx Rs 8.6 lakh."
+       },
+       "summary": "Extracted qty=86000.0 nos, need-by=2026-10-10, value=Rs 8,60,000, category=packaging (offline rule-based parser)"
+      },
+      {
+       "tool": "budget_check",
+       "input": {
+        "cost_center": "CC-LOG-520",
+        "amount": 860000
+       },
+       "summary": "Logistics - Packaging: remaining Rs 41,70,000 vs request Rs 8,60,000"
+      }
+     ],
+     "findings": [],
+     "decision": "Requisition structured and forwarded to Policy & Compliance",
+     "highlights": [
+      "86,000 nos | Rs 8,60,000",
+      "Indirect - consumables | HSN 3923",
+      "Need-by in 11 days"
+     ],
+     "rationale": "PR-26-0972 is a indirect - consumables request for 86,000 nos of VCI poly bags 600 x 900 mm, 50 micron (HSN 3923), estimated at Rs 8,60,000 and needed in 11 days. Budget on CC-LOG-520 has Rs 41,70,000 available. The request is complete and consistent with the form.",
+     "rationale_source": "offline-template",
+     "guardrail": "n/a",
+     "elapsed_ms": 0.2
+    },
+    {
+     "agent": "policy",
+     "title": "Policy & Compliance Officer",
+     "framework": "LangGraph node",
+     "mandate": "Apply the procurement policy before any money is committed.",
+     "tools": [
+      {
+       "tool": "delegation_of_authority",
+       "input": {
+        "value": 860000
+       },
+       "summary": "Approver for Rs 8,60,000: Plant Head"
+      },
+      {
+       "tool": "competitive_quote_rule",
+       "input": {
+        "value": 860000,
+        "quotes": 3
+       },
+       "summary": "Needs 3 quote(s); received 3"
+      },
+      {
+       "tool": "split_purchase_scan",
+       "input": {
+        "window_days": 30,
+        "history": 0
+       },
+       "summary": "0 related PR(s); combined Rs 8,60,000"
+      },
+      {
+       "tool": "budget_check",
+       "input": {
+        "cost_center": "CC-LOG-520"
+       },
+       "summary": "Remaining Rs 41,70,000; OK"
+      },
+      {
+       "tool": "vendor_due_diligence",
+       "input": {
+        "vendor_id": "V-106"
+       },
+       "summary": "Godavari Packaging Industries: clean"
+      },
+      {
+       "tool": "vendor_due_diligence",
+       "input": {
+        "vendor_id": "V-107"
+       },
+       "summary": "Mula Industrial Supplies: clean"
+      },
+      {
+       "tool": "vendor_due_diligence",
+       "input": {
+        "vendor_id": "V-108"
+       },
+       "summary": "Pavana Polymers Pvt. Ltd.: clean"
+      }
+     ],
+     "findings": [],
+     "decision": "Cleared for sourcing; approver = Plant Head",
+     "highlights": [
+      "Approver: Plant Head",
+      "Findings: 0 block / 0 warn"
+     ],
+     "rationale": "Policy checks passed. Approval authority: Plant Head. No warnings. Excluded from sourcing on lead time: V-107.",
+     "rationale_source": "offline-template",
+     "guardrail": "n/a",
+     "elapsed_ms": 0.1
+    },
+    {
+     "agent": "supplier_analyst",
+     "title": "Sourcing Crew (3 CrewAI agents)",
+     "framework": "CrewAI crew inside a LangGraph node",
+     "mandate": "Rank suppliers on total value, not just price.",
+     "tools": [
+      {
+       "tool": "kraljic_analysis",
+       "input": {
+        "case_id": "S4-web-reject"
+       },
+       "summary": "Non-critical (spend Rs 91,20,000, risk score 1)"
+      },
+      {
+       "tool": "supplier_scorecard",
+       "input": {
+        "case_id": "S4-web-reject"
+       },
+       "summary": "Winner V-106 94.1 pts; runner-up V-108"
+      },
+      {
+       "tool": "should_cost_model",
+       "input": {
+        "case_id": "S4-web-reject"
+       },
+       "summary": "Should-cost Rs 9.97 vs quote Rs 10 (0.3% gap)"
+      }
+     ],
+     "findings": [],
+     "decision": "Recommend V-106 Godavari Packaging Industries at Rs 10/unit",
+     "highlights": [
+      "Kraljic: Non-critical",
+      "Winner 94.1 pts",
+      "Target Rs 10"
+     ],
+     "rationale": "Ranking: V-106 Godavari Packaging Industries: 94.1 pts, landed Rs 10/unit, lead 7 days | V-108 Pavana Polymers Pvt. Ltd.: 86.55 pts, landed Rs 9.80/unit, lead 9 days | V-107 Mula Industrial Supplies: 88.31 pts, landed Rs 10.60/unit, lead 10 days [excluded: lead time misses need-by date]. The cheapest quote (V-108, Rs 9.80/unit) loses on quality, delivery or eligibility, so lowest price is not best value here. Margin over runner-up: 7.55 pts.",
+     "rationale_source": "CrewAI (offline expert LLM)",
+     "guardrail": "passed",
+     "elapsed_ms": 18.1,
+     "crew": [
+      {
+       "agent": "category_manager",
+       "title": "Category Manager",
+       "output": "Kraljic position: Non-critical. Annual spend Rs 91.20 lakh gives low profit impact; supply-risk score 1 gives low supply risk. Evaluate suppliers with weights: price 35%, quality 20%, delivery 25%, risk 10%, compliance 10%. Strategy levers: Rate contract / catalogue buying to cut transaction cost; Bundle with similar items; automate re-orders."
+      },
+      {
+       "agent": "supplier_analyst",
+       "title": "Supplier Performance & Risk Analyst",
+       "output": "Ranking: V-106 Godavari Packaging Industries: 94.1 pts, landed Rs 10/unit, lead 7 days | V-108 Pavana Polymers Pvt. Ltd.: 86.55 pts, landed Rs 9.80/unit, lead 9 days | V-107 Mula Industrial Supplies: 88.31 pts, landed Rs 10.60/unit, lead 10 days [excluded: lead time misses need-by date]. The cheapest quote (V-108, Rs 9.80/unit) loses on quality, delivery or eligibility, so lowest price is not best value here. Margin over runner-up: 7.55 pts.\nRecommended vendor: V-106"
+      },
+      {
+       "agent": "negotiator",
+       "title": "Negotiation Strategist",
+       "output": "Should-cost Rs 9.97/unit (material Rs 6.40 + conversion Rs 1.90 + secondary ops Rs 0.60 + 12% overhead and margin) vs quote Rs 10: gap 0.3%. Verdict: price is fair (within 1% of should-cost). BATNA: V-108 Pavana Polymers Pvt. Ltd. at Rs 9.80/unit landed (86.55 pts). Levers: Rate contract / catalogue buying to cut transaction cost; Bundle with similar items; automate re-orders."
+      }
+     ],
+     "engine": "CrewAI (offline expert LLM)",
+     "crew_error": null,
+     "crew_tool_calls": [
+      "kraljic_analysis",
+      "supplier_scorecard",
+      "should_cost_model"
+     ]
+    },
+    {
+     "agent": "approver",
+     "title": "Human Approver (per DoA)",
+     "framework": "LangGraph interrupt (human-in-the-loop)",
+     "mandate": "Accountable human decision at the point of financial commitment.",
+     "tools": [
+      {
+       "tool": "approval_pack",
+       "input": {
+        "case_id": "S4-web-reject"
+       },
+       "summary": "Approve PO to Godavari Packaging Industries for Rs 8,60,000 (excl. GST)?"
+      }
+     ],
+     "findings": [],
+     "decision": "REJECTED by Plant Head",
+     "highlights": [
+      "Role required: Plant Head",
+      "Value Rs 8,60,000"
+     ],
+     "rationale": "Use existing stock first; re-raise next week.",
+     "rationale_source": "human",
+     "guardrail": "n/a",
+     "elapsed_ms": 0.0
+    },
+    {
+     "agent": "controller",
+     "title": "Finance Controller",
+     "framework": "LangGraph node",
+     "mandate": "Summarise the case for the CFO with decisions, risks, money impact and an audit trail.",
+     "tools": [],
+     "findings": [],
+     "decision": "Case closed: REJECTED",
+     "highlights": [
+      "Status REJECTED",
+      "13 tool calls",
+      "1 human touchpoint(s)"
+     ],
+     "rationale": "- Case S4-web-reject - PR-26-0972: VCI poly bags 600 x 900 mm, 50 micron (86,000 nos).\n- Outcome: REJECTED by Plant Head. Use existing stock first; re-raise next week.",
+     "rationale_source": "offline-template",
+     "guardrail": "n/a",
+     "elapsed_ms": 0.0
+    }
+   ],
+   "status": "REJECTED",
+   "data": {
+    "requisition": {
+     "pr_no": "PR-26-0972",
+     "date": "2026-09-29",
+     "requester": "Sneha Patil",
+     "department": "Logistics - Packaging",
+     "cost_center": "CC-LOG-520",
+     "request_text": "October replenishment: 86000 VCI poly bags 600x900 mm, 50 micron. Need by 10 Oct 2026. Approx Rs 8.6 lakh.",
+     "item": {
+      "code": "PKG-VCI-600900",
+      "description": "VCI poly bags 600 x 900 mm, 50 micron",
+      "hsn": "3923",
+      "uom": "nos",
+      "qty": 86000,
+      "need_by": "2026-10-10"
+     },
+     "estimated_value": 860000,
+     "category": "packaging",
+     "criticality": "low",
+     "annual_volume_qty": 900000,
+     "single_source": false,
+     "justification": null,
+     "hsn": "3923",
+     "spend_class": "Indirect - consumables",
+     "days_to_need_by": 11,
+     "parse_method": "offline rule-based parser",
+     "budget": {
+      "remaining": 4170000,
+      "ok": true
+     },
+     "parsed": {
+      "item_description": "October replenishment: 86000 VCI poly bags 600x900 mm, 50 micron. Need by 10 Oct 2026. Approx Rs 8.6 lakh.",
+      "quantity": 86000.0,
+      "uom": "nos",
+      "need_by": "2026-10-10",
+      "estimated_value_inr": 860000.0,
+      "category": "packaging",
+      "urgent": false,
+      "sole_source_claimed": false
+     }
+    },
+    "policy": {
+     "decision": "PROCEED",
+     "approver": "Plant Head",
+     "quote_rule": {
+      "max": 2500000,
+      "min_quotes": 3,
+      "rfq_required": false
+     },
+     "findings": [],
+     "budget": {
+      "ok": true,
+      "cost_center": "CC-LOG-520",
+      "name": "Logistics - Packaging",
+      "remaining": 4170000,
+      "issues": []
+     },
+     "split": {
+      "related": [],
+      "combined_value": 860000,
+      "issues": []
+     },
+     "vendor_diligence": {
+      "V-106": {
+       "vendor": "Godavari Packaging Industries",
+       "gstin": {
+        "gstin": "27ABJPK7745D1ZI",
+        "format_ok": true,
+        "checksum_ok": true,
+        "state_code": "27",
+        "state": "Maharashtra",
+        "pan_in_gstin": "ABJPK7745D",
+        "pan_match": true,
+        "issues": []
+       },
+       "issues": [],
+       "clean": true
+      },
+      "V-107": {
+       "vendor": "Mula Industrial Supplies",
+       "gstin": {
+        "gstin": "27AAKFM9032B1ZE",
+        "format_ok": true,
+        "checksum_ok": true,
+        "state_code": "27",
+        "state": "Maharashtra",
+        "pan_in_gstin": "AAKFM9032B",
+        "pan_match": true,
+        "issues": []
+       },
+       "issues": [],
+       "clean": true
+      },
+      "V-108": {
+       "vendor": "Pavana Polymers Pvt. Ltd.",
+       "gstin": {
+        "gstin": "27AADCP4410N1ZB",
+        "format_ok": true,
+        "checksum_ok": true,
+        "state_code": "27",
+        "state": "Maharashtra",
+        "pan_in_gstin": "AADCP4410N",
+        "pan_match": true,
+        "issues": []
+       },
+       "issues": [],
+       "clean": true
+      }
+     },
+     "excluded_vendors": [],
+     "lead_time_risk_vendors": [
+      "V-107"
+     ]
+    },
+    "sourcing": {
+     "kraljic": {
+      "quadrant": "Non-critical",
+      "annual_spend": 9120000,
+      "profit_impact": "low",
+      "supply_risk_score": 1,
+      "supply_risk": "low",
+      "weights": {
+       "price": 0.35,
+       "quality": 0.2,
+       "delivery": 0.25,
+       "risk": 0.1,
+       "compliance": 0.1
+      },
+      "levers": [
+       "Rate contract / catalogue buying to cut transaction cost",
+       "Bundle with similar items; automate re-orders"
+      ]
+     },
+     "scorecard": {
+      "ranking": [
+       {
+        "vendor_id": "V-106",
+        "vendor": "Godavari Packaging Industries",
+        "unit_price": 10.0,
+        "landed_unit_cost": 10.0,
+        "lead_time_days": 7,
+        "msme": "micro",
+        "state_code": "27",
+        "scores": {
+         "price": 98.0,
+         "quality": 92.5,
+         "delivery": 98.0,
+         "risk": 80.0,
+         "compliance": 88.0
+        },
+        "weighted_total": 94.1,
+        "eligible": true,
+        "note": ""
+       },
+       {
+        "vendor_id": "V-108",
+        "vendor": "Pavana Polymers Pvt. Ltd.",
+        "unit_price": 9.8,
+        "landed_unit_cost": 9.8,
+        "lead_time_days": 9,
+        "msme": "small",
+        "state_code": "27",
+        "scores": {
+         "price": 100.0,
+         "quality": 77.5,
+         "delivery": 89.0,
+         "risk": 60.0,
+         "compliance": 78.0
+        },
+        "weighted_total": 86.55,
+        "eligible": true,
+        "note": ""
+       },
+       {
+        "vendor_id": "V-107",
+        "vendor": "Mula Industrial Supplies",
+        "unit_price": 10.6,
+        "landed_unit_cost": 10.6,
+        "lead_time_days": 10,
+        "msme": "small",
+        "state_code": "27",
+        "scores": {
+         "price": 92.45,
+         "quality": 83.75,
+         "delivery": 92.0,
+         "risk": 80.0,
+         "compliance": 82.0
+        },
+        "weighted_total": 88.31,
+        "eligible": false,
+        "note": "excluded: lead time misses need-by date"
+       }
+      ],
+      "recommended": {
+       "vendor_id": "V-106",
+       "vendor": "Godavari Packaging Industries",
+       "unit_price": 10.0,
+       "landed_unit_cost": 10.0,
+       "lead_time_days": 7,
+       "msme": "micro",
+       "state_code": "27",
+       "scores": {
+        "price": 98.0,
+        "quality": 92.5,
+        "delivery": 98.0,
+        "risk": 80.0,
+        "compliance": 88.0
+       },
+       "weighted_total": 94.1,
+       "eligible": true,
+       "note": ""
+      },
+      "runner_up": {
+       "vendor_id": "V-108",
+       "vendor": "Pavana Polymers Pvt. Ltd.",
+       "unit_price": 9.8,
+       "landed_unit_cost": 9.8,
+       "lead_time_days": 9,
+       "msme": "small",
+       "state_code": "27",
+       "scores": {
+        "price": 100.0,
+        "quality": 77.5,
+        "delivery": 89.0,
+        "risk": 60.0,
+        "compliance": 78.0
+       },
+       "weighted_total": 86.55,
+       "eligible": true,
+       "note": ""
+      },
+      "cheapest": {
+       "vendor_id": "V-108",
+       "vendor": "Pavana Polymers Pvt. Ltd.",
+       "unit_price": 9.8,
+       "landed_unit_cost": 9.8,
+       "lead_time_days": 9,
+       "msme": "small",
+       "state_code": "27",
+       "scores": {
+        "price": 100.0,
+        "quality": 77.5,
+        "delivery": 89.0,
+        "risk": 60.0,
+        "compliance": 78.0
+       },
+       "weighted_total": 86.55,
+       "eligible": true,
+       "note": ""
+      },
+      "margin_vs_runner_up": 7.55,
+      "weights": {
+       "price": 0.35,
+       "quality": 0.2,
+       "delivery": 0.25,
+       "risk": 0.1,
+       "compliance": 0.1
+      }
+     },
+     "negotiation": {
+      "vendor_id": "V-106",
+      "quoted_unit_price": 10.0,
+      "should_cost": {
+       "material_cost": 6.4,
+       "conversion": 1.9,
+       "secondary_ops": 0.6,
+       "overhead_margin_pct": 12,
+       "should_cost": 9.97,
+       "quoted": 10.0,
+       "gap_per_unit": 0.03,
+       "gap_pct": 0.3,
+       "saving_this_order": 0.0,
+       "saving_annualised": 0.0,
+       "verdict": "price is fair (within 1% of should-cost)"
+      },
+      "batna": {
+       "vendor_id": "V-108",
+       "vendor": "Pavana Polymers Pvt. Ltd.",
+       "landed_unit_cost": 9.8,
+       "weighted_total": 86.55
+      },
+      "levers": [
+       "Rate contract / catalogue buying to cut transaction cost",
+       "Bundle with similar items; automate re-orders"
+      ],
+      "target_unit_price": 10.0,
+      "opening_ask": null
+     },
+     "recommended_vendor": "V-106",
+     "recommended_quote": {
+      "vendor_id": "V-106",
+      "unit_price": 10.0,
+      "freight": 0,
+      "lead_time_days": 7
+     },
+     "engine": "CrewAI (offline expert LLM)",
+     "crew": [
+      {
+       "agent": "category_manager",
+       "title": "Category Manager",
+       "output": "Kraljic position: Non-critical. Annual spend Rs 91.20 lakh gives low profit impact; supply-risk score 1 gives low supply risk. Evaluate suppliers with weights: price 35%, quality 20%, delivery 25%, risk 10%, compliance 10%. Strategy levers: Rate contract / catalogue buying to cut transaction cost; Bundle with similar items; automate re-orders."
+      },
+      {
+       "agent": "supplier_analyst",
+       "title": "Supplier Performance & Risk Analyst",
+       "output": "Ranking: V-106 Godavari Packaging Industries: 94.1 pts, landed Rs 10/unit, lead 7 days | V-108 Pavana Polymers Pvt. Ltd.: 86.55 pts, landed Rs 9.80/unit, lead 9 days | V-107 Mula Industrial Supplies: 88.31 pts, landed Rs 10.60/unit, lead 10 days [excluded: lead time misses need-by date]. The cheapest quote (V-108, Rs 9.80/unit) loses on quality, delivery or eligibility, so lowest price is not best value here. Margin over runner-up: 7.55 pts.\nRecommended vendor: V-106"
+      },
+      {
+       "agent": "negotiator",
+       "title": "Negotiation Strategist",
+       "output": "Should-cost Rs 9.97/unit (material Rs 6.40 + conversion Rs 1.90 + secondary ops Rs 0.60 + 12% overhead and margin) vs quote Rs 10: gap 0.3%. Verdict: price is fair (within 1% of should-cost). BATNA: V-108 Pavana Polymers Pvt. Ltd. at Rs 9.80/unit landed (86.55 pts). Levers: Rate contract / catalogue buying to cut transaction cost; Bundle with similar items; automate re-orders."
+      }
+     ]
+    },
+    "approval": {
+     "case_id": "S4-web-reject",
+     "approver_role": "Plant Head",
+     "pr_no": "PR-26-0972",
+     "item": "VCI poly bags 600 x 900 mm, 50 micron",
+     "qty": 86000,
+     "vendor_id": "V-106",
+     "vendor": "Godavari Packaging Industries",
+     "po_value_excl_gst": 860000.0,
+     "score": 94.1,
+     "runner_up": "V-108",
+     "kraljic": "Non-critical",
+     "warnings": [],
+     "negotiation_target": 10.0,
+     "question": "Approve PO to Godavari Packaging Industries for Rs 8,60,000 (excl. GST)?",
+     "approved": false,
+     "approved_by": "Plant Head",
+     "comment": "Use existing stock first; re-raise next week."
+    },
+    "memo": {
+     "status": "REJECTED",
+     "bullets": [
+      "Case S4-web-reject - PR-26-0972: VCI poly bags 600 x 900 mm, 50 micron (86,000 nos).",
+      "Outcome: REJECTED by Plant Head. Use existing stock first; re-raise next week."
+     ],
+     "text": "- Case S4-web-reject - PR-26-0972: VCI poly bags 600 x 900 mm, 50 micron (86,000 nos).\n- Outcome: REJECTED by Plant Head. Use existing stock first; re-raise next week.",
+     "kpis": {
+      "agents_involved": 6,
+      "tool_calls": 13,
+      "controls_flagged": 0,
+      "blocking_controls": 0,
+      "human_touchpoints": 1,
+      "touchless_invoice": false,
+      "agent_processing_ms": 18.4,
+      "po_value_incl_gst": null,
+      "approved_payable": null,
+      "disputed_amount_protected": null,
+      "tds_withheld": null,
+      "itc_claimable": null,
+      "negotiation_value_this_order": 0.0,
+      "negotiation_value_annual": 0.0,
+      "msme_interest_accrued": 0.0,
+      "discount_decision": null
+     }
+    }
+   }
+  }
+ }
+}

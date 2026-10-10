@@ -1,0 +1,64 @@
+{
+  "id": "S1",
+  "title": "Die-cast gearbox housings: clean end-to-end run",
+  "story": "Production needs 4,000 aluminium die-cast housings. Three suppliers quoted. The cheapest supplier has poor quality and delivery, so the agents must pick on total value, not price. Goods arrive and the invoice matches.",
+  "learning_points": [
+    "Weighted supplier scorecard beats lowest-price buying for a strategic item",
+    "Inter-state purchase: IGST, e-invoice IRN check, TDS on goods above the Rs 50 lakh threshold",
+    "Treasury declines an early-payment discount whose annualised return is below the cost of funds"
+  ],
+  "requisition": {
+    "pr_no": "PR-26-0871",
+    "date": "2026-09-01",
+    "requester": "Anil Deshmukh",
+    "department": "Production Planning",
+    "cost_center": "CC-PRD-210",
+    "request_text": "Need 4000 nos aluminium die-cast gearbox housings (ADC12, part HSG-ADC12-GB04) for the Q3 build plan, required by 5 Oct 2026. Budget about Rs 19 lakh. Line-stopper part.",
+    "item": {"code": "HSG-ADC12-GB04", "description": "Aluminium die-cast gearbox housing, ADC12, machined", "hsn": "7616", "uom": "nos", "qty": 4000, "need_by": "2026-10-05"},
+    "estimated_value": 1900000,
+    "category": "aluminium castings",
+    "criticality": "high",
+    "annual_volume_qty": 48000,
+    "single_source": false,
+    "justification": null
+  },
+  "quotes": [
+    {"vendor_id": "V-101", "unit_price": 452.0, "freight": 0, "lead_time_days": 25},
+    {"vendor_id": "V-102", "unit_price": 438.0, "freight": 22000, "lead_time_days": 28},
+    {"vendor_id": "V-103", "unit_price": 415.0, "freight": 30000, "lead_time_days": 21}
+  ],
+  "should_cost": {"material_kg": 0.95, "material_rate_per_kg": 238, "conversion": 120, "secondary_ops": 40, "overhead_margin_pct": 12},
+  "pr_history": [],
+  "po_date": "2026-09-04",
+  "grn": {"grn_no": "GRN-26-10-0112", "received_date": "2026-10-01", "accepted_date": "2026-10-03", "received_qty": 4000, "accepted_qty": 4000, "rejected_qty": 0, "remarks": "Dimensional and porosity checks OK"},
+  "invoice": {
+    "invoice_no": "TAC/26-27/04417",
+    "vendor_id": "V-102",
+    "date": "2026-10-01",
+    "received_on": "2026-10-02",
+    "supplier_gstin": "29AABCT8834R1ZD",
+    "buyer_gstin": "27AAKCM4821Q1ZU",
+    "place_of_supply": "27",
+    "lines": [{"hsn": "7616", "qty": 4000, "unit_price": 438.0}],
+    "freight": 22000,
+    "igst": 319320.0, "cgst": 0, "sgst": 0,
+    "total": 2093320.0,
+    "irn": "a3f1c09e7b5d4e2f9c8a61d0b4e7f3a29c5d8e1f0a7b6c4d3e2f1a0b9c8d7e6f",
+    "irn_date": "2026-10-01",
+    "bank_account_masked": "XXXXXX0928",
+    "in_gstr2b": true
+  },
+  "invoice_history": [
+    {"vendor_id": "V-102", "invoice_no": "TAC/26-27/03981", "date": "2026-08-18", "total": 1650240.0}
+  ],
+  "open_payables": [],
+  "expected": {
+    "final_status": "COMPLETED",
+    "vendor": "V-102",
+    "approver": "CFO",
+    "exceptions": [],
+    "tds_amount": 1774,
+    "pay_on": "2026-11-30",
+    "take_discount": false
+  }
+}

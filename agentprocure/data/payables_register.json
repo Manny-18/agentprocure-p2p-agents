@@ -1,0 +1,10 @@
+{
+  "note": "Open AP items used by the daily MSME payment watch (n8n -> GET /alerts/msme). Fictional.",
+  "items": [
+    {"vendor_id": "V-106", "invoice_no": "GPI/26-27/279", "invoice_date": "2026-08-26", "accepted_date": "2026-08-28", "taxable": 640000.0, "total": 755200.0, "status": "unpaid - stuck awaiting PO amendment approval"},
+    {"vendor_id": "V-101", "invoice_no": "DPC/2627/0577", "invoice_date": "2026-08-27", "accepted_date": "2026-08-29", "taxable": 912000.0, "total": 1076160.0, "status": "approved - in next payment run"},
+    {"vendor_id": "V-107", "invoice_no": "MIS-26-1094", "invoice_date": "2026-09-01", "accepted_date": "2026-09-02", "taxable": 148500.0, "total": 175230.0, "status": "unpaid - awaiting GRN correction"},
+    {"vendor_id": "V-104", "invoice_no": "NCE/2627/1050", "invoice_date": "2026-09-05", "accepted_date": "2026-09-08", "taxable": 433000.0, "total": 510940.0, "status": "approved"},
+    {"vendor_id": "V-108", "invoice_no": "PPL/26/0412", "invoice_date": "2026-09-28", "accepted_date": "2026-09-30", "taxable": 286000.0, "total": 337480.0, "status": "approved"}
+  ]
+}

@@ -1,0 +1,393 @@
+[
+  {
+    "id": "E01",
+    "case": "S1 baseline: clean strategic buy",
+    "expected": "COMPLETED",
+    "actual": "COMPLETED",
+    "status_ok": true,
+    "controls_expected": [],
+    "controls_fired": [],
+    "controls_ok": true,
+    "values_ok": true,
+    "values": [
+      "tax.tds.tds_amount=1774"
+    ],
+    "pass": true
+  },
+  {
+    "id": "E02",
+    "case": "Invoice price +0.8% (inside 1% tolerance)",
+    "expected": "COMPLETED",
+    "actual": "COMPLETED",
+    "status_ok": true,
+    "controls_expected": [],
+    "controls_fired": [],
+    "controls_ok": true,
+    "values_ok": true,
+    "values": [],
+    "pass": true
+  },
+  {
+    "id": "E03",
+    "case": "Invoice price +1.5% (outside tolerance)",
+    "expected": "COMPLETED_WITH_HOLD",
+    "actual": "COMPLETED_WITH_HOLD",
+    "status_ok": true,
+    "controls_expected": [
+      "PRICE_VARIANCE"
+    ],
+    "controls_fired": [
+      "PRICE_VARIANCE"
+    ],
+    "controls_ok": true,
+    "values_ok": true,
+    "values": [
+      "ap.match.approved_total=2093320.0"
+    ],
+    "pass": true
+  },
+  {
+    "id": "E04",
+    "case": "Large supplier invoice without IRN",
+    "expected": "ON_HOLD",
+    "actual": "ON_HOLD",
+    "status_ok": true,
+    "controls_expected": [
+      "IRN_MISSING"
+    ],
+    "controls_fired": [
+      "IRN_MISSING"
+    ],
+    "controls_ok": true,
+    "values_ok": true,
+    "values": [],
+    "pass": true
+  },
+  {
+    "id": "E05",
+    "case": "IRN generated 35 days after invoice date",
+    "expected": "ON_HOLD",
+    "actual": "ON_HOLD",
+    "status_ok": true,
+    "controls_expected": [
+      "IRN_LATE"
+    ],
+    "controls_fired": [
+      "IRN_LATE"
+    ],
+    "controls_ok": true,
+    "values_ok": true,
+    "values": [],
+    "pass": true
+  },
+  {
+    "id": "E06",
+    "case": "Inter-state invoice billed as CGST+SGST",
+    "expected": "ON_HOLD",
+    "actual": "ON_HOLD",
+    "status_ok": true,
+    "controls_expected": [
+      "WRONG_TAX_TYPE"
+    ],
+    "controls_fired": [
+      "TAX_AMOUNT_MISMATCH",
+      "WRONG_TAX_TYPE"
+    ],
+    "controls_ok": true,
+    "values_ok": true,
+    "values": [],
+    "pass": true
+  },
+  {
+    "id": "E07",
+    "case": "Same invoice already booked (number formatted differently)",
+    "expected": "ON_HOLD",
+    "actual": "ON_HOLD",
+    "status_ok": true,
+    "controls_expected": [
+      "DUPLICATE_INVOICE"
+    ],
+    "controls_fired": [
+      "DUPLICATE_INVOICE"
+    ],
+    "controls_ok": true,
+    "values_ok": true,
+    "values": [],
+    "pass": true
+  },
+  {
+    "id": "E08",
+    "case": "Bank account on invoice differs from master",
+    "expected": "ON_HOLD",
+    "actual": "ON_HOLD",
+    "status_ok": true,
+    "controls_expected": [
+      "BANK_ON_INVOICE_DIFFERS"
+    ],
+    "controls_fired": [
+      "BANK_ON_INVOICE_DIFFERS"
+    ],
+    "controls_ok": true,
+    "values_ok": true,
+    "values": [],
+    "pass": true
+  },
+  {
+    "id": "E09",
+    "case": "CFO rejects at approval",
+    "expected": "REJECTED",
+    "actual": "REJECTED",
+    "status_ok": true,
+    "controls_expected": [],
+    "controls_fired": [],
+    "controls_ok": true,
+    "values_ok": true,
+    "values": [],
+    "pass": true
+  },
+  {
+    "id": "E10",
+    "case": "Only two quotes for a Rs 19 lakh buy",
+    "expected": "ESCALATED",
+    "actual": "ESCALATED",
+    "status_ok": true,
+    "controls_expected": [
+      "QUOTES_INSUFFICIENT"
+    ],
+    "controls_fired": [
+      "QUOTES_INSUFFICIENT"
+    ],
+    "controls_ok": true,
+    "values_ok": true,
+    "values": [],
+    "pass": true
+  },
+  {
+    "id": "E11",
+    "case": "Cost center budget nearly exhausted",
+    "expected": "ESCALATED",
+    "actual": "ESCALATED",
+    "status_ok": true,
+    "controls_expected": [
+      "BUDGET_EXCEEDED"
+    ],
+    "controls_fired": [
+      "BUDGET_EXCEEDED"
+    ],
+    "controls_ok": true,
+    "values_ok": true,
+    "values": [],
+    "pass": true
+  },
+  {
+    "id": "E12",
+    "case": "S2 baseline: price variance + QC rejection",
+    "expected": "COMPLETED_WITH_HOLD",
+    "actual": "COMPLETED_WITH_HOLD",
+    "status_ok": true,
+    "controls_expected": [
+      "PRICE_VARIANCE",
+      "QTY_EXCEEDS_ACCEPTED"
+    ],
+    "controls_fired": [
+      "PRICE_VARIANCE",
+      "QTY_EXCEEDS_ACCEPTED"
+    ],
+    "controls_ok": true,
+    "values_ok": true,
+    "values": [
+      "ap.match.disputed_total=67059.4"
+    ],
+    "pass": true
+  },
+  {
+    "id": "E13",
+    "case": "S2 with correct price and no rejection",
+    "expected": "COMPLETED",
+    "actual": "COMPLETED",
+    "status_ok": true,
+    "controls_expected": [],
+    "controls_fired": [],
+    "controls_ok": true,
+    "values_ok": true,
+    "values": [
+      "ap.match.approved_total=837800.0"
+    ],
+    "pass": true
+  },
+  {
+    "id": "E14",
+    "case": "Invoice arrives with no goods receipt",
+    "expected": "ON_HOLD",
+    "actual": "ON_HOLD",
+    "status_ok": true,
+    "controls_expected": [
+      "MISSING_GRN"
+    ],
+    "controls_fired": [
+      "MISSING_GRN",
+      "PRICE_VARIANCE",
+      "QTY_EXCEEDS_ACCEPTED"
+    ],
+    "controls_ok": true,
+    "values_ok": true,
+    "values": [],
+    "pass": true
+  },
+  {
+    "id": "E15",
+    "case": "S3 baseline: split purchase + vendor red flags",
+    "expected": "ESCALATED",
+    "actual": "ESCALATED",
+    "status_ok": true,
+    "controls_expected": [
+      "GSTIN_CHECKSUM_INVALID",
+      "PAN_MISMATCH",
+      "BANK_CHANGE_UNVERIFIED",
+      "SPLIT_PURCHASE_SUSPECTED"
+    ],
+    "controls_fired": [
+      "BANK_CHANGE_UNVERIFIED",
+      "BUDGET_AT_RISK",
+      "GSTIN_CHECKSUM_INVALID",
+      "PAN_MISMATCH",
+      "QUOTES_INSUFFICIENT",
+      "SINGLE_SOURCE_WEAK_JUSTIFICATION",
+      "SOLE_SOURCE_CLAIMED",
+      "SPLIT_PURCHASE_SUSPECTED",
+      "URGENCY_LANGUAGE"
+    ],
+    "controls_ok": true,
+    "values_ok": true,
+    "values": [],
+    "pass": true
+  },
+  {
+    "id": "E16",
+    "case": "S3 after vendor KYC is fixed: split purchase alone still blocks",
+    "expected": "ESCALATED",
+    "actual": "ESCALATED",
+    "status_ok": true,
+    "controls_expected": [
+      "SPLIT_PURCHASE_SUSPECTED"
+    ],
+    "controls_fired": [
+      "BUDGET_AT_RISK",
+      "QUOTES_INSUFFICIENT",
+      "SINGLE_SOURCE_WEAK_JUSTIFICATION",
+      "SOLE_SOURCE_CLAIMED",
+      "SPLIT_PURCHASE_SUSPECTED",
+      "URGENCY_LANGUAGE"
+    ],
+    "controls_ok": true,
+    "values_ok": true,
+    "values": [],
+    "pass": true
+  },
+  {
+    "id": "E17",
+    "case": "S4 baseline: TDS threshold crossing + overdue MSME invoice",
+    "expected": "COMPLETED",
+    "actual": "COMPLETED",
+    "status_ok": true,
+    "controls_expected": [
+      "MSME_OVERDUE"
+    ],
+    "controls_fired": [
+      "MSME_OVERDUE"
+    ],
+    "controls_ok": true,
+    "values_ok": true,
+    "values": [
+      "tax.tds.tds_amount=480"
+    ],
+    "pass": true
+  },
+  {
+    "id": "E18",
+    "case": "S4 supplier still below Rs 50 lakh for the year",
+    "expected": "COMPLETED",
+    "actual": "COMPLETED",
+    "status_ok": true,
+    "controls_expected": [],
+    "controls_fired": [
+      "MSME_OVERDUE"
+    ],
+    "controls_ok": true,
+    "values_ok": true,
+    "values": [
+      "tax.tds.tds_amount=0"
+    ],
+    "pass": true
+  },
+  {
+    "id": "E19",
+    "case": "S4 supplier without PAN on record (5% TDS rate)",
+    "expected": "COMPLETED",
+    "actual": "COMPLETED",
+    "status_ok": true,
+    "controls_expected": [
+      "PAN_NOT_ON_MASTER",
+      "TDS_HIGHER_RATE_NO_PAN"
+    ],
+    "controls_fired": [
+      "MSME_OVERDUE",
+      "PAN_NOT_ON_MASTER",
+      "TDS_HIGHER_RATE_NO_PAN"
+    ],
+    "controls_ok": true,
+    "values_ok": true,
+    "values": [
+      "tax.tds.tds_amount=24000"
+    ],
+    "pass": true
+  },
+  {
+    "id": "E20",
+    "case": "S4 with no overdue MSME items",
+    "expected": "COMPLETED",
+    "actual": "COMPLETED",
+    "status_ok": true,
+    "controls_expected": [],
+    "controls_fired": [],
+    "controls_ok": true,
+    "values_ok": true,
+    "values": [
+      "memo.kpis.msme_interest_accrued=0.0"
+    ],
+    "pass": true
+  },
+  {
+    "id": "E21",
+    "case": "Early-payment discount worth more than cost of funds",
+    "expected": "COMPLETED",
+    "actual": "COMPLETED",
+    "status_ok": true,
+    "controls_expected": [],
+    "controls_fired": [],
+    "controls_ok": true,
+    "values_ok": true,
+    "values": [
+      "treasury.plan.take_discount=True"
+    ],
+    "pass": true
+  },
+  {
+    "id": "E22",
+    "case": "Medium enterprise is outside the MSMED 45-day rule",
+    "expected": "COMPLETED_WITH_HOLD",
+    "actual": "COMPLETED_WITH_HOLD",
+    "status_ok": true,
+    "controls_expected": [],
+    "controls_fired": [
+      "PRICE_VARIANCE",
+      "QTY_EXCEEDS_ACCEPTED"
+    ],
+    "controls_ok": true,
+    "values_ok": true,
+    "values": [
+      "treasury.plan.msme.covered=False"
+    ],
+    "pass": true
+  }
+]

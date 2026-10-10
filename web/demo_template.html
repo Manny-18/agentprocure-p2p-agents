@@ -1,0 +1,946 @@
+<title>AgentProcure</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500..800&family=IBM+Plex+Mono:wght@400;500&family=Public+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<style>
+/* Layout: a P2P "case desk" - sticky top bar and section tabs; case folders; pipeline rail on the left,
+   the selected agent's working sheet on the right; labs and briefings as card grids below. */
+:root {
+  --paper: #eceff4;
+  --sheet: #ffffff;
+  --sheet-2: #f6f7fa;
+  --ink: #18202d;
+  --muted: #586274;
+  --rule: #d3d9e2;
+  --carbon: #2a44c4;
+  --carbon-soft: #e4e9fb;
+  --ok: #1b7548;
+  --ok-soft: #ddf0e5;
+  --hold: #9a5d06;
+  --hold-soft: #f9ecd3;
+  --block: #bb3127;
+  --block-soft: #fadfdb;
+  --tint-pink: #f7e1e6;
+  --tint-yellow: #f8efc6;
+  --shadow: 0 1px 2px rgba(24, 32, 45, .06), 0 4px 14px rgba(24, 32, 45, .06);
+  --f-display: "Archivo", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
+  --f-body: "Public Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --step--1: .8125rem;
+  --step-0: .9375rem;
+  --step-1: 1.125rem;
+  --step-2: 1.4rem;
+  --step-3: 2rem;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0e131b; --sheet: #151c27; --sheet-2: #1a2230; --ink: #e5eaf2; --muted: #9ba6b8; --rule: #2a3445;
+    --carbon: #93a4ff; --carbon-soft: #1f2846; --ok: #56c892; --ok-soft: #15301f; --hold: #e7b453; --hold-soft: #352a12;
+    --block: #ff8174; --block-soft: #3a1c19; --tint-pink: #3a232a; --tint-yellow: #36301a;
+    --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 6px 18px rgba(0, 0, 0, .25);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #0e131b; --sheet: #151c27; --sheet-2: #1a2230; --ink: #e5eaf2; --muted: #9ba6b8; --rule: #2a3445;
+  --carbon: #93a4ff; --carbon-soft: #1f2846; --ok: #56c892; --ok-soft: #15301f; --hold: #e7b453; --hold-soft: #352a12;
+  --block: #ff8174; --block-soft: #3a1c19; --tint-pink: #3a232a; --tint-yellow: #36301a;
+  --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 6px 18px rgba(0, 0, 0, .25);
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--paper); color: var(--ink); font-family: var(--f-body); font-size: var(--step-0); line-height: 1.55; }
+h1, h2, h3, h4 { font-family: var(--f-display); text-wrap: balance; margin: 0; line-height: 1.15; }
+p { margin: 0; }
+button, input, select, textarea { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--carbon); outline-offset: 2px; }
+.mono { font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
+.muted { color: var(--muted); }
+.wrap { max-width: 1240px; margin: 0 auto; padding-inline: clamp(16px, 3vw, 32px); }
+
+/* top bar */
+.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 10; background: var(--sheet); border-bottom: 1px solid var(--rule); }
+.top .wrap { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; padding-block: 12px; }
+.brand { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.brand b { font-family: var(--f-display); font-weight: 800; font-stretch: 112%; font-size: 1.35rem; letter-spacing: -.01em; }
+.brand b span { color: var(--carbon); }
+.brand small { color: var(--muted); font-size: var(--step--1); }
+@media (max-width: 1100px) { .brand small { display: none; } }
+.tabs { display: flex; gap: 4px; margin-left: auto; flex-wrap: wrap; }
+.tab { border: 1px solid transparent; background: none; padding: 7px 12px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: var(--step--1); color: var(--muted); }
+.tab:hover { color: var(--ink); background: var(--sheet-2); }
+.tab[aria-selected="true"] { color: var(--carbon); background: var(--carbon-soft); }
+
+main { padding-block: 28px 64px; }
+section.view { display: grid; gap: 22px; }
+
+/* hero line */
+.lede { display: grid; gap: 10px; max-width: 78ch; }
+.eyebrow { font-family: var(--f-display); font-stretch: 80%; font-weight: 700; text-transform: uppercase; letter-spacing: .12em; font-size: .78rem; color: var(--carbon); }
+.lede h1 { font-size: clamp(1.6rem, 1.1rem + 2vw, 2.4rem); font-weight: 800; font-stretch: 92%; }
+.lede p { color: var(--muted); max-width: 70ch; }
+
+/* case folders */
+.folders { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.folder { text-align: left; border: 1px solid var(--rule); background: var(--sheet); border-radius: 10px 10px 6px 6px; padding: 12px 14px 14px; cursor: pointer; display: grid; gap: 6px; position: relative; min-width: 0; }
+.folder:hover { border-color: var(--carbon); }
+.folder[aria-pressed="true"] { border-color: var(--carbon); box-shadow: inset 0 3px 0 var(--carbon); }
+.folder .fid { font-family: var(--f-mono); font-size: var(--step--1); color: var(--muted); }
+.folder .ftitle { font-weight: 600; line-height: 1.3; font-size: var(--step--1); }
+.stamp { font-family: var(--f-display); font-stretch: 72%; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; font-size: .72rem;
+  border: 2px solid currentColor; border-radius: 3px; padding: .1em .45em; display: inline-block; transform: rotate(-3deg); width: max-content; max-width: 100%; line-height: 1.5; }
+.st-ok { color: var(--ok); } .st-hold { color: var(--hold); } .st-block { color: var(--block); } .st-info { color: var(--carbon); }
+.stamp.big { font-size: 1.05rem; border-width: 3px; transform: rotate(-5deg); }
+
+/* case head */
+.casehead { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 18px; align-items: start; }
+.casehead .story { display: grid; gap: 10px; }
+.casehead h2 { font-size: var(--step-2); font-weight: 750; font-stretch: 95%; }
+.slip { background: var(--sheet); border: 1px dashed var(--muted); border-radius: 4px; padding: 12px 14px; display: grid; gap: 6px; font-size: var(--step--1); }
+.slip .lbl { font-family: var(--f-display); font-stretch: 75%; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; font-size: .7rem; color: var(--muted); display: flex; justify-content: space-between; gap: 8px; }
+.slip q { font-family: var(--f-mono); quotes: none; display: block; line-height: 1.5; }
+.learn { margin: 0; padding-left: 18px; color: var(--muted); font-size: var(--step--1); display: grid; gap: 2px; }
+
+/* controls */
+.controls { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.btn { border: 1px solid var(--rule); background: var(--sheet); border-radius: 6px; padding: 8px 14px; font-weight: 600; cursor: pointer; font-size: var(--step--1); }
+.btn:hover:not(:disabled) { border-color: var(--carbon); color: var(--carbon); }
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+.btn.primary { background: var(--carbon); color: var(--sheet); border-color: var(--carbon); }
+.btn.primary:hover:not(:disabled) { color: var(--sheet); filter: brightness(1.08); }
+.btn.approve { background: var(--ok); border-color: var(--ok); color: var(--sheet); }
+.btn.reject { background: var(--sheet); border-color: var(--block); color: var(--block); }
+.progress { font-family: var(--f-mono); font-size: var(--step--1); color: var(--muted); margin-left: auto; }
+
+/* desk grid */
+.desk { display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 18px; align-items: start; }
+.rail { background: var(--sheet); border: 1px solid var(--rule); border-radius: 10px; padding: 10px; display: grid; gap: 2px; position: sticky; top: calc(env(safe-area-inset-top, 0px) + 76px); }
+.node { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 10px; align-items: start; padding: 8px 8px; border-radius: 7px; border: 1px solid transparent; background: none; text-align: left; cursor: pointer; position: relative; width: 100%; }
+.node:disabled { cursor: default; }
+.node .dot { width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--rule); margin-top: 3px; margin-left: 4px; background: var(--sheet); position: relative; z-index: 1; }
+.node:not(:last-child)::after { content: ""; position: absolute; left: 18px; top: 24px; bottom: -6px; width: 2px; background: var(--rule); }
+.node .nt { font-weight: 600; font-size: var(--step--1); line-height: 1.3; }
+.node .nf { font-family: var(--f-mono); font-size: .72rem; color: var(--muted); }
+.node .nd { font-size: .78rem; color: var(--muted); line-height: 1.35; margin-top: 2px; }
+.node.done .dot { background: var(--carbon); border-color: var(--carbon); }
+.node.done.v-ok .dot { background: var(--ok); border-color: var(--ok); }
+.node.done.v-hold .dot { background: var(--hold); border-color: var(--hold); }
+.node.done.v-block .dot { background: var(--block); border-color: var(--block); }
+.node.skipped { opacity: .45; }
+.node.skipped .nd { font-style: italic; }
+.node.waiting .dot { border-color: var(--hold); background: var(--hold-soft); }
+.node[aria-current="step"] { background: var(--carbon-soft); border-color: var(--carbon); }
+.sub { display: grid; gap: 1px; margin-top: 4px; }
+.sub span { font-size: .74rem; color: var(--muted); padding-left: 10px; border-left: 2px solid var(--tint-pink); }
+
+/* sheet */
+.sheet { background: var(--sheet); border: 1px solid var(--rule); border-radius: 10px; box-shadow: var(--shadow); padding: clamp(16px, 2.4vw, 26px); display: grid; gap: 18px; min-width: 0; }
+.sheet-head { display: flex; gap: 12px; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; }
+.sheet-head h3 { font-size: var(--step-2); font-weight: 750; font-stretch: 95%; }
+.badge { font-family: var(--f-mono); font-size: .72rem; padding: 3px 8px; border-radius: 4px; border: 1px solid var(--rule); white-space: nowrap; }
+.fw-langgraph { background: var(--carbon-soft); }
+.fw-crewai { background: var(--tint-pink); }
+.fw-human { background: var(--tint-yellow); }
+.mandate { color: var(--muted); font-size: var(--step--1); max-width: 70ch; }
+.decision { font-family: var(--f-display); font-weight: 700; font-stretch: 92%; font-size: var(--step-1); line-height: 1.3; padding: 12px 14px; border-radius: 6px; background: var(--sheet-2); border-left: 4px solid var(--carbon); }
+.decision.v-ok { border-left-color: var(--ok); } .decision.v-hold { border-left-color: var(--hold); } .decision.v-block { border-left-color: var(--block); }
+.chips { display: flex; gap: 6px; flex-wrap: wrap; }
+.chip { font-size: .78rem; padding: 3px 9px; border-radius: 999px; background: var(--sheet-2); border: 1px solid var(--rule); }
+.blk-title { font-family: var(--f-display); font-stretch: 78%; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; font-size: .72rem; color: var(--muted); margin-bottom: 8px; }
+.tools { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; }
+.tools li { display: grid; grid-template-columns: minmax(150px, max-content) minmax(0, 1fr); gap: 12px; font-size: var(--step--1); padding: 6px 0; border-bottom: 1px dotted var(--rule); }
+.tools code { font-family: var(--f-mono); color: var(--carbon); font-size: .78rem; }
+.finds { display: grid; gap: 6px; }
+.find { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 10px; align-items: start; font-size: var(--step--1); padding: 8px 10px; border-radius: 6px; background: var(--sheet-2); }
+.sev { font-family: var(--f-mono); font-size: .68rem; font-weight: 500; padding: 2px 6px; border-radius: 3px; white-space: nowrap; }
+.sev-BLOCK, .sev-HIGH { background: var(--block-soft); color: var(--block); }
+.sev-HOLD, .sev-WARN { background: var(--hold-soft); color: var(--hold); }
+.sev-INFO { background: var(--carbon-soft); color: var(--carbon); }
+.find b { font-family: var(--f-mono); font-weight: 500; font-size: .76rem; }
+.why { display: grid; gap: 6px; }
+.why p { white-space: pre-line; max-width: 75ch; }
+.why .src { font-size: .74rem; color: var(--muted); font-family: var(--f-mono); }
+.crew { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.crew article { background: var(--tint-pink); border-radius: 8px; padding: 12px; display: grid; gap: 6px; align-content: start; font-size: var(--step--1); min-width: 0; }
+.crew h4 { font-size: .9rem; font-weight: 700; }
+.tbl-wrap { overflow-x: auto; border: 1px solid var(--rule); border-radius: 8px; }
+table { border-collapse: collapse; width: 100%; font-size: var(--step--1); }
+th, td { padding: 7px 10px; text-align: left; border-bottom: 1px solid var(--rule); white-space: nowrap; }
+th { font-family: var(--f-display); font-stretch: 80%; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; font-size: .7rem; color: var(--muted); background: var(--sheet-2); }
+td.num, th.num { text-align: right; font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
+tr.win td { background: var(--ok-soft); }
+tr.out td { color: var(--muted); }
+tbody tr:last-child td { border-bottom: 0; }
+pre.mail { background: var(--sheet-2); border: 1px solid var(--rule); border-radius: 6px; padding: 12px; font-family: var(--f-mono); font-size: .76rem; white-space: pre-wrap; margin: 0; overflow-x: auto; }
+.approval { border: 2px dashed var(--hold); background: var(--hold-soft); border-radius: 10px; padding: 16px; display: grid; gap: 10px; }
+.approval h4 { font-size: var(--step-1); }
+.kv { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 4px 16px; font-size: var(--step--1); }
+.kv dt { color: var(--muted); }
+.kv dd { margin: 0; }
+
+/* memo + kpis */
+.memo { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 18px; }
+.memo-card { background: var(--sheet); border: 1px solid var(--rule); border-radius: 10px; padding: 20px; display: grid; gap: 12px; align-content: start; min-width: 0; }
+.memo-card ul { margin: 0; padding-left: 18px; display: grid; gap: 6px; font-size: var(--step--1); }
+.kpis { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; align-content: start; }
+.kpi { background: var(--sheet); border: 1px solid var(--rule); border-radius: 8px; padding: 12px; display: grid; gap: 2px; min-width: 0; }
+.kpi span { font-size: .74rem; color: var(--muted); }
+.kpi b { font-family: var(--f-mono); font-weight: 500; font-size: 1.05rem; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+
+/* lab */
+.grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; align-items: start; }
+.card { background: var(--sheet); border: 1px solid var(--rule); border-radius: 10px; padding: 18px; display: grid; gap: 14px; align-content: start; min-width: 0; }
+.card h3 { font-size: var(--step-1); font-weight: 750; }
+.card .rule-ref { font-size: .74rem; color: var(--muted); font-family: var(--f-mono); }
+.fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 12px; }
+.field { display: grid; gap: 4px; font-size: .78rem; color: var(--muted); min-width: 0; }
+.field input, .field select, textarea { background: var(--sheet-2); border: 1px solid var(--rule); border-radius: 6px; padding: 7px 9px; font-family: var(--f-mono); font-size: .85rem; color: var(--ink); width: 100%; min-width: 0; }
+.field.check { grid-template-columns: auto 1fr; align-items: center; gap: 8px; color: var(--ink); font-size: var(--step--1); }
+.field.check input { width: auto; }
+.out { background: var(--sheet-2); border-radius: 8px; padding: 12px 14px; display: grid; gap: 6px; font-size: var(--step--1); }
+.out .big { font-family: var(--f-mono); font-size: 1.25rem; font-variant-numeric: tabular-nums; }
+.presets { display: flex; gap: 6px; flex-wrap: wrap; }
+.presets button { font-size: .74rem; padding: 4px 9px; }
+
+/* ask */
+.ask { display: grid; grid-template-columns: 280px minmax(0, 1fr); gap: 16px; align-items: start; }
+.agents { display: grid; gap: 4px; }
+.agents label { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 8px; align-items: start; padding: 7px 9px; border-radius: 6px; cursor: pointer; font-size: var(--step--1); border: 1px solid transparent; }
+.agents label:has(input:checked) { background: var(--carbon-soft); border-color: var(--carbon); }
+.agents small { display: block; color: var(--muted); font-size: .72rem; }
+textarea { font-family: var(--f-body); font-size: var(--step-0); min-height: 84px; resize: vertical; }
+.answer { white-space: pre-wrap; background: var(--sheet-2); border-radius: 8px; padding: 14px; min-height: 80px; font-size: var(--step-0); max-width: 80ch; }
+.note { font-size: .78rem; color: var(--muted); }
+.notice { border: 1px solid var(--rule); border-radius: 8px; padding: 10px 12px; font-size: var(--step--1); background: var(--sheet-2); }
+
+/* built */
+.tri { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.tri .card:nth-child(1) { background: var(--carbon-soft); }
+.tri .card:nth-child(2) { background: var(--tint-pink); }
+.tri .card:nth-child(3) { background: var(--tint-yellow); }
+.bars { display: grid; gap: 8px; }
+.bar { display: grid; grid-template-columns: minmax(0, 210px) minmax(0, 1fr) 70px; gap: 10px; align-items: center; font-size: var(--step--1); }
+.bar .track { background: var(--sheet-2); border-radius: 4px; height: 14px; overflow: hidden; }
+.bar .fill { height: 100%; background: var(--carbon); border-radius: 4px; }
+.bar .v { font-family: var(--f-mono); text-align: right; }
+pre.mermaid { background: var(--sheet); border: 1px solid var(--rule); border-radius: 10px; padding: 16px; overflow-x: auto; font-size: .78rem; margin: 0; }
+.foot { font-size: .76rem; color: var(--muted); border-top: 1px solid var(--rule); padding-top: 14px; }
+
+@media (max-width: 1000px) {
+  .desk { grid-template-columns: minmax(0, 1fr); }
+  .rail { position: static; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 6px; }
+  .node::after { display: none; }
+  .node { border-color: var(--rule); }
+  .sub { display: none; }
+  .casehead, .memo, .ask { grid-template-columns: minmax(0, 1fr); }
+  .crew, .tri { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 760px) {
+  .folders { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .grid2, .fields { grid-template-columns: minmax(0, 1fr); }
+  .tools li { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+  .tabs { margin-left: 0; }
+  .bar { grid-template-columns: minmax(0, 1fr) 70px; }
+  .bar .track { grid-column: 1 / -1; grid-row: 2; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .sheet { animation: rise .28s ease-out; }
+  @keyframes rise { from { transform: translateY(4px); } to { transform: none; } }
+}
+</style>
+
+<header class="top">
+  <div class="wrap">
+    <div class="brand"><b>Agent<span>Procure</span></b><small id="ctx"></small></div>
+    <nav class="tabs" role="tablist" aria-label="Sections">
+      <button class="tab" role="tab" id="tab-desk" aria-controls="desk" aria-selected="true">Case desk</button>
+      <button class="tab" role="tab" id="tab-lab" aria-controls="lab" aria-selected="false">What-if lab</button>
+      <button class="tab" role="tab" id="tab-ask" aria-controls="ask" aria-selected="false">Ask the agents</button>
+      <button class="tab" role="tab" id="tab-built" aria-controls="built" aria-selected="false">How it's built</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <!-- CASE DESK -->
+  <section class="view" id="desk" role="tabpanel" aria-labelledby="tab-desk">
+    <div class="lede">
+      <span class="eyebrow">Procure-to-Pay, run by specialist agents</span>
+      <h1>Eleven expert agents take a purchase from request to payment, and stop it when they should.</h1>
+      <p>Pick a case file. Every step below is the real output of the Python system (LangGraph workflow, CrewAI sourcing crew, tested Indian compliance rules). Run a case step by step to act as the approver yourself.</p>
+    </div>
+    <div class="folders" id="folders"></div>
+    <div class="casehead" id="casehead"></div>
+    <div class="controls">
+      <button class="btn primary" id="run">Run this case step by step</button>
+      <button class="btn" id="prev">Previous step</button>
+      <button class="btn" id="next">Next step</button>
+      <button class="btn" id="showall">Show finished case</button>
+      <span class="progress" id="progress"></span>
+    </div>
+    <div class="desk">
+      <nav class="rail" id="rail" aria-label="Agent pipeline"></nav>
+      <article class="sheet" id="sheet" aria-live="polite"></article>
+    </div>
+    <div class="memo" id="memo"></div>
+  </section>
+
+  <!-- WHAT-IF LAB -->
+  <section class="view" id="lab" role="tabpanel" aria-labelledby="tab-lab" hidden>
+    <div class="lede">
+      <span class="eyebrow">The rules engine behind the agents</span>
+      <h1>Change the numbers and watch each control decide.</h1>
+      <p>These are the same deterministic rules the agents call as tools (ported line for line from the Python package and checked against it). The LLM never produces these figures.</p>
+    </div>
+    <div class="grid2">
+      <div class="card" id="lab-match">
+        <div><h3>3-way match: PO vs goods receipt vs invoice</h3><div class="rule-ref">AP Specialist + Exception Resolver | price tolerance 1%</div></div>
+        <div class="presets"><button class="btn" data-preset="s2">Load case S2</button><button class="btn" data-preset="clean">Clean invoice</button></div>
+        <div class="fields">
+          <label class="field">PO price (Rs/unit)<input id="m-po" type="number" step="0.01" value="284"></label>
+          <label class="field">Invoice price (Rs/unit)<input id="m-inv" type="number" step="0.01" value="293.10"></label>
+          <label class="field">PO quantity<input id="m-poq" type="number" value="2500"></label>
+          <label class="field">Accepted at GRN<input id="m-acc" type="number" value="2380"></label>
+          <label class="field">Invoiced quantity<input id="m-invq" type="number" value="2500"></label>
+          <label class="field">GST rate<select id="m-rate"><option value="5">5%</option><option value="18" selected>18%</option><option value="40">40%</option></select></label>
+        </div>
+        <div class="out" id="o-match"></div>
+      </div>
+      <div class="card" id="lab-tds">
+        <div><h3>TDS on purchase of goods</h3><div class="rule-ref">Income-tax Act 2025 s.393(1) Table Sl. 8(ii), formerly s.194Q</div></div>
+        <div class="presets"><button class="btn" data-preset="s4">Load case S4</button><button class="btn" data-preset="s1">Load case S1</button></div>
+        <div class="fields">
+          <label class="field">Purchases from this seller so far this tax year (Rs)<input id="t-cum" type="number" value="4620000"></label>
+          <label class="field">This invoice, taxable value (Rs)<input id="t-this" type="number" value="860000"></label>
+          <label class="field check"><input id="t-pan" type="checkbox" checked>Seller PAN on record</label>
+          <label class="field check"><input id="t-turn" type="checkbox" checked>Our turnover last year above Rs 10 crore</label>
+        </div>
+        <div class="out" id="o-tds"></div>
+      </div>
+      <div class="card" id="lab-msme">
+        <div><h3>MSME 45-day payment clock</h3><div class="rule-ref">MSMED Act s.15, s.16 | Income-tax Act 2025 s.37(2)(g)</div></div>
+        <div class="fields">
+          <label class="field">Supplier category<select id="s-cat"><option value="micro" selected>Micro</option><option value="small">Small</option><option value="medium">Medium</option><option value="none">Not MSME</option></select></label>
+          <label class="field">Agreed credit days<input id="s-days" type="number" value="30"></label>
+          <label class="field">Goods accepted on<input id="s-acc" type="date" value="2026-08-28"></label>
+          <label class="field">Today<input id="s-today" type="date" value="2026-10-10"></label>
+          <label class="field">Amount due (Rs)<input id="s-amt" type="number" value="755200"></label>
+          <label class="field">RBI Bank Rate (%)<input id="s-br" type="number" step="0.05" value="5.75"></label>
+          <label class="field check"><input id="s-written" type="checkbox" checked>Written agreement on credit terms</label>
+        </div>
+        <div class="out" id="o-msme"></div>
+      </div>
+      <div class="card" id="lab-disc">
+        <div><h3>Take the early-payment discount?</h3><div class="rule-ref">Treasury Analyst | annualised return vs cost of funds</div></div>
+        <div class="fields">
+          <label class="field">Discount (%)<input id="d-pct" type="number" step="0.1" value="1"></label>
+          <label class="field">If paid within (days)<input id="d-days" type="number" value="15"></label>
+          <label class="field">Otherwise net (days)<input id="d-net" type="number" value="60"></label>
+          <label class="field">Our cost of funds (%)<input id="d-cof" type="number" step="0.05" value="9.25"></label>
+        </div>
+        <div class="out" id="o-disc"></div>
+      </div>
+      <div class="card" id="lab-gstin">
+        <div><h3>GSTIN and PAN check</h3><div class="rule-ref">Policy & Compliance Officer | GSTN check digit (Luhn mod 36)</div></div>
+        <div class="presets"><button class="btn" data-preset="good">A valid GSTIN</button><button class="btn" data-preset="bad">Vendor from case S3</button></div>
+        <div class="fields">
+          <label class="field">GSTIN<input id="g-gstin" type="text" value="06AAHCV3371L1Z4" maxlength="15" autocomplete="off"></label>
+          <label class="field">PAN on vendor master (optional)<input id="g-pan" type="text" value="AAHCV3317L" maxlength="10" autocomplete="off"></label>
+        </div>
+        <div class="out" id="o-gstin"></div>
+      </div>
+      <div class="card" id="lab-doa">
+        <div><h3>Who approves, and how many quotes?</h3><div class="rule-ref">Delegation of authority + competitive-quote policy (Meridian)</div></div>
+        <div class="fields">
+          <label class="field">Purchase value excl. GST (Rs)<input id="a-val" type="number" value="2380000"></label>
+          <label class="field">Related PRs in last 30 days (Rs)<input id="a-rel" type="number" value="2450000"></label>
+          <label class="field check"><input id="a-sole" type="checkbox">Sole source with documented reason</label>
+        </div>
+        <div class="out" id="o-doa"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ASK -->
+  <section class="view" id="ask" role="tabpanel" aria-labelledby="tab-ask" hidden>
+    <div class="lede">
+      <span class="eyebrow">Live agents</span>
+      <h1>Question any agent about a case, or hand the analyst a new request.</h1>
+      <p>Each answer is written live by Claude in the agent's role and grounded only on that case's record. The first question asks you to allow the page to use Claude.</p>
+    </div>
+    <div class="notice" id="ask-unavailable" hidden>Live questions need this page to be open in Claude. Everything else on the page works without it.</div>
+    <div class="ask">
+      <div class="card">
+        <div class="field">Case<select id="q-case"></select></div>
+        <div class="blk-title" style="margin:0">Agent</div>
+        <div class="agents" id="q-agents"></div>
+      </div>
+      <div class="card">
+        <div class="blk-title" style="margin:0">Suggested questions</div>
+        <div class="chips" id="q-sugg"></div>
+        <label class="field">Your question<textarea id="q-text" placeholder="Ask the agent about this case"></textarea></label>
+        <div class="controls"><button class="btn primary" id="q-go">Ask</button><button class="btn" id="q-stop" disabled>Stop</button><span class="note" id="q-status"></span></div>
+        <div class="answer" id="q-answer">Pick a suggested question or type your own.</div>
+      </div>
+    </div>
+    <div class="card">
+      <div><h3>Intake desk: try your own purchase request</h3><div class="rule-ref">Procurement Analyst (Claude extracts) -> Policy rules (computed in the page)</div></div>
+      <label class="field">Request as an employee would write it<textarea id="i-text">Urgent: need 600 nos bearing housings (cast iron, drawing BH-62) for the new gearbox line by 30 Oct 2026. Around Rs 4.2 lakh. Only Sahyadri Castings can make these, please approve fast.</textarea></label>
+      <div class="controls"><button class="btn primary" id="i-go">Run the Procurement Analyst</button><button class="btn" id="i-offline">Use the offline parser</button><span class="note" id="i-status"></span></div>
+      <div class="grid2"><div class="out" id="i-parsed">The structured requisition appears here.</div><div class="out" id="i-policy">Policy verdict appears here.</div></div>
+    </div>
+  </section>
+
+  <!-- BUILT -->
+  <section class="view" id="built" role="tabpanel" aria-labelledby="tab-built" hidden>
+    <div class="lede">
+      <span class="eyebrow">Architecture, evidence, business case</span>
+      <h1>Three tools, each doing the job it is best at.</h1>
+    </div>
+    <div class="tri">
+      <div class="card"><h3>LangGraph runs the case</h3><p>A stateful graph with conditional routes (block, reject, exception, partial release), a human approval <span class="mono">interrupt()</span> with checkpointing, and one audit record per agent step.</p></div>
+      <div class="card"><h3>CrewAI runs sourcing</h3><p>A crew of three: Category Manager (Kraljic), Supplier Performance &amp; Risk Analyst (scorecard), Negotiation Strategist (should-cost). Offline it is driven by a scripted expert LLM over the same ReAct loop.</p></div>
+      <div class="card"><h3>n8n runs the business plumbing</h3><p>Request intake, approval e-mails with approve/reject links that resume the graph, Google Sheets audit log, and a daily MSME 45-day payment watch, all through a FastAPI service.</p></div>
+    </div>
+    <pre class="mermaid">
+graph TD
+  start([Purchase request]) --> intake[Procurement Analyst]
+  intake --> policy[Policy and Compliance Officer]
+  policy -- block --> controller[Finance Controller]
+  policy -- clear --> crew[[CrewAI sourcing crew]]
+  crew --> approval{{Human approver - interrupt}}
+  approval -- reject --> controller
+  approval -- approve --> po[Buyer issues PO]
+  po --> ap[AP Specialist - 3-way match]
+  ap --> tax[GST and TDS Specialist]
+  tax -- exceptions --> resolver[Exception Resolver]
+  tax -- clean --> treasury[Treasury Analyst]
+  resolver -- partial release --> treasury
+  resolver -- hard stop --> controller
+  treasury --> controller
+  controller --> done([Case memo and audit trail])
+    </pre>
+    <div class="grid2">
+      <div class="card">
+        <h3>Numbers come from tools, never from the LLM</h3>
+        <p>The LLM explains, prioritises and drafts. Every amount, date and rate is computed by tested rules. A guardrail rejects any LLM text that contains a figure not present in the tool outputs, and the crew cannot overrule the scorecard winner; only the human approver can.</p>
+        <div class="kv" id="built-facts"></div>
+      </div>
+      <div class="card">
+        <h3>Control-effectiveness evaluation</h3>
+        <p class="muted" id="eval-sum"></p>
+        <div class="tbl-wrap"><table><thead><tr><th>ID</th><th>Injected condition</th><th>Expected</th><th>Result</th></tr></thead><tbody id="eval-rows"></tbody></table></div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Business case for Meridian (fictional), Rs lakh</h3>
+      <div class="tbl-wrap"><table><thead><tr><th></th><th class="num">Conservative</th><th class="num">Base</th><th class="num">Optimistic</th></tr></thead><tbody id="bc-rows"></tbody></table></div>
+      <div class="blk-title">Base case value drivers (Rs lakh per year)</div>
+      <div class="bars" id="bc-bars"></div>
+      <p class="note" id="bc-note"></p>
+    </div>
+    <div class="card">
+      <h3>Rules encoded (as of 10 October 2026)</h3>
+      <ul class="learn" style="color:var(--ink)">
+        <li>TDS on goods: Income-tax Act 2025 s.393(1) Table Sl. 8(ii) (formerly s.194Q): 0.1% above Rs 50 lakh per seller per tax year; 5% without PAN; buyer turnover above Rs 10 crore.</li>
+        <li>MSMED Act s.15: pay micro/small suppliers within the agreed term, never more than 45 days from acceptance (15 days with no written agreement); s.16: compound interest at 3x RBI Bank Rate (5.75% after the 7 Oct 2026 MPC decision, so 17.25%); s.23: interest not deductible.</li>
+        <li>Income-tax Act 2025 s.37(2)(g) (formerly s.43B(h)): late MSE dues are deductible only in the year paid.</li>
+        <li>GST 2.0 rates from 22 Sep 2025 (5% / 18% / 40%); IGST for inter-state supply; e-invoice IRN for suppliers above Rs 5 crore AATO; IRN within 30 days for AATO of Rs 10 crore or more; ITC reversal if the supplier is unpaid after 180 days.</li>
+      </ul>
+    </div>
+    <p class="foot" id="foot"></p>
+  </section>
+</main>
+
+<script type="application/json" id="data">__DATA_JSON__</script>
+<script>/*__RULES__*/</script>
+<script>
+(() => {
+  const D = JSON.parse(document.getElementById("data").textContent);
+  const $ = (s) => document.querySelector(s);
+  const inr = P2P.inr;
+  const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const rupee = (s) => esc(s).replace(/\bRs /g, "₹");
+  const store = { get(k) { try { return localStorage.getItem(k); } catch { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch {} } };
+
+  $("#ctx").textContent = "Meridian Precision Components (fictional) | Pune | as of 10 Oct 2026";
+
+  /* ---------------- tabs ---------------- */
+  const TABS = ["desk", "lab", "ask", "built"];
+  function showTab(id) {
+    TABS.forEach((t) => { $("#" + t).hidden = t !== id; $("#tab-" + t).setAttribute("aria-selected", String(t === id)); });
+    store.set("ap-tab", id);
+  }
+  TABS.forEach((t) => $("#tab-" + t).addEventListener("click", () => showTab(t)));
+  const startTab = (location.hash || "").slice(1);
+  showTab(TABS.includes(startTab) ? startTab : (store.get("ap-tab") || "desk"));
+
+  /* ---------------- case desk ---------------- */
+  const BASES = ["S1", "S2", "S3", "S4"];
+  const NODES = [
+    { key: "intake", label: "Procurement Analyst" },
+    { key: "policy", label: "Policy & Compliance Officer" },
+    { key: "supplier_analyst", label: "Sourcing crew", sub: ["Category Manager", "Supplier Performance & Risk Analyst", "Negotiation Strategist"] },
+    { key: "approver", label: "Human approver" },
+    { key: "buyer", label: "Buyer (PO Specialist)" },
+    { key: "ap", label: "Accounts Payable Specialist" },
+    { key: "tax", label: "GST & TDS Specialist" },
+    { key: "resolver", label: "Exception Resolver" },
+    { key: "treasury", label: "Treasury & Working-Capital Analyst" },
+    { key: "controller", label: "Finance Controller" },
+  ];
+  const STATUS = {
+    COMPLETED: ["Completed", "st-ok"], COMPLETED_WITH_HOLD: ["Part paid, rest held", "st-hold"], ESCALATED: ["Escalated, no PO", "st-block"],
+    REJECTED: ["Rejected by approver", "st-block"], ON_HOLD: ["On hold", "st-hold"],
+  };
+  const fwClass = (fw) => /crew/i.test(fw) ? "fw-crewai" : /interrupt|human/i.test(fw) ? "fw-human" : "fw-langgraph";
+  const fwShort = (fw) => /crew/i.test(fw) ? "CrewAI" : /interrupt|human/i.test(fw) ? "Human-in-the-loop" : "LangGraph";
+
+  function verdict(step) {
+    const d = (step.decision || "").toUpperCase();
+    const sev = (step.findings || []).map((f) => f.severity);
+    if (/BLOCK|REJECT|HOLD ENTIRE|ESCALATED/.test(d)) return "v-block";
+    if (/HOLD|EXCEPTION|PARTIAL|PAID IN PART/.test(d) || sev.includes("HIGH") || sev.includes("HOLD")) return "v-hold";
+    if (/APPROVED|MATCHED|VALID|ISSUED|COMPLETED|CLEARED|RECOMMEND|SCHEDULE|STRUCTURED/.test(d)) return "v-ok";
+    return "";
+  }
+
+  const S = { base: "S1", key: "S1", upto: 0, sel: 0, waiting: false, playing: false, timer: null };
+  const cur = () => D.cases[S.key];
+  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  function restAt(base) {
+    stopTimer();
+    S.base = base; S.key = base; S.waiting = false; S.playing = false;
+    S.upto = cur().steps.length; S.sel = S.upto - 1;
+    store.set("ap-case", base);
+    renderAll();
+  }
+  function stopTimer() { clearTimeout(S.timer); S.timer = null; }
+
+  function renderFolders() {
+    $("#folders").innerHTML = BASES.map((b) => {
+      const c = D.cases[b];
+      const [label, cls] = STATUS[c.status] || [c.status, "st-info"];
+      return `<button class="folder" data-case="${b}" aria-pressed="${b === S.base}">
+        <span class="fid">${b} | ${esc(c.pr.pr_no)}</span>
+        <span class="ftitle">${esc(c.title)}</span>
+        <span class="stamp ${cls}">${esc(label)}</span></button>`;
+    }).join("");
+    document.querySelectorAll(".folder").forEach((f) => f.addEventListener("click", () => restAt(f.dataset.case)));
+  }
+
+  function renderHead() {
+    const c = D.cases[S.base];
+    $("#casehead").innerHTML = `
+      <div class="story">
+        <h2>${esc(c.title)}</h2>
+        <p>${esc(c.story)}</p>
+        <ul class="learn">${c.learning_points.map((l) => `<li>${esc(l)}</li>`).join("")}</ul>
+      </div>
+      <div class="slip">
+        <div class="lbl"><span>Purchase requisition ${esc(c.pr.pr_no)}</span><span>${esc(c.pr.cost_center)}</span></div>
+        <q>${esc(c.request_text)}</q>
+        <div class="lbl"><span>${esc(c.pr.requester)}, ${esc(c.pr.department)}</span><span>HSN ${esc(c.pr.item.hsn)}</span></div>
+      </div>`;
+  }
+
+  function stepIndexFor(key) { return cur().steps.findIndex((s) => s.agent === key); }
+
+  function renderRail() {
+    const c = cur();
+    const visited = new Set(c.steps.slice(0, S.upto).map((s) => s.agent));
+    const done = S.upto >= c.steps.length && !S.waiting;
+    $("#rail").innerHTML = NODES.map((n) => {
+      const idx = stepIndexFor(n.key);
+      const step = idx >= 0 ? c.steps[idx] : null;
+      const isVisited = visited.has(n.key);
+      const isWaiting = S.waiting && n.key === "approver";
+      const skipped = !isVisited && (done || idx < 0 && S.upto >= c.steps.length);
+      const cls = ["node", isVisited ? "done " + verdict(step) : "", isWaiting ? "waiting" : "", skipped ? "skipped" : ""].join(" ");
+      const desc = isWaiting ? "Waiting for your decision" : isVisited ? step.decision : skipped ? "Not needed in this case" : "Pending";
+      const fw = step ? fwShort(step.framework) : (n.key === "supplier_analyst" ? "CrewAI" : n.key === "approver" ? "Human-in-the-loop" : "LangGraph");
+      const current = (isVisited && idx === S.sel) || isWaiting;
+      return `<button class="${cls}" data-idx="${idx}" ${isVisited ? "" : "disabled"} ${current ? 'aria-current="step"' : ""}>
+        <span class="dot"></span>
+        <span><span class="nt">${esc(n.label)}</span> <span class="nf">${fw}</span>
+        <span class="nd">${rupee(desc)}</span>
+        ${n.sub ? `<span class="sub">${n.sub.map((x) => `<span>${esc(x)}</span>`).join("")}</span>` : ""}</span>
+      </button>`;
+    }).join("");
+    document.querySelectorAll("#rail .node:not(:disabled)").forEach((b) => b.addEventListener("click", () => {
+      S.sel = Number(b.dataset.idx); S.waiting = false; stopTimer(); S.playing = false; renderAll();
+    }));
+  }
+
+  function tableRanking(c) {
+    const w = c.kraljic.weights;
+    return `<div class="tbl-wrap"><table>
+      <thead><tr><th>Supplier</th><th class="num">Quote</th><th class="num">Landed</th><th class="num">Lead</th>
+      ${Object.keys(w).map((k) => `<th class="num">${k} ${Math.round(w[k] * 100)}%</th>`).join("")}<th class="num">Score</th></tr></thead>
+      <tbody>${c.ranking.map((r, i) => `<tr class="${i === 0 && r.eligible ? "win" : !r.eligible ? "out" : ""}">
+        <td>${esc(r.vendor_id)} ${esc(r.vendor)}${r.note ? `<br><small class="muted">${esc(r.note)}</small>` : ""}<br><small class="muted">MSME: ${esc(r.msme)}</small></td>
+        <td class="num">${inr(r.unit_price)}</td><td class="num">${inr(r.landed_unit_cost)}</td><td class="num">${r.lead_time_days} d</td>
+        ${Object.keys(w).map((k) => `<td class="num">${r.scores[k].toFixed(1)}</td>`).join("")}
+        <td class="num"><b>${r.weighted_total.toFixed(2)}</b></td></tr>`).join("")}</tbody></table></div>`;
+  }
+
+  function extraFor(step, c) {
+    const k = step.agent;
+    if (k === "supplier_analyst" && c.ranking) {
+      const sc = c.should_cost;
+      return `<div><div class="blk-title">The crew's three agents (CrewAI, sequential process)</div>
+        <div class="crew">${(step.crew || []).map((m) => `<article><h4>${esc(m.title)}</h4><p>${rupee(m.output)}</p></article>`).join("")}</div></div>
+        <div><div class="blk-title">Supplier scorecard | Kraljic: ${esc(c.kraljic.quadrant)} (annual spend ${inr(c.kraljic.annual_spend)})</div>${tableRanking(c)}</div>
+        ${sc ? `<dl class="kv"><dt>Should-cost</dt><dd class="mono">${inr(sc.should_cost)} per unit vs quote ${inr(sc.quoted)} (gap ${sc.gap_pct}%)</dd>
+          <dt>Value at stake</dt><dd class="mono">${inr(sc.saving_this_order)} this order | ${inr(sc.saving_annualised)} a year</dd></dl>` : ""}`;
+    }
+    if (k === "approver" && c.approval_pack) {
+      const p = c.approval_pack;
+      return `<dl class="kv"><dt>Required approver</dt><dd>${esc(p.approver_role)}</dd><dt>PO value excl. GST</dt><dd class="mono">${inr(p.po_value_excl_gst)}</dd>
+        <dt>Supplier</dt><dd>${esc(p.vendor)} (${p.score} pts, runner-up ${esc(p.runner_up)})</dd>
+        <dt>Comment</dt><dd>${esc(step.rationale)}</dd></dl>`;
+    }
+    if (k === "buyer" && c.po) {
+      return `<div><div class="blk-title">PO terms</div><ul class="learn" style="color:var(--ink)">${c.po.terms.map((t) => `<li>${rupee(t)}</li>`).join("")}</ul></div>`;
+    }
+    if (k === "ap" && c.match) {
+      const m = c.match;
+      return `<div class="tbl-wrap"><table><thead><tr><th></th><th class="num">PO</th><th class="num">Goods receipt</th><th class="num">Invoice</th></tr></thead><tbody>
+        <tr><td>Quantity</td><td class="num">${m.po_qty.toLocaleString("en-IN")}</td><td class="num">${m.accepted_qty.toLocaleString("en-IN")} accepted</td><td class="num">${m.invoiced_qty.toLocaleString("en-IN")}</td></tr>
+        <tr><td>Unit price</td><td class="num">${inr(m.po_price)}</td><td class="num">-</td><td class="num">${inr(m.invoice_price)}</td></tr>
+        <tr><td>Total incl. GST</td><td class="num">-</td><td class="num">${inr(m.approved_total)} approved</td><td class="num">${inr(m.billed_total)}</td></tr>
+        </tbody></table></div>`;
+    }
+    if (k === "tax" && c.tax) {
+      const t = c.tax.tds;
+      return `<dl class="kv"><dt>GST</dt><dd>${esc(c.tax.tax_type)} at ${c.tax.rate_pct}%</dd><dt>ITC claimable now</dt><dd class="mono">${inr(c.tax.itc_amount)}${c.tax.itc_on_hold > 0.5 ? ` (${inr(c.tax.itc_on_hold)} waits for the credit note)` : ""}</dd>
+        <dt>TDS</dt><dd class="mono">${inr(t.tds_amount)} = ${t.rate_pct}% x ${inr(t.base)}</dd><dt>Provision</dt><dd>${esc(t.provision)}</dd></dl>`;
+    }
+    if (k === "resolver" && step.email_draft) {
+      return `<div><div class="blk-title">Draft e-mail to supplier</div><pre class="mail">${rupee(step.email_draft)}</pre></div>`;
+    }
+    if (k === "treasury" && c.treasury) {
+      const tr = c.treasury;
+      return `<div class="tbl-wrap"><table><thead><tr><th>Payment run</th><th class="num">Amount</th><th>Pay on</th><th>Priority</th></tr></thead><tbody>
+        ${tr.run.map((r) => `<tr><td>${esc(r.invoice_no)}</td><td class="num">${inr(r.amount)}</td><td class="mono">${esc(r.pay_on)}</td><td>${esc(r.priority)}</td></tr>`).join("")}
+        </tbody></table></div>
+        ${tr.discount ? `<dl class="kv"><dt>Discount offered</dt><dd>${esc(tr.discount.terms)}</dd><dt>Worth</dt><dd class="mono">${tr.discount.annualised_return_pct}% a year vs ${tr.discount.cost_of_funds_pct}% cost of funds: ${tr.discount.take ? "take it" : "skip it"}</dd></dl>` : ""}`;
+    }
+    return "";
+  }
+
+  function renderSheet() {
+    const c = cur();
+    const sheet = $("#sheet");
+    if (S.waiting) {
+      const p = D.cases[S.base].approval_pack;
+      sheet.innerHTML = `<div class="sheet-head"><h3>Your decision, ${esc(p.approver_role)}</h3><span class="badge fw-human">LangGraph interrupt</span></div>
+        <p class="mandate">The graph is paused with its state checkpointed. In production this is the e-mail n8n sends with Approve / Reject links.</p>
+        <div class="approval">
+          <h4>${rupee(p.question)}</h4>
+          <dl class="kv"><dt>Item</dt><dd>${esc(p.item)} (${p.qty.toLocaleString("en-IN")})</dd>
+          <dt>Recommended</dt><dd>${esc(p.vendor_id)} ${esc(p.vendor)} | ${p.score} pts | Kraljic ${esc(p.kraljic)}</dd>
+          <dt>Runner-up</dt><dd>${esc(p.runner_up || "-")}</dd>
+          <dt>Negotiation target</dt><dd class="mono">${p.negotiation_target ? inr(p.negotiation_target) + " per unit" : "-"}</dd>
+          <dt>Warnings</dt><dd>${p.warnings.length ? p.warnings.map(rupee).join("<br>") : "None"}</dd></dl>
+          <div class="controls"><button class="btn approve" id="approve">Approve PO</button><button class="btn reject" id="reject">Reject</button></div>
+        </div>`;
+      $("#approve").addEventListener("click", () => decide(true));
+      $("#reject").addEventListener("click", () => decide(false));
+      return;
+    }
+    const step = c.steps[S.sel];
+    if (!step) { sheet.innerHTML = ""; return; }
+    const v = verdict(step);
+    sheet.innerHTML = `
+      <div class="sheet-head"><div><div class="eyebrow">Step ${S.sel + 1} of ${c.steps.length}</div><h3>${esc(step.title)}</h3></div>
+        <span class="badge ${fwClass(step.framework)}">${esc(step.framework)} | ${step.elapsed_ms} ms</span></div>
+      <p class="mandate">${esc(step.mandate || "")}</p>
+      <div class="decision ${v}">${rupee(step.decision)}</div>
+      ${step.highlights ? `<div class="chips">${step.highlights.map((h) => `<span class="chip">${rupee(h)}</span>`).join("")}</div>` : ""}
+      ${step.tools && step.tools.length ? `<div><div class="blk-title">Tools called</div><ul class="tools">${step.tools.map((t) => `<li><code>${esc(t.tool)}</code><span>${rupee(t.summary)}</span></li>`).join("")}</ul></div>` : ""}
+      ${step.findings && step.findings.length ? `<div><div class="blk-title">Findings</div><div class="finds">${step.findings.map((f) => `<div class="find"><span class="sev sev-${f.severity}">${f.severity}</span><span><b>${esc(f.code)}</b> ${rupee(f.detail)}</span></div>`).join("")}</div></div>` : ""}
+      ${extraFor(step, c)}
+      ${step.agent !== "approver" ? `<div class="why"><div class="blk-title">Why</div><p>${rupee(step.rationale)}</p>
+        <span class="src">written by: ${esc(step.rationale_source)} | numeric guardrail: ${esc(step.guardrail)}</span></div>` : ""}`;
+  }
+
+  function renderMemo() {
+    const c = cur();
+    const done = S.upto >= c.steps.length && !S.waiting;
+    if (!done || !c.memo) {
+      $("#memo").innerHTML = `<div class="memo-card"><div class="blk-title">CFO case memo</div><p class="muted">The Finance Controller writes the memo when the case closes.</p></div><div></div>`;
+      return;
+    }
+    const m = c.memo, k = m.kpis;
+    const [label, cls] = STATUS[m.status] || [m.status, "st-info"];
+    const tiles = [
+      ["Approved payable", k.approved_payable, true], ["Held for credit note", k.disputed_amount_protected, true],
+      ["TDS withheld", k.tds_withheld, true], ["GST input credit", k.itc_claimable, true],
+      ["MSME interest flagged", k.msme_interest_accrued, true], ["Negotiation value / year", k.negotiation_value_annual, true],
+      ["Tool calls", k.tool_calls, false], ["Controls flagged", k.controls_flagged, false],
+      ["Human touchpoints", k.human_touchpoints, false], ["Agent processing time", k.agent_processing_ms, "ms"],
+    ].filter(([, v]) => v !== null && v !== undefined);
+    $("#memo").innerHTML = `<div class="memo-card"><div class="sheet-head"><div class="blk-title">CFO case memo | Finance Controller</div><span class="stamp big ${cls}">${esc(label)}</span></div>
+      <ul>${m.bullets.map((b) => `<li>${rupee(b)}</li>`).join("")}</ul></div>
+      <div class="kpis">${tiles.map(([n, v, money]) => `<div class="kpi"><span>${esc(n)}</span><b>${money === true ? inr(v) : money === "ms" ? Math.round(v) + " ms" : esc(v)}</b></div>`).join("")}</div>`;
+  }
+
+  function renderControls() {
+    const c = cur();
+    $("#progress").textContent = S.waiting ? "Paused for approval" : `Step ${Math.min(S.sel + 1, c.steps.length)} of ${c.steps.length}`;
+    $("#prev").disabled = S.waiting || S.sel <= 0;
+    $("#next").disabled = S.waiting || (S.sel >= c.steps.length - 1 && S.upto >= c.steps.length);
+    $("#run").textContent = S.playing ? "Pause" : "Run this case step by step";
+  }
+
+  function renderAll() { renderFolders(); renderHead(); renderRail(); renderSheet(); renderMemo(); renderControls(); }
+
+  function advance() {
+    const c = cur();
+    if (S.sel < S.upto - 1) { S.sel++; renderAll(); return true; }
+    if (S.upto >= c.steps.length) { S.playing = false; renderAll(); return false; }
+    if (c.approval_pack && S.upto === c.pre && S.key === S.base) { S.waiting = true; S.playing = false; stopTimer(); renderAll(); return false; }
+    S.upto++; S.sel = S.upto - 1; renderAll(); return true;
+  }
+  function loop() { stopTimer(); if (!S.playing) return; S.timer = setTimeout(() => { if (advance()) loop(); }, reduced ? 900 : 1300); }
+  function decide(ok) {
+    S.waiting = false;
+    S.key = ok ? S.base : S.base + "-reject";
+    S.upto = cur().pre + 1; S.sel = S.upto - 1; S.playing = true;
+    renderAll(); loop();
+  }
+  $("#run").addEventListener("click", () => {
+    if (S.playing) { S.playing = false; stopTimer(); renderAll(); return; }
+    if (S.upto >= cur().steps.length && !S.waiting) { S.key = S.base; S.upto = 1; S.sel = 0; }
+    S.playing = true; renderAll(); loop();
+  });
+  $("#next").addEventListener("click", () => { S.playing = false; stopTimer(); advance(); });
+  $("#prev").addEventListener("click", () => { S.playing = false; stopTimer(); if (S.sel > 0) { S.sel--; renderAll(); } });
+  $("#showall").addEventListener("click", () => restAt(S.base));
+  restAt(BASES.includes(store.get("ap-case")) ? store.get("ap-case") : "S1");
+
+  /* ---------------- what-if lab ---------------- */
+  const num = (id) => Number($(id).value) || 0;
+  const pill = (txt, cls) => `<span class="stamp ${cls}">${esc(txt)}</span>`;
+  function labMatch() {
+    const m = P2P.threeWayMatch({ poPrice: num("#m-po"), poQty: num("#m-poq"), acceptedQty: num("#m-acc"), invQty: num("#m-invq"), invPrice: num("#m-inv"), rate: num("#m-rate") });
+    $("#o-match").innerHTML = `${pill(m.status === "MATCHED" ? "Matched: pay in full" : "Exception: pay part, hold rest", m.status === "MATCHED" ? "st-ok" : "st-hold")}
+      ${m.exceptions.map((e) => `<div class="find"><span class="sev sev-HOLD">HOLD</span><span><b>${e[0]}</b> ${esc(e[1])}${e[2] ? ` (${inr(e[2])})` : ""}</span></div>`).join("")}
+      <dl class="kv"><dt>Release now</dt><dd class="mono big">${inr(m.approvedTotal)}</dd><dt>Hold for credit note</dt><dd class="mono">${inr(m.disputedTotal)}</dd>
+      <dt>GST credit to defer</dt><dd class="mono">${inr(m.disputedTax)}</dd><dt>Price variance</dt><dd class="mono">${m.varPct}%</dd></dl>`;
+  }
+  function labTds() {
+    const t = P2P.tdsOnGoods({ buyerTurnoverCr: $("#t-turn").checked ? 420 : 8, hasPan: $("#t-pan").checked, cumBefore: num("#t-cum"), thisTaxable: num("#t-this") });
+    $("#o-tds").innerHTML = `<div class="big">${inr(t.tds)}</div><div>${t.base ? `${t.rate}% on ${inr(t.base)}` : ""}</div><div class="muted">${esc(t.note)}</div>`;
+  }
+  function labMsme() {
+    const d = P2P.msmeDue({ acceptDate: $("#s-acc").value, category: $("#s-cat").value, written: $("#s-written").checked, agreedDays: num("#s-days") });
+    if (!d.covered) { $("#o-msme").innerHTML = `${pill("Outside MSMED Act Chapter V", "st-info")}<div class="muted">Only micro and small enterprises are covered; pay on contract terms.</div>`; return; }
+    const i = P2P.msmeInterest({ principal: num("#s-amt"), due: d.due, asOf: $("#s-today").value, bankRate: num("#s-br") });
+    const late = i.late > 0;
+    const left = P2P.between($("#s-today").value, d.due);
+    $("#o-msme").innerHTML = `${pill(late ? `${i.late} days overdue` : `${left} days left`, late ? "st-block" : left <= 7 ? "st-hold" : "st-ok")}
+      <dl class="kv"><dt>Statutory due date</dt><dd class="mono">${d.due} (${d.days} days from acceptance)</dd>
+      <dt>Interest accrued</dt><dd class="mono big">${inr(i.interest)}</dd><dt>Interest rate</dt><dd class="mono">${i.annualPct}% a year, compounded monthly; not tax-deductible</dd>
+      <dt>If unpaid on 31 Mar 2027</dt><dd>${late || d.due <= "2027-03-31" ? "Expense disallowed for tax year 2026-27 under s.37(2)(g); deductible only when paid" : "No disallowance yet"}</dd></dl>`;
+  }
+  function labDisc() {
+    const apr = P2P.discountApr(num("#d-pct"), num("#d-days"), num("#d-net")), cof = num("#d-cof");
+    const take = apr > cof;
+    $("#o-disc").innerHTML = `${pill(take ? "Take the discount" : "Skip it, pay on the due date", take ? "st-ok" : "st-info")}
+      <div class="big">${apr}% a year</div><div class="muted">Paying ${num("#d-net") - num("#d-days")} days early earns ${apr}% annualised vs ${cof}% cost of funds.</div>`;
+  }
+  function labGstin() {
+    const g = P2P.validateGstin($("#g-gstin").value, $("#g-pan").value.trim() || null);
+    const ok = !g.issues.length;
+    $("#o-gstin").innerHTML = `${pill(ok ? "Valid" : "Fails checks", ok ? "st-ok" : "st-block")}
+      ${g.issues.map((i) => `<div class="find"><span class="sev sev-BLOCK">BLOCK</span><span><b>${i[0]}</b> ${esc(i[1])}</span></div>`).join("")}
+      <dl class="kv"><dt>State</dt><dd>${esc(g.state || "-")}</dd><dt>PAN inside</dt><dd class="mono">${esc(g.pan || "-")}</dd><dt>Expected check digit</dt><dd class="mono">${esc(g.expected || "-")}</dd></dl>`;
+  }
+  function labDoa() {
+    const v = num("#a-val"), rel = num("#a-rel"), sole = $("#a-sole").checked;
+    let appr = P2P.approverFor(v);
+    const one = P2P.quoteRule(v), all = P2P.quoteRule(v + rel);
+    const split = rel > 0 && (one.min !== all.min || one.rfq !== all.rfq);
+    if (split) appr = P2P.approverFor(v + rel);
+    if (sole) { const order = ["Department Head", "Plant Head", "CFO", "Managing Director"]; appr = order[Math.min(order.indexOf(appr) + 1, 3)]; }
+    $("#o-doa").innerHTML = `<dl class="kv"><dt>Approver</dt><dd><b>${esc(appr)}</b>${sole ? " (one level up for sole source)" : ""}</dd>
+      <dt>Quotes needed</dt><dd>${sole ? "1 allowed with documented justification" : one.min}${one.rfq ? ", formal RFQ / e-auction" : ""}</dd></dl>
+      ${split ? `<div class="find"><span class="sev sev-BLOCK">BLOCK</span><span><b>SPLIT_PURCHASE_SUSPECTED</b> Combined ${inr(v + rel)} needs ${all.min} quotes${all.rfq ? " and a formal RFQ" : ""}</span></div>` : ""}`;
+  }
+  const LABS = [["#lab-match", labMatch], ["#lab-tds", labTds], ["#lab-msme", labMsme], ["#lab-disc", labDisc], ["#lab-gstin", labGstin], ["#lab-doa", labDoa]];
+  LABS.forEach(([card, fn]) => { $(card).addEventListener("input", fn); $(card).addEventListener("change", fn); fn(); });
+  const setv = (o) => Object.entries(o).forEach(([id, v]) => { const e = $(id); if (e.type === "checkbox") e.checked = v; else e.value = v; });
+  document.querySelectorAll("[data-preset]").forEach((b) => b.addEventListener("click", () => {
+    const p = b.dataset.preset;
+    if (p === "s2") setv({ "#m-po": 284, "#m-inv": 293.10, "#m-poq": 2500, "#m-acc": 2380, "#m-invq": 2500, "#m-rate": 18 });
+    if (p === "clean") setv({ "#m-po": 438, "#m-inv": 438, "#m-poq": 4000, "#m-acc": 4000, "#m-invq": 4000, "#m-rate": 18 });
+    if (p === "s4") setv({ "#t-cum": 4620000, "#t-this": 860000, "#t-pan": true, "#t-turn": true });
+    if (p === "s1") setv({ "#t-cum": 11200000, "#t-this": 1774000, "#t-pan": true, "#t-turn": true });
+    if (p === "good") setv({ "#g-gstin": "29AABCT8834R1ZD", "#g-pan": "AABCT8834R" });
+    if (p === "bad") setv({ "#g-gstin": "06AAHCV3371L1Z4", "#g-pan": "AAHCV3317L" });
+    LABS.forEach(([, fn]) => fn());
+  }));
+
+  /* ---------------- ask the agents ---------------- */
+  const ASKABLE = ["intake", "policy", "category_manager", "supplier_analyst", "negotiator", "buyer", "ap", "tax", "resolver", "treasury", "controller"];
+  const SUGG = {
+    S1: [["supplier_analyst", "Why didn't we buy from the cheapest supplier?"], ["treasury", "Why did you skip the 1% early-payment discount?"], ["tax", "How was the TDS of Rs 1,774 worked out?"], ["negotiator", "How should the buyer use the should-cost gap?"]],
+    S2: [["resolver", "Why is Rs 67,059.40 on hold?"], ["tax", "Can we claim the full GST credit on this invoice?"], ["ap", "What exactly did the 3-way match find?"], ["treasury", "Does the MSME 45-day rule apply to this supplier?"]],
+    S3: [["policy", "Which red flags stopped this case?"], ["policy", "Why is a bank-account change by e-mail dangerous?"], ["controller", "What must happen before this can be re-submitted?"], ["intake", "What in the request text looked suspicious?"]],
+    S4: [["tax", "Why is TDS only Rs 480?"], ["treasury", "What does the overdue MSME invoice cost us?"], ["treasury", "What happens if it is still unpaid on 31 March?"], ["supplier_analyst", "Why Godavari Packaging over the cheaper quote?"]],
+  };
+  $("#q-case").innerHTML = BASES.map((b) => `<option value="${b}">${b}: ${esc(D.cases[b].title)}</option>`).join("");
+  $("#q-agents").innerHTML = ASKABLE.map((k, i) => `<label><input type="radio" name="q-agent" value="${k}" ${i === 0 ? "checked" : ""}><span>${esc(D.personas[k].title)}<small>${esc(fwShort(D.personas[k].framework))}</small></span></label>`).join("");
+  function renderSugg() {
+    const b = $("#q-case").value;
+    $("#q-sugg").innerHTML = SUGG[b].map(([a, q], i) => `<button class="btn" data-i="${i}">${esc(q)}</button>`).join("");
+    $("#q-sugg").querySelectorAll("button").forEach((btn) => btn.addEventListener("click", () => {
+      const [a, q] = SUGG[b][Number(btn.dataset.i)];
+      document.querySelector(`input[name="q-agent"][value="${a}"]`).checked = true;
+      $("#q-text").value = q;
+      ask();
+    }));
+  }
+  $("#q-case").addEventListener("change", renderSugg);
+  $("#q-case").value = S.base; renderSugg();
+
+  function caseRecord(b) {
+    const c = D.cases[b];
+    const rec = { case: b, title: c.title, story: c.story, request: c.request_text, final_status: c.status,
+      steps: c.steps.map((s) => ({ agent: s.title, decision: s.decision, tools: (s.tools || []).map((t) => `${t.tool}: ${t.summary}`),
+        findings: (s.findings || []).map((f) => `${f.severity} ${f.code}: ${f.detail}`), reasoning: s.rationale, crew: s.crew })),
+      memo: c.memo, scorecard: c.ranking, kraljic: c.kraljic, should_cost: c.should_cost, po: c.po, match: c.match, tax: c.tax, treasury: c.treasury,
+      company: D.company };
+    return JSON.stringify(rec);
+  }
+  const ERR = { not_granted: "The page was not allowed to use Claude, so live questions are off for this view.", sampling_disabled: "Claude is not available for this account.",
+    rate_limited: "Too many questions in a short time. Wait a little and ask again.", session_expired: "Sign in to Claude again, then ask.", refused: "Claude declined this question. Try asking it differently.",
+    empty_completion: "No answer came back. Try a shorter question.", invalid_json: "The analyst's reply could not be read. Try again.", prompt_too_large: "The question is too long." };
+  const errCopy = (e) => ERR[e && e.code] || "The answer was interrupted. Try again.";
+
+  let samplePromise = null;
+  const getSample = () => (samplePromise ||= (window.claude && window.claude.use ? window.claude.use("sample") : Promise.resolve(null)).catch(() => null));
+  getSample().then((s) => { if (!s) { $("#ask-unavailable").hidden = false; $("#q-go").disabled = true; $("#i-go").disabled = true; } });
+
+  let qCtl = null;
+  async function ask() {
+    const sample = await getSample();
+    if (!sample) return;
+    const q = $("#q-text").value.trim();
+    if (!q) { $("#q-status").textContent = "Type a question first."; return; }
+    const key = document.querySelector('input[name="q-agent"]:checked').value;
+    const p = D.personas[key], b = $("#q-case").value;
+    const prompt = `You are the ${p.title} in AgentProcure, a team of domain-expert AI agents running Procure-to-Pay for ${D.company.name}, a fictional Indian auto-components manufacturer in Pune. Today is 10 October 2026.
+Your mandate: ${p.mandate}
+Your expertise: ${p.expertise.join(", ")}.
+
+Answer the question using ONLY the case record below. The record was produced by the system's tested rules engine and other agents.
+Rules:
+- Use only figures, dates, names and rates that appear in the record. Never invent a number. If the record does not contain something, say so.
+- Name the rule or legal provision behind a conclusion when the record names it.
+- Plain business English for an MBA audience. At most 170 words. Short paragraphs or up to 5 bullets. Write amounts in Indian format with the rupee sign.
+- Speak in the first person as this agent. If the question belongs to another agent, answer briefly and say which agent owns it.
+- This is a teaching demo with fictional data, not tax or legal advice.
+
+CASE RECORD (JSON):
+${caseRecord(b)}
+
+QUESTION: ${q}`;
+    qCtl?.abort();
+    qCtl = new AbortController();
+    $("#q-answer").textContent = "Thinking...";
+    $("#q-status").textContent = `${p.title} on case ${b}`;
+    $("#q-go").disabled = true; $("#q-stop").disabled = false;
+    try {
+      await sample(prompt, { signal: qCtl.signal, cache: false, onText: ({ text }) => { $("#q-answer").textContent = text; } });
+    } catch (e) {
+      $("#q-answer").textContent = e && e.text ? e.text : "";
+      if (!e || e.code !== "cancelled") $("#q-status").textContent = errCopy(e);
+      if (e && ["not_granted", "sampling_disabled"].includes(e.code)) { $("#ask-unavailable").hidden = false; }
+    } finally {
+      $("#q-go").disabled = false; $("#q-stop").disabled = true;
+    }
+  }
+  $("#q-go").addEventListener("click", ask);
+  $("#q-stop").addEventListener("click", () => qCtl?.abort());
+
+  /* intake desk */
+  const CATS = { "aluminium castings": ["die-cast", "die cast", "casting", "adc12"], "machined components": ["shaft", "machined", "cnc", "turned"],
+    "electrical panels": ["panel", "plc", "vfd", "switchgear"], packaging: ["bag", "film", "packaging", "carton"], MRO: ["bolt", "fastener", "glove", "spare", "bearing", "tool"] };
+  function offlineParse(t) {
+    const s = t.toLowerCase();
+    const q = s.match(/(\d[\d,]*)\s*(nos|pcs|units|rolls|kits|lot)\b/);
+    const v = s.match(/rs\.?\s*([\d.]+)\s*(lakh|crore)/);
+    const d = s.match(/by (\d{1,2}) ([a-z]{3,9}) (\d{4})/);
+    const months = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
+    let need = null;
+    if (d) { const m = months.indexOf(d[2].slice(0, 3)); if (m >= 0) need = `${d[3]}-${String(m + 1).padStart(2, "0")}-${d[1].padStart(2, "0")}`; }
+    const category = Object.keys(CATS).find((c) => CATS[c].some((k) => s.includes(k))) || "other";
+    const out = { item: t.slice(0, 80), quantity: q ? Number(q[1].replace(/,/g, "")) : null, uom: q ? q[2] : null, need_by: need,
+      estimated_value_inr: v ? Number(v[1]) * (v[2] === "lakh" ? 1e5 : 1e7) : null, category,
+      urgent: /urgent|asap|approve fast|immediately/.test(s), sole_source_claimed: /only .* can|sole source|single source|only vendor/.test(s) };
+    out.missing = ["quantity", "need_by", "estimated_value_inr"].filter((k) => out[k] === null);
+    out.note = out.missing.length ? `Please add: ${out.missing.join(", ")}.` : "Request is complete enough to raise a requisition.";
+    return out;
+  }
+  function showIntake(r, by) {
+    const val = Number(r.estimated_value_inr) || 0;
+    $("#i-parsed").innerHTML = `<div class="blk-title" style="margin:0">Structured requisition (${esc(by)})</div><dl class="kv">
+      <dt>Item</dt><dd>${esc(r.item)}</dd><dt>Quantity</dt><dd class="mono">${esc(r.quantity ?? "-")} ${esc(r.uom ?? "")}</dd>
+      <dt>Need by</dt><dd class="mono">${esc(r.need_by ?? "-")}</dd><dt>Estimated value</dt><dd class="mono">${val ? inr(val) : "-"}</dd>
+      <dt>Category</dt><dd>${esc(r.category ?? "-")}</dd><dt>Missing</dt><dd>${esc((r.missing || []).join(", ") || "nothing")}</dd>
+      <dt>Note to requester</dt><dd>${esc(r.note ?? "")}</dd></dl>`;
+    if (!val) { $("#i-policy").innerHTML = `<div class="muted">No value given, so the approver and quote rule cannot be set yet.</div>`; return; }
+    let appr = P2P.approverFor(val); const q = P2P.quoteRule(val);
+    const flags = [];
+    if (r.urgent) flags.push(["INFO", "URGENCY_LANGUAGE", "Pressure for speed is a common lever in policy bypass"]);
+    if (r.sole_source_claimed) { flags.push(["WARN", "SOLE_SOURCE_CLAIMED", "Needs a documented reason (OEM lock-in, IP, capability gap); approval moves one level up"]); appr = ["Department Head", "Plant Head", "CFO", "Managing Director"][Math.min(["Department Head", "Plant Head", "CFO", "Managing Director"].indexOf(appr) + 1, 3)]; }
+    if (r.sole_source_claimed && q.min > 1) flags.push(["BLOCK", "QUOTES_INSUFFICIENT", `Policy needs ${q.min} quotes for ${inr(val)} unless the sole-source reason is accepted`]);
+    $("#i-policy").innerHTML = `<div class="blk-title" style="margin:0">Policy & Compliance Officer (rules in the page)</div>
+      <dl class="kv"><dt>Approver</dt><dd><b>${esc(appr)}</b></dd><dt>Quotes needed</dt><dd>${q.min}${q.rfq ? " + formal RFQ" : ""}</dd></dl>
+      ${flags.map(([s, c, d]) => `<div class="find"><span class="sev sev-${s}">${s}</span><span><b>${c}</b> ${esc(d)}</span></div>`).join("")}`;
+  }
+  let iCtl = null;
+  $("#i-go").addEventListener("click", async () => {
+    const sample = await getSample();
+    if (!sample) return;
+    const text = $("#i-text").value.trim();
+    if (!text) return;
+    iCtl?.abort(); iCtl = new AbortController();
+    $("#i-status").textContent = "Thinking..."; $("#i-go").disabled = true;
+    try {
+      const r = await sample.json(`You are the Procurement Analyst agent at an Indian manufacturer. Today is 2026-10-10. Extract a purchase requisition from the employee's request below.
+Reply with only one JSON object with exactly these keys:
+{"item": string, "quantity": number or null, "uom": string or null, "need_by": "YYYY-MM-DD" or null, "estimated_value_inr": number or null (convert lakh and crore to rupees), "category": one of "aluminium castings" | "machined components" | "electrical panels" | "packaging" | "MRO" | "other", "urgent": boolean, "sole_source_claimed": boolean, "missing": array of the fields a buyer still needs, "note": one short sentence to the requester}
+Request: """${text.slice(0, 2000)}"""`, { modelTier: "quick", signal: iCtl.signal });
+      showIntake(r || {}, "Claude, in the Procurement Analyst role");
+      $("#i-status").textContent = "";
+    } catch (e) {
+      if (!e || e.code !== "cancelled") $("#i-status").textContent = errCopy(e);
+    } finally { $("#i-go").disabled = false; }
+  });
+  $("#i-offline").addEventListener("click", () => { showIntake(offlineParse($("#i-text").value), "offline parser"); $("#i-status").textContent = ""; });
+
+  /* ---------------- how it's built ---------------- */
+  const passed = D.evals.filter((e) => e.pass).length;
+  $("#eval-sum").textContent = `${passed} of ${D.evals.length} injected conditions handled correctly: right final outcome, right control fired, right money figure. Each case mutates a scenario (price drift, missing IRN, duplicate invoice, missing PAN...) and runs the full multi-agent workflow.`;
+  $("#eval-rows").innerHTML = D.evals.map((e) => `<tr><td class="mono">${e.id}</td><td style="white-space:normal;min-width:220px">${esc(e.case)}</td><td class="mono">${esc(e.expected)}</td><td>${e.pass ? '<span class="sev sev-INFO">PASS</span>' : '<span class="sev sev-BLOCK">FAIL</span>'}</td></tr>`).join("");
+  $("#built-facts").innerHTML = `<dt>Agents</dt><dd>11 AI agents (8 graph steps + a 3-agent crew) and 1 human approver</dd><dt>Unit + workflow tests</dt><dd>36 passing (pytest)</dd>
+    <dt>Eval cases</dt><dd>${passed}/${D.evals.length} passing</dd><dt>Traces on this page</dt><dd>${esc(D.generated_with)}</dd>
+    <dt>LLM options</dt><dd>offline, Gemini (free tier), OpenAI, Anthropic, Ollama</dd>`;
+  const bc = D.business_case, cols = ["Conservative", "Base", "Optimistic"];
+  const row = (label, f) => `<tr><td>${label}</td>${cols.map((c) => `<td class="num">${f(bc[c])}</td>`).join("")}</tr>`;
+  $("#bc-rows").innerHTML = [
+    row("Gross annual benefit", (x) => x.gross_benefit_lakh.toFixed(1)), row("Run cost per year", (x) => x.run_cost_lakh.toFixed(1)),
+    row("<b>Net annual benefit</b>", (x) => `<b>${x.net_annual_benefit_lakh.toFixed(1)}</b>`), row("One-time cost", (x) => x.one_time_cost_lakh.toFixed(1)),
+    row("Payback (months)", (x) => x.payback_months), row("3-year NPV at 12%", (x) => x.npv_3yr_lakh.toFixed(1)), row("3-year ROI", (x) => x.roi_3yr_pct + "%"),
+  ].join("");
+  const drivers = Object.entries(bc.Base.drivers), max = Math.max(...drivers.map(([, v]) => v));
+  $("#bc-bars").innerHTML = drivers.map(([k, v]) => `<div class="bar"><span>${esc(k)}</span><span class="track"><span class="fill" style="width:${(v / max * 100).toFixed(1)}%;display:block"></span></span><span class="v">${v.toFixed(1)}</span></div>`).join("");
+  $("#bc-note").textContent = `Assumptions are explicit in agentprocure/business_case.py (spend Rs 260 crore, 36,000 invoices a year, 40% effort reduction in Year 1, against a best-in-class cost gap of about 73% in Ardent Partners' 2026 benchmarks). About ${D.ops_kpis.exceptions_avoided_per_year.toLocaleString("en-IN")} invoice exceptions a year are avoided; that effort sits inside operations cost and is not counted twice.`;
+  $("#foot").textContent = "Academic prototype. Company, vendors, GSTINs and figures are fictional. Rules reflect the position as of 10 October 2026; confirm against current notifications before any real use. Not tax or legal advice.";
+})();
+</script>

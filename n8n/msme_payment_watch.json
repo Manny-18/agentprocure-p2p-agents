@@ -1,0 +1,325 @@
+{
+  "name": "AgentProcure - MSME 45-day payment watch",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "5 9 * * 1-6"
+            }
+          ]
+        }
+      },
+      "id": "d704c401-10c9-4d60-a8ee-9455d55fde7e",
+      "name": "Every working day 09:05 IST",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b35be269-f4f1-4d15-95ac-8a92feab6200",
+              "name": "api_base",
+              "value": "http://localhost:8000",
+              "type": "string"
+            },
+            {
+              "id": "c7c3eecb-353c-430d-8a09-ef17cec3fb11",
+              "name": "n8n_base",
+              "value": "http://localhost:5678",
+              "type": "string"
+            },
+            {
+              "id": "db05b06c-997f-45a9-b875-6feaefe9397f",
+              "name": "approver_email",
+              "value": "approver@example.com",
+              "type": "string"
+            },
+            {
+              "id": "997d4b07-e9b5-40c8-8396-e59b254c9f3b",
+              "name": "ap_email",
+              "value": "ap-team@example.com",
+              "type": "string"
+            },
+            {
+              "id": "03f504cd-3b44-4148-9ed2-8dc018df3ade",
+              "name": "treasury_email",
+              "value": "treasury@example.com",
+              "type": "string"
+            },
+            {
+              "id": "08241eac-b110-4ca0-8722-f5ba5b9a537c",
+              "name": "from_email",
+              "value": "p2p-agents@example.com",
+              "type": "string"
+            },
+            {
+              "id": "0333ce69-dd4d-4bc8-a814-49b88ea4084d",
+              "name": "audit_sheet_url",
+              "value": "https://docs.google.com/spreadsheets/d/REPLACE_ME",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "id": "48aabc58-597a-4815-b21f-e1c47790a58d",
+      "name": "Config",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        220,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $('Config').item.json.api_base }}/alerts/msme",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "window_days",
+              "value": "7"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "f7325501-9739-4756-b204-6190406263a3",
+      "name": "Agents: MSME 45-day scan",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        440,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "22cd2be8-7b9a-4dc8-9e9f-7699ef93df0e",
+              "leftValue": "={{ $json.count }}",
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              },
+              "rightValue": 0
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "fc352a86-db4c-4853-99c1-a6c49c35b164",
+      "name": "Any alerts?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        660,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "alerts",
+        "options": {}
+      },
+      "id": "08b4880c-012e-4568-9152-3024f3d575e7",
+      "name": "One item per alert",
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        880,
+        220
+      ]
+    },
+    {
+      "parameters": {
+        "fromEmail": "={{ $('Config').item.json.from_email }}",
+        "toEmail": "={{ $('Config').item.json.treasury_email }}",
+        "subject": "=[{{ $json.severity }}] MSME payment {{ $json.invoice_no }} - {{ $json.vendor }} due {{ $json.msme_due }}",
+        "emailFormat": "text",
+        "text": "=Vendor: {{ $json.vendor }} ({{ $json.msme_category }} enterprise)\nInvoice: {{ $json.invoice_no }} for Rs {{ $json.total }}\nMSMED Act due date: {{ $json.msme_due }}\nOverdue days: {{ $json.overdue_days }} | Days to due: {{ $json.days_to_due }}\nInterest accrued (3x RBI Bank Rate, compounded monthly, not tax-deductible): Rs {{ $json.interest_accrued }}\nExpense disallowed under Income-tax Act 2025 s.37(2)(g) if unpaid at year end: Rs {{ $json.disallowance_if_unpaid_at_year_end }}\nStatus: {{ $json.status }}\nAction: {{ $json.action }}\n\n- Treasury & Working-Capital Analyst agent",
+        "options": {}
+      },
+      "id": "68e132b8-d438-4323-825f-5335bb96bbf7",
+      "name": "Email Treasury",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        1100,
+        220
+      ],
+      "credentials": {
+        "smtp": {
+          "id": "REPLACE_ME",
+          "name": "SMTP account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $('Config').item.json.audit_sheet_url }}",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "AuditLog"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": []
+        },
+        "options": {}
+      },
+      "id": "ed4996e3-f3eb-4c11-8a41-d561a15e702b",
+      "name": "Append alert to Google Sheet",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        1320,
+        220
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "REPLACE_ME",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "id": "36943437-49c3-4084-b36e-739d19821c87",
+      "name": "No alerts today",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        880,
+        420
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## MSME 45-day payment watch\nRuns daily. Calls the Treasury agent's scan of open payables and e-mails Treasury for every micro/small-enterprise invoice that is overdue or due within 7 days (MSMED Act s.15/16; Income-tax Act 2025 s.37(2)(g)).",
+        "height": 200,
+        "width": 420
+      },
+      "id": "3e5db71e-1dc1-427d-8c02-518e8d506d49",
+      "name": "Sticky: MSME watch",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        40
+      ]
+    }
+  ],
+  "connections": {
+    "Every working day 09:05 IST": {
+      "main": [
+        [
+          {
+            "node": "Config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Config": {
+      "main": [
+        [
+          {
+            "node": "Agents: MSME 45-day scan",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Agents: MSME 45-day scan": {
+      "main": [
+        [
+          {
+            "node": "Any alerts?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Any alerts?": {
+      "main": [
+        [
+          {
+            "node": "One item per alert",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No alerts today",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "One item per alert": {
+      "main": [
+        [
+          {
+            "node": "Email Treasury",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email Treasury": {
+      "main": [
+        [
+          {
+            "node": "Append alert to Google Sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Kolkata"
+  },
+  "pinData": {},
+  "tags": []
+}
