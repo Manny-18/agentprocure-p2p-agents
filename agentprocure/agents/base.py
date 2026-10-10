@@ -4,6 +4,7 @@ from __future__ import annotations
 import time
 from contextlib import contextmanager
 
+from ..knowledge import basis_for
 from .personas import PERSONAS
 
 
@@ -28,7 +29,7 @@ class StepRecorder:
             "framework": self.persona["framework"],
             "mandate": self.persona["mandate"],
             "tools": self.tools,
-            "findings": findings or [],
+            "findings": [{**f, "basis": f.get("basis") or basis_for(f["code"])} for f in (findings or [])],
             "decision": decision,
             "highlights": highlights or [],
             "rationale": (rationale or {}).get("text", ""),

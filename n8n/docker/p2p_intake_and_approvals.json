@@ -1,0 +1,793 @@
+{
+  "name": "AgentProcure - P2P intake and approvals",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "p2p-request",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "3f6df828-68e9-4ab9-9a8a-27518b3467d9",
+      "name": "Purchase request (webhook)",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        300
+      ],
+      "webhookId": "b2666cf6-79cd-4cad-b284-cba819606b62"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "07e2b0a9-f7bb-4fdf-8e9a-2b8716a58cff",
+              "name": "api_base",
+              "value": "http://api:8000",
+              "type": "string"
+            },
+            {
+              "id": "4d6bf388-cd88-4474-9b83-7b0dca96bfa4",
+              "name": "n8n_base",
+              "value": "http://localhost:5678",
+              "type": "string"
+            },
+            {
+              "id": "c90fcdf2-cc30-4fdd-9342-01245bd532e7",
+              "name": "approver_email",
+              "value": "approver@example.com",
+              "type": "string"
+            },
+            {
+              "id": "0a1910f6-20b8-4a99-991d-888713f3f6d8",
+              "name": "ap_email",
+              "value": "ap-team@example.com",
+              "type": "string"
+            },
+            {
+              "id": "9c888d6c-58a0-4444-bfa1-89adb876c2e7",
+              "name": "treasury_email",
+              "value": "treasury@example.com",
+              "type": "string"
+            },
+            {
+              "id": "ad9dded5-b261-48c1-99a6-34b41e4c40f4",
+              "name": "from_email",
+              "value": "p2p-agents@example.com",
+              "type": "string"
+            },
+            {
+              "id": "c8d68abf-1c32-449b-9ddc-b5259db3044c",
+              "name": "audit_sheet_url",
+              "value": "https://docs.google.com/spreadsheets/d/REPLACE_ME",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "id": "5663f1f1-35f8-44aa-b350-33c8ff6c0304",
+      "name": "Config",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        220,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Config').item.json.api_base }}/intake/triage",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ sender: $('Purchase request (webhook)').item.json.body.email, subject: $('Purchase request (webhook)').item.json.body.subject, body: $('Purchase request (webhook)').item.json.body.text }) }}",
+        "options": {
+          "timeout": 60000
+        }
+      },
+      "id": "248bd40e-aaa9-491c-b807-b40d049a054d",
+      "name": "Agents: triage request",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        440,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "87520fac-a110-47b5-a340-8714ed99465f",
+              "leftValue": "={{ $json.complete }}",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "b7d2a83a-ecfd-4117-ba83-14b76d9c4b8a",
+      "name": "Request complete?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        660,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "fromEmail": "={{ $('Config').item.json.from_email }}",
+        "toEmail": "={{ $('Purchase request (webhook)').item.json.body.email }}",
+        "subject": "=Re: {{ $('Purchase request (webhook)').item.json.body.subject }}",
+        "emailFormat": "text",
+        "text": "={{ $json.reply_suggestion }}\n\n- Procurement Analyst agent",
+        "options": {}
+      },
+      "id": "4bd60480-73fd-4af0-a019-1c234f756698",
+      "name": "Ask requester for missing info",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        880,
+        460
+      ],
+      "credentials": {
+        "smtp": {
+          "id": "REPLACE_ME",
+          "name": "SMTP account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Config').item.json.api_base }}/cases",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ scenario_id: $('Purchase request (webhook)').item.json.body.scenario_id || 'S1', requested_by: $('Purchase request (webhook)').item.json.body.email }) }}",
+        "options": {
+          "timeout": 300000
+        }
+      },
+      "id": "86cd08d3-f002-47ba-996d-ce812db67a41",
+      "name": "Agents: run P2P case",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        880,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "ba226d86-8b3f-44fb-8f15-83a09d20518f",
+              "leftValue": "={{ $json.status }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              },
+              "rightValue": "AWAITING_APPROVAL"
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "02019f28-5085-40a3-a5fa-99850d6275db",
+      "name": "Waiting for approval?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1100,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "fromEmail": "={{ $('Config').item.json.from_email }}",
+        "toEmail": "={{ $('Config').item.json.approver_email }}",
+        "subject": "=Approval needed ({{ $json.approval_request.approver_role }}): {{ $json.approval_request.vendor }} - {{ $json.approval_request.pr_no }}",
+        "emailFormat": "html",
+        "html": "=<h3>{{ $json.approval_request.question }}</h3><p>Item: {{ $json.approval_request.item }} ({{ $json.approval_request.qty }})<br>Supplier score: {{ $json.approval_request.score }} (Kraljic: {{ $json.approval_request.kraljic }}), runner-up {{ $json.approval_request.runner_up }}<br>Negotiation target: Rs {{ $json.approval_request.negotiation_target }}</p><p>Warnings: {{ $json.approval_request.warnings.join('; ') || 'none' }}</p><p><a href=\"{{ $('Config').item.json.n8n_base }}/webhook/p2p-approve?case_id={{ $json.case_id }}&decision=approve\">APPROVE</a> &nbsp; | &nbsp; <a href=\"{{ $('Config').item.json.n8n_base }}/webhook/p2p-approve?case_id={{ $json.case_id }}&decision=reject\">REJECT</a></p>",
+        "options": {}
+      },
+      "id": "c6ee4c40-5f38-4e09-91e3-9e87f2f642dd",
+      "name": "Email approver (approve / reject links)",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        1320,
+        120
+      ],
+      "credentials": {
+        "smtp": {
+          "id": "REPLACE_ME",
+          "name": "SMTP account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fromEmail": "={{ $('Config').item.json.from_email }}",
+        "toEmail": "={{ $('Config').item.json.ap_email }}",
+        "subject": "=P2P case {{ $json.case_id }}: {{ $json.status }}",
+        "emailFormat": "text",
+        "text": "={{ $json.memo.bullets.join('\\n') }}",
+        "options": {}
+      },
+      "id": "66ece125-a0c7-4644-bd99-77264ae539c3",
+      "name": "Notify AP: case closed without approval step",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        1320,
+        300
+      ],
+      "credentials": {
+        "smtp": {
+          "id": "REPLACE_ME",
+          "name": "SMTP account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "498e0050-cb13-485a-b2af-5240779bdb04",
+              "name": "timestamp",
+              "value": "={{ $now.toISO() }}",
+              "type": "string"
+            },
+            {
+              "id": "6211517b-f351-440d-b455-660bc1d06700",
+              "name": "case_id",
+              "value": "={{ $('Agents: run P2P case').item.json.case_id }}",
+              "type": "string"
+            },
+            {
+              "id": "f048449a-5820-4aee-9bcc-36b083664474",
+              "name": "status",
+              "value": "={{ $('Agents: run P2P case').item.json.status }}",
+              "type": "string"
+            },
+            {
+              "id": "9e1aad84-ef70-4de0-a69a-972490b6caf4",
+              "name": "steps",
+              "value": "={{ $('Agents: run P2P case').item.json.steps.map(s => s.agent + ': ' + s.decision).join(' | ') }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "47f7dc5b-74e2-442b-aa67-b24206594a58",
+      "name": "Log case to audit sheet",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1540,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $('Config').item.json.audit_sheet_url }}",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "AuditLog"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": []
+        },
+        "options": {}
+      },
+      "id": "f3a86c6a-0de0-47c5-b422-b812812a4bc5",
+      "name": "Append to Google Sheet",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        1760,
+        200
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "REPLACE_ME",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ received: true, case_id: $('Agents: run P2P case').isExecuted ? $('Agents: run P2P case').item.json.case_id : null }) }}",
+        "options": {}
+      },
+      "id": "9562ca62-6081-4f12-a9ef-4845d3d67e99",
+      "name": "Respond to requester",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        1980,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "httpMethod": "GET",
+        "path": "p2p-approve",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "e61ec880-e9c9-4bbc-9a13-59043b3923e0",
+      "name": "Approver clicks link (webhook)",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        760
+      ],
+      "webhookId": "cd32686d-66c2-464e-a755-a96d3971ac0d"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "4aebac54-7979-4234-9b9e-2a2a82b2c2e0",
+              "name": "api_base",
+              "value": "http://api:8000",
+              "type": "string"
+            },
+            {
+              "id": "5076a8bb-4f00-48a3-bcff-7592bdc4c547",
+              "name": "n8n_base",
+              "value": "http://localhost:5678",
+              "type": "string"
+            },
+            {
+              "id": "014efa67-8168-4ac8-9e7a-c31e75ebb521",
+              "name": "approver_email",
+              "value": "approver@example.com",
+              "type": "string"
+            },
+            {
+              "id": "1fc12d63-20be-46c8-b54d-3abaa05b9633",
+              "name": "ap_email",
+              "value": "ap-team@example.com",
+              "type": "string"
+            },
+            {
+              "id": "558afbff-0771-44f7-8a62-3f7840e2d293",
+              "name": "treasury_email",
+              "value": "treasury@example.com",
+              "type": "string"
+            },
+            {
+              "id": "6713fbf3-ba8d-4a68-a14a-698a71a73290",
+              "name": "from_email",
+              "value": "p2p-agents@example.com",
+              "type": "string"
+            },
+            {
+              "id": "606ad246-0c2f-4283-9505-8532b93baf4a",
+              "name": "audit_sheet_url",
+              "value": "https://docs.google.com/spreadsheets/d/REPLACE_ME",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "id": "ef54f0e2-00b3-4352-a270-ebec2374d095",
+      "name": "Config (approvals)",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        220,
+        760
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Config (approvals)').item.json.api_base }}/cases/{{ $('Approver clicks link (webhook)').item.json.query.case_id }}/decision",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ decision: $('Approver clicks link (webhook)').item.json.query.decision, approver: $('Config (approvals)').item.json.approver_email, comment: 'Decided via e-mail link' }) }}",
+        "options": {
+          "timeout": 300000
+        }
+      },
+      "id": "269ce309-8a9f-427f-a126-20467a5ccb31",
+      "name": "Agents: resume with decision",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        440,
+        760
+      ]
+    },
+    {
+      "parameters": {
+        "fromEmail": "={{ $('Config (approvals)').item.json.from_email }}",
+        "toEmail": "={{ $('Config (approvals)').item.json.ap_email }}, {{ $('Config (approvals)').item.json.treasury_email }}",
+        "subject": "=P2P case {{ $json.case_id }} closed: {{ $json.status }}",
+        "emailFormat": "text",
+        "text": "={{ $json.memo.bullets.join('\\n') }}\n\nAgent trail:\n{{ $json.steps.map(s => '- ' + s.agent + ': ' + s.decision).join('\\n') }}",
+        "options": {}
+      },
+      "id": "aec9b99e-a57d-4555-aa24-aea1c7e72e00",
+      "name": "Send case memo to AP + Treasury",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        660,
+        760
+      ],
+      "credentials": {
+        "smtp": {
+          "id": "REPLACE_ME",
+          "name": "SMTP account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "fe15daf5-d3f6-4c3a-8469-0de731038e85",
+              "name": "timestamp",
+              "value": "={{ $now.toISO() }}",
+              "type": "string"
+            },
+            {
+              "id": "b54262f0-8dfa-45f2-8503-dbfc364e4715",
+              "name": "case_id",
+              "value": "={{ $('Agents: resume with decision').item.json.case_id }}",
+              "type": "string"
+            },
+            {
+              "id": "0d69a53e-d6d7-4ac5-a2e5-e56a18bb1a4f",
+              "name": "status",
+              "value": "={{ $('Agents: resume with decision').item.json.status }}",
+              "type": "string"
+            },
+            {
+              "id": "b9ae9531-2ea7-4728-b647-f79e583b263a",
+              "name": "decision",
+              "value": "={{ $('Approver clicks link (webhook)').item.json.query.decision }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "46af52a1-4f42-4b7d-a70e-97150ef0acec",
+      "name": "Log decision",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        880,
+        760
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $('Config (approvals)').item.json.audit_sheet_url }}",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "AuditLog"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": []
+        },
+        "options": {}
+      },
+      "id": "55e08668-6492-4a7a-8257-db4829187fe8",
+      "name": "Append decision to Google Sheet",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        1100,
+        760
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "REPLACE_ME",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "=Decision recorded for case {{ $('Agents: resume with decision').item.json.case_id }}: {{ $('Agents: resume with decision').item.json.status }}. You can close this tab.",
+        "options": {}
+      },
+      "id": "271bdf7a-29f7-474a-b2e4-6e32ee3aced8",
+      "name": "Thank-you page",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        1320,
+        760
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## AgentProcure - intake & approvals\n1. A form / email client POSTs `{email, subject, text, scenario_id}` to the first webhook.\n2. The Procurement Analyst agent triages it; incomplete requests get an auto-reply.\n3. Complete requests start a LangGraph case: policy -> CrewAI sourcing crew -> pauses for the human approver.\n4. The approver gets an e-mail with APPROVE / REJECT links (second webhook) which resume the graph.\n5. Every case and decision is logged to Google Sheets.\n\nSet the values in **Config** and attach SMTP + Google Sheets credentials.",
+        "height": 300,
+        "width": 520
+      },
+      "id": "f809c577-320c-4d40-8d0c-be3e739f83ca",
+      "name": "Sticky: how it works",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        -60
+      ]
+    }
+  ],
+  "connections": {
+    "Purchase request (webhook)": {
+      "main": [
+        [
+          {
+            "node": "Config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Config": {
+      "main": [
+        [
+          {
+            "node": "Agents: triage request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Agents: triage request": {
+      "main": [
+        [
+          {
+            "node": "Request complete?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Request complete?": {
+      "main": [
+        [
+          {
+            "node": "Agents: run P2P case",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Ask requester for missing info",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ask requester for missing info": {
+      "main": [
+        [
+          {
+            "node": "Respond to requester",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Agents: run P2P case": {
+      "main": [
+        [
+          {
+            "node": "Waiting for approval?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Waiting for approval?": {
+      "main": [
+        [
+          {
+            "node": "Email approver (approve / reject links)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Notify AP: case closed without approval step",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email approver (approve / reject links)": {
+      "main": [
+        [
+          {
+            "node": "Log case to audit sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Notify AP: case closed without approval step": {
+      "main": [
+        [
+          {
+            "node": "Log case to audit sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log case to audit sheet": {
+      "main": [
+        [
+          {
+            "node": "Append to Google Sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append to Google Sheet": {
+      "main": [
+        [
+          {
+            "node": "Respond to requester",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Approver clicks link (webhook)": {
+      "main": [
+        [
+          {
+            "node": "Config (approvals)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Config (approvals)": {
+      "main": [
+        [
+          {
+            "node": "Agents: resume with decision",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Agents: resume with decision": {
+      "main": [
+        [
+          {
+            "node": "Send case memo to AP + Treasury",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send case memo to AP + Treasury": {
+      "main": [
+        [
+          {
+            "node": "Log decision",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log decision": {
+      "main": [
+        [
+          {
+            "node": "Append decision to Google Sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append decision to Google Sheet": {
+      "main": [
+        [
+          {
+            "node": "Thank-you page",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Kolkata"
+  },
+  "pinData": {},
+  "tags": [],
+  "id": "agentProcureP2P1"
+}

@@ -1,0 +1,277 @@
+{
+  "retrieval": "bm25",
+  "questions": 22,
+  "hit_at_1": 0.909,
+  "hit_at_3": 0.955,
+  "mrr": 0.932,
+  "rows": [
+    {
+      "question": "Can I split one order into two smaller orders to avoid getting three quotes?",
+      "expected": [
+        "POL-4.2"
+      ],
+      "retrieved": [
+        "POL-4.1",
+        "POL-4.2",
+        "POL-1.2"
+      ],
+      "rank": 2
+    },
+    {
+      "question": "How many quotations do I need for a purchase of Rs 4 lakh?",
+      "expected": [
+        "POL-4.1"
+      ],
+      "retrieved": [
+        "POL-4.1",
+        "POL-2.1",
+        "POL-4.2"
+      ],
+      "rank": 1
+    },
+    {
+      "question": "Who must approve a purchase order worth Rs 60 lakh?",
+      "expected": [
+        "POL-2.1"
+      ],
+      "retrieved": [
+        "POL-2.1",
+        "POL-4.1",
+        "POL-2.3"
+      ],
+      "rank": 1
+    },
+    {
+      "question": "The vendor emailed new bank account details. Can we pay to the new account?",
+      "expected": [
+        "POL-5.2"
+      ],
+      "retrieved": [
+        "POL-5.2",
+        "POL-2.3",
+        "POL-5.1"
+      ],
+      "rank": 1
+    },
+    {
+      "question": "Is 'we have worked with them before' a good enough reason to buy from one supplier only?",
+      "expected": [
+        "POL-4.3"
+      ],
+      "retrieved": [
+        "POL-4.3",
+        "POL-7.3",
+        "POL-3.2"
+      ],
+      "rank": 1
+    },
+    {
+      "question": "The invoice price is slightly higher than the PO price. Can we still pay it?",
+      "expected": [
+        "POL-7.1"
+      ],
+      "retrieved": [
+        "POL-7.1",
+        "POL-4.4",
+        "POL-6.1"
+      ],
+      "rank": 1
+    },
+    {
+      "question": "Should we stop the whole invoice when only part of it is disputed?",
+      "expected": [
+        "POL-7.2"
+      ],
+      "retrieved": [
+        "POL-7.2",
+        "POL-7.1",
+        "POL-7.4"
+      ],
+      "rank": 1
+    },
+    {
+      "question": "When should we take an early payment discount?",
+      "expected": [
+        "POL-8.2"
+      ],
+      "retrieved": [
+        "POL-8.2",
+        "POL-8.1",
+        "REG-MSMED-5"
+      ],
+      "rank": 1
+    },
+    {
+      "question": "Within how many days must a micro enterprise supplier be paid?",
+      "expected": [
+        "POL-8.3",
+        "REG-MSMED-1"
+      ],
+      "retrieved": [
+        "POL-8.3",
+        "POL-8.1",
+        "REG-MSMED-1"
+      ],
+      "rank": 1
+    },
+    {
+      "question": "What interest do we owe if we pay a small enterprise late?",
+      "expected": [
+        "REG-MSMED-2"
+      ],
+      "retrieved": [
+        "REG-MSMED-2",
+        "POL-8.1",
+        "POL-8.3"
+      ],
+      "rank": 1
+    },
+    {
+      "question": "When does TDS on purchase of goods apply and at what rate?",
+      "expected": [
+        "REG-IT-2"
+      ],
+      "retrieved": [
+        "REG-IT-2",
+        "POL-5.3",
+        "REG-GST-1"
+      ],
+      "rank": 1
+    },
+    {
+      "question": "What happens to our tax deduction if MSME dues are still unpaid at year end?",
+      "expected": [
+        "REG-IT-3"
+      ],
+      "retrieved": [
+        "REG-IT-3",
+        "POL-8.3",
+        "REG-IT-2"
+      ],
+      "rank": 1
+    },
+    {
+      "question": "When is an e-invoice IRN mandatory for a supplier?",
+      "expected": [
+        "REG-GST-4"
+      ],
+      "retrieved": [
+        "REG-GST-4",
+        "POL-6.1",
+        "POL-4.1"
+      ],
+      "rank": 1
+    },
+    {
+      "question": "When should a supplier charge IGST instead of CGST and SGST?",
+      "expected": [
+        "REG-GST-2"
+      ],
+      "retrieved": [
+        "REG-GST-2",
+        "REG-GST-5",
+        "POL-4.3"
+      ],
+      "rank": 1
+    },
+    {
+      "question": "Can we keep the input tax credit if we have not paid the supplier for 200 days?",
+      "expected": [
+        "POL-7.4",
+        "REG-GST-5"
+      ],
+      "retrieved": [
+        "POL-7.4",
+        "REG-GST-5",
+        "REG-GST-4"
+      ],
+      "rank": 1
+    },
+    {
+      "question": "The vendor has no PAN. Do we still pay and what TDS rate applies?",
+      "expected": [
+        "POL-5.3",
+        "REG-IT-2"
+      ],
+      "retrieved": [
+        "POL-5.3",
+        "REG-IT-2",
+        "POL-5.1"
+      ],
+      "rank": 1
+    },
+    {
+      "question": "What is the current RBI Bank Rate used for MSME late-payment interest?",
+      "expected": [
+        "REG-RBI-1"
+      ],
+      "retrieved": [
+        "REG-RBI-1",
+        "REG-MSMED-2",
+        "REG-GST-1"
+      ],
+      "rank": 1
+    },
+    {
+      "question": "Does the 45-day payment rule apply to medium enterprises or traders?",
+      "expected": [
+        "REG-MSMED-4"
+      ],
+      "retrieved": [
+        "REG-MSMED-4",
+        "POL-8.3",
+        "REG-MSMED-1"
+      ],
+      "rank": 1
+    },
+    {
+      "question": "My manager says this is urgent, can we skip the quotes?",
+      "expected": [
+        "POL-3.3"
+      ],
+      "retrieved": [
+        "POL-3.3",
+        "POL-4.1",
+        "REG-MSMED-2"
+      ],
+      "rank": 1
+    },
+    {
+      "question": "How do we check that a GSTIN is genuine?",
+      "expected": [
+        "POL-5.1",
+        "REG-GST-3"
+      ],
+      "retrieved": [
+        "REG-GST-3",
+        "POL-5.1",
+        "POL-3.3"
+      ],
+      "rank": 1
+    },
+    {
+      "question": "Can the buyer who negotiated the deal also approve the PO?",
+      "expected": [
+        "POL-2.3"
+      ],
+      "retrieved": [
+        "POL-2.3",
+        "POL-6.1",
+        "POL-1.2"
+      ],
+      "rank": 1
+    },
+    {
+      "question": "Is the cheapest quote always the one we should pick?",
+      "expected": [
+        "POL-4.4"
+      ],
+      "retrieved": [
+        "POL-4.1",
+        "POL-4.5",
+        "POL-6.1"
+      ],
+      "rank": null
+    }
+  ]
+}

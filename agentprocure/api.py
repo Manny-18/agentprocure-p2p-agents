@@ -7,6 +7,7 @@ Run:  uvicorn agentprocure.api:app --reload --port 8000     (Swagger UI at /docs
   GET  /cases/{case_id}          current state of a case
   POST /cases/{case_id}/decision approver's answer -> resumes the LangGraph run to the end
   GET  /alerts/msme              daily MSME 45-day watch over open payables (n8n schedule)
+  POST /policy/ask               Policy Advisor: policy and compliance questions answered with clause citations (RAG)
 """
 from __future__ import annotations
 
@@ -16,6 +17,7 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
 
 from . import config
+from .agents.advisor import ask_policy
 from .agents.intake import ParsedRequest, parse_offline
 from .graph import get_graph, pending_approval, resume_case, start_case
 from .llm import GATEWAY
@@ -35,6 +37,10 @@ class Decision(BaseModel):
     decision: Literal["approve", "reject"]
     approver: str | None = None
     comment: str | None = None
+
+
+class PolicyQuestion(BaseModel):
+    question: str = Field(examples=["Can I split one order into two to avoid getting three quotes?"])
 
 
 class TriageIn(BaseModel):
@@ -126,3 +132,8 @@ def msme_alerts(window_days: int = 7):
     alerts.sort(key=lambda a: (a["severity"] != "CRITICAL", a["msme_due"]))
     return {"as_of": co["as_of"], "count": len(alerts), "critical": sum(a["severity"] == "CRITICAL" for a in alerts),
             "alerts": alerts}
+
+
+@app.post("/policy/ask")
+def policy_ask(body: PolicyQuestion):
+    return ask_policy(body.question)

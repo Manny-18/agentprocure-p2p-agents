@@ -7,6 +7,7 @@ from datetime import datetime
 from pydantic import BaseModel, Field
 
 from .. import config
+from ..knowledge import excerpt, kb
 from ..llm import GATEWAY
 from ..rules.common import days_between, inr
 from ..rules.policy import budget_check
@@ -99,24 +100,40 @@ def intake_agent(state: dict) -> dict:
     if parsed.sole_source_claimed:
         findings.append({"code": "SOLE_SOURCE_CLAIMED", "severity": "INFO", "detail": "Requester names a single supplier"})
 
+    reminders = []
+    queries = []
+    if parsed.urgent:
+        queries.append("urgent request pressure to approve fast emergency purchase")
+    if parsed.sole_source_claimed or pr.get("single_source"):
+        queries.append("buy from one supplier only sole source justification")
+    for q in queries:
+        hit = kb().retrieve(q, k=1)
+        if hit and hit[0]["clause"] not in {r["clause"] for r in reminders}:
+            reminders.append({"clause": hit[0]["clause"], "title": hit[0]["title"], "excerpt": excerpt(hit[0]["text"])})
+    if queries:
+        rec.tool("policy_knowledge_base", {"queries": queries, "retrieval": kb().mode}, reminders,
+                 "Retrieved " + ", ".join(f"{r['clause']} {r['title']}" for r in reminders))
+
     lead_days = days_between(pr["date"], pr["item"]["need_by"])
     budget = rec.tool("budget_check", {"cost_center": pr["cost_center"], "amount": pr["estimated_value"]},
                       budget_check(pr["cost_center"], pr["estimated_value"], co["budgets"]),
                       "")
     rec.tools[-1]["summary"] = (f"{budget['name']}: remaining {inr(budget['remaining'])} vs request {inr(pr['estimated_value'])}"
                                 if budget.get("name") else "cost center not found")
-    requisition = {**pr, "hsn": hsn, "spend_class": SPEND_CLASS.get(pr["category"], "Unclassified"),
+    requisition = {**pr, "policy_reminders": reminders, "hsn": hsn, "spend_class": SPEND_CLASS.get(pr["category"], "Unclassified"),
                    "days_to_need_by": lead_days, "parsed": parsed.model_dump(), "parse_method": method,
                    "budget": {"remaining": budget["remaining"], "ok": budget["ok"]}}
     facts = {"pr_no": pr["pr_no"], "item": pr["item"]["description"], "qty": pr["item"]["qty"],
              "estimated_value": pr["estimated_value"], "need_by": pr["item"]["need_by"],
              "days_to_need_by": lead_days, "spend_class": requisition["spend_class"], "hsn": hsn,
-             "budget_remaining": budget["remaining"], "flags": [f["code"] for f in findings]}
+             "budget_remaining": budget["remaining"], "flags": [f["code"] for f in findings],
+             "policy_reminders": reminders}
     fallback = (f"{pr['pr_no']} is a {requisition['spend_class'].lower()} request for {pr['item']['qty']:,} {pr['item']['uom']} of "
                 f"{pr['item']['description']} (HSN {hsn}), estimated at {inr(pr['estimated_value'])} and needed in {lead_days} days. "
                 f"Budget on {pr['cost_center']} has {inr(budget['remaining'])} available. "
                 + ("Flags for the policy officer: " + ", ".join(f["code"] for f in findings) + "." if findings else
-                   "The request is complete and consistent with the form."))
+                   "The request is complete and consistent with the form.")
+                + ("".join(f" Reminder to the requester ({r['clause']}, {r['title']}): {r['excerpt']}" for r in reminders)))
     rationale = GATEWAY.narrate(persona=PERSONAS["intake"]["system"],
                                 task="Summarise this requisition for the policy officer in 2-3 sentences and list any flags.",
                                 facts=facts, fallback=fallback)

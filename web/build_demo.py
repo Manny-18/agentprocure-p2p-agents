@@ -15,6 +15,7 @@ sys.path.insert(0, str(ROOT))
 
 from agentprocure.agents.personas import PERSONAS  # noqa: E402
 from agentprocure.business_case import evaluate  # noqa: E402
+from agentprocure.knowledge import kb  # noqa: E402
 
 WEB = ROOT / "web"
 
@@ -23,7 +24,9 @@ def slim_step(t: dict) -> dict:
     keep = {k: t.get(k) for k in ("agent", "title", "framework", "mandate", "decision", "highlights", "rationale",
                                    "rationale_source", "guardrail", "elapsed_ms", "engine", "crew_tool_calls", "email_draft")}
     keep["tools"] = [{"tool": x["tool"], "summary": x["summary"]} for x in t.get("tools", [])]
-    keep["findings"] = [{"code": f["code"], "severity": f["severity"], "detail": f["detail"]} for f in t.get("findings", [])]
+    keep["findings"] = [{"code": f["code"], "severity": f["severity"], "detail": f["detail"],
+                         "basis": (f.get("basis") or {}).get("clause"), "basis_title": (f.get("basis") or {}).get("title")}
+                        for f in t.get("findings", [])]
     if t.get("crew"):
         keep["crew"] = [{"agent": c["agent"], "title": c["title"], "output": c["output"]} for c in t["crew"]]
     return {k: v for k, v in keep.items() if v not in (None, [], "")}
@@ -74,6 +77,10 @@ def main():
             "evals": [{k: r[k] for k in ("id", "case", "expected", "actual", "pass")} for r in evals],
             "business_case": {k: bc[k] for k in ("Conservative", "Base", "Optimistic")},
             "ops_kpis": bc["operational_kpis"]}
+    data["kb"] = [{"clause": d.metadata["clause"], "title": d.metadata["title"], "section": d.metadata["section"],
+                   "source": d.metadata["source"], "text": d.page_content} for d in kb().docs]
+    rag = json.loads((ROOT / "evals" / "rag_results.json").read_text(encoding="utf-8"))
+    data["rag_eval"] = {k: rag[k] for k in ("retrieval", "questions", "hit_at_1", "hit_at_3", "mrr")}
     payload = json.dumps(data, separators=(",", ":"), ensure_ascii=False).replace("</", "<\\/")
     html = (WEB / "demo_template.html").read_text(encoding="utf-8")
     html = html.replace("/*__RULES__*/", (WEB / "rules.js").read_text(encoding="utf-8"))

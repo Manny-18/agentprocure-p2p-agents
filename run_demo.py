@@ -5,6 +5,7 @@ Examples
   python run_demo.py -s S2 --interactive   # you play the approver at the LangGraph interrupt
   python run_demo.py -s S1 --reject        # approver rejects -> case closes
   python run_demo.py --graph               # print the LangGraph workflow as Mermaid
+  python run_demo.py --ask "Can I split an order to avoid three quotes?"   # Policy Advisor (RAG)
   LLM_PROVIDER=gemini GOOGLE_API_KEY=... python run_demo.py -s S1   # real LLM narration + CrewAI crew
 """
 from __future__ import annotations
@@ -108,9 +109,17 @@ def main(argv=None):
     ap.add_argument("--reject", action="store_true", help="approver rejects (demo)")
     ap.add_argument("--graph", action="store_true", help="print the LangGraph workflow as Mermaid and exit")
     ap.add_argument("--json", help="write full case results to this JSON file")
+    ap.add_argument("--ask", help="ask the Policy Advisor a policy or compliance question (RAG)")
     args = ap.parse_args(argv)
     if args.graph:
         print(mermaid())
+        return 0
+    if args.ask:
+        from agentprocure.agents.advisor import ask_policy
+        res = ask_policy(args.ask)
+        say(f"Policy Advisor | retrieval: {escape(res['retrieval'])} | answer by: {escape(res['source'])} | guardrail: {escape(res['guardrail'])}", "dim")
+        say("Retrieved: " + ", ".join(f"{r['clause']} {escape(r['title'])} ({r['score']})" for r in res["retrieved"]), "dim")
+        say("\n" + escape(res["answer"]), "bold")
         return 0
     say(f"AgentProcure | LLM: {GATEWAY.label} | CrewAI: {'on' if config.USE_CREWAI else 'off'} | as-of {config.company()['as_of']}", "dim")
     ids = [s["id"] for s in config.list_scenarios()] if args.scenario == "all" else [args.scenario]

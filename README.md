@@ -6,13 +6,16 @@ specialist AI agents. Each agent behaves like a real role in a P2P organisation 
 domain rules for Indian compliance: GST, e-invoicing, TDS under the Income-tax Act 2025, the MSMED
 Act 45-day rule and the procurement policy.
 
-It uses three agent tools, each where it fits best:
+It uses six tools, each where it fits best:
 
 | Tool | Role in the project |
 |---|---|
 | **LangGraph** | Runs the end-to-end P2P case as a stateful graph: routing, exception branches, a human approval step (`interrupt`) and a full audit trail. |
 | **CrewAI** | A three-agent sourcing "crew" (Category Manager, Supplier Performance & Risk Analyst, Negotiation Strategist) running inside one LangGraph node. |
 | **n8n** | Business automation around the agents: purchase-request intake, approval e-mails with approve/reject links, audit logging to Google Sheets, and a daily MSME payment watch. |
+| **LangChain** | The model layer: `init_chat_model` switches between Gemini, OpenAI, Anthropic and Ollama; `with_structured_output` extracts requisitions; an LCEL chain (prompt, model, parser) drives the Policy Advisor; the knowledge base uses LangChain's text splitter, retriever and vector-store interfaces. |
+| **RAG** | A policy and regulation knowledge base (39 clauses) searched with BM25, optionally fused with Gemini embeddings. The Policy Advisor answers questions with clause citations, the Procurement Analyst retrieves reminders for risky requests, and every finding names the clause behind it. |
+| **Docker** | `docker compose up` starts the agents' API and n8n together, with both workflows imported and pointed at the API. |
 
 **Runs with no API key.** In offline mode the CrewAI crew and every agent still run; the
 reasoning text comes from expert templates. Add a free Gemini key (or OpenAI, Anthropic, Ollama)
@@ -36,11 +39,13 @@ and the same agents write their explanations with an LLM, checked by a guardrail
 | 8 | Exception Resolver | LangGraph node | Split payable vs disputed; credit note; supplier e-mail | owner routing, credit-note request |
 | 9 | Treasury & Working-Capital Analyst | LangGraph node | When to pay | MSMED s.15/16 dates and interest, s.37(2)(g) exposure, discount APR vs cost of funds |
 | 10 | Finance Controller | LangGraph node | CFO memo, KPIs, audit trail | KPI roll-up |
+| 11 | Policy Advisor | LangChain LCEL + RAG (API, CLI, demo) | Answers policy and compliance questions with citations | knowledge-base retrieval, citation and number checks |
 
 **Design rule: numbers come from tools, never from the LLM.** The LLM explains, prioritises and
 drafts. A guardrail (`agentprocure/llm.py::numbers_grounded`) rejects any LLM text containing a
 figure not present in the tool outputs, and the CrewAI recommendation can never override the
-scorecard winner; only the human approver can.
+scorecard winner; only the human approver can. The Policy Advisor's answers are accepted only if every
+cited clause was actually retrieved and every number appears in the retrieved text.
 
 ## Workflow
 
@@ -82,8 +87,10 @@ pip install -r requirements.txt
 python run_demo.py                     # all four scenarios, offline, auto-approve
 python run_demo.py -s S2 --interactive # you are the approver at the interrupt
 python run_demo.py -s S1 --reject      # rejection path
-pytest                                 # 40 unit + workflow tests
+pytest                                 # 47 tests: rules, workflow, RAG, LLM gateway
 python -m evals.run_evals              # 22-case control-effectiveness evaluation
+python -m evals.rag_eval               # 22 policy questions: does retrieval find the right clause?
+python run_demo.py --ask "Can I split an order to avoid three quotes?"   # Policy Advisor (RAG)
 python -m agentprocure.business_case   # ROI, payback, NPV (3 scenarios)
 ```
 
@@ -120,6 +127,7 @@ uvicorn agentprocure.api:app --port 8000      # Swagger UI: http://localhost:800
 | `POST /cases/{id}/decision` | approver's link in the e-mail resumes the graph |
 | `GET /cases/{id}` | case status |
 | `GET /alerts/msme` | daily MSME 45-day payment watch |
+| `POST /policy/ask` | Policy Advisor: question in, cited answer and retrieved clauses out |
 
 ### n8n workflows
 
@@ -131,24 +139,47 @@ Import the two files in `n8n/` (n8n -> Workflows -> Import from file):
   overdue or due-soon MSE invoice -> Google Sheets log.
 
 Set the URLs and e-mail addresses in each workflow's **Config** node and attach SMTP and Google
-Sheets credentials. Run n8n with `npx n8n` or Docker; if n8n runs in Docker, use
-`http://host.docker.internal:8000` as `api_base`.
+Sheets credentials. Run n8n with `npx n8n`, or use Docker Compose below, which does the import for you.
+
+### Docker: API + n8n in one command
+
+Needs Docker Desktop (Windows/Mac) or Docker Engine (Linux).
+
+```bash
+docker compose up --build
+```
+
+* Agents' API and Swagger UI: http://localhost:8000/docs
+* n8n: http://localhost:5678 (create the local owner account on first visit). Both AgentProcure workflows are
+  already imported, and their Config nodes call the API at `http://api:8000` (the compose service name).
+* An optional `.env` (copy `.env.example`) switches the API to Gemini or another model; without it the API runs offline.
+* `n8n/build_variants.py` regenerates the Docker copies of the workflows in `n8n/docker/` after you edit the originals.
+
+### RAG: the policy knowledge base
+
+`agentprocure/knowledge/` holds Meridian's procurement policy (`procurement_policy.md`, clauses POL-1.1 to POL-9.1)
+and regulatory notes (`regulations.md`: MSMED Act, Income-tax Act 2025, GST, RBI rate). LangChain's
+`MarkdownHeaderTextSplitter` turns them into one document per clause; a LangChain retriever over BM25 finds clauses
+with no API key. Set `RAG_EMBEDDINGS=gemini` to add Gemini embeddings in an in-memory vector store, merged with BM25
+by reciprocal-rank fusion. `python -m evals.rag_eval` scores retrieval on 22 employee-style questions.
 
 ## Project structure
 
 ```
 agentprocure/
   rules/            deterministic domain expertise (GST, TDS, MSME, matching, policy, sourcing, treasury)
-  agents/           one module per expert agent + the CrewAI crew + human approval node
+  knowledge/        RAG knowledge base: policy manual, regulatory notes, splitter + retrievers
+  agents/           one module per expert agent + the CrewAI crew + human approval node + Policy Advisor
   graph.py          LangGraph workflow (StateGraph, conditional edges, interrupt, checkpointer)
   llm.py            provider-agnostic LLM gateway + numeric grounding guardrail
   api.py            FastAPI service for n8n
   business_case.py  ROI model with explicit assumptions
   export_traces.py  exports agent traces as JSON (feeds the web demo)
   data/             company, vendor master, HSN rates, payables register, scenarios S1-S4
-n8n/                importable n8n workflows
-tests/              pytest: rules + end-to-end workflow
-evals/              22 mutation cases scoring outcome, control fired and money figures
+n8n/                importable n8n workflows (n8n/docker/: copies wired for Docker Compose)
+tests/              pytest: rules, end-to-end workflow, RAG, LLM gateway resilience
+evals/              22 control-evaluation cases + 22 RAG retrieval questions
+Dockerfile, docker-compose.yml   API image; API + n8n stack
 web/               live demo: index.html (open in any browser), rules.js (JS port of the rules),
                    build_demo.py + demo_template.html (rebuild after export_traces), traces.json
 ```
@@ -158,6 +189,7 @@ Rebuild the demo after changing rules or scenarios:
 ```bash
 python -m agentprocure.export_traces --out web/traces.json
 python -m evals.run_evals
+python -m evals.rag_eval
 python web/build_demo.py
 ```
 

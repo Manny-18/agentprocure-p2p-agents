@@ -215,9 +215,9 @@ textarea { font-family: var(--f-body); font-size: var(--step-0); min-height: 84p
 
 /* built */
 .tri { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
-.tri .card:nth-child(1) { background: var(--carbon-soft); }
-.tri .card:nth-child(2) { background: var(--tint-pink); }
-.tri .card:nth-child(3) { background: var(--tint-yellow); }
+.tri .card:nth-child(1), .tri .card:nth-child(4) { background: var(--carbon-soft); }
+.tri .card:nth-child(2), .tri .card:nth-child(5) { background: var(--tint-pink); }
+.tri .card:nth-child(3), .tri .card:nth-child(6) { background: var(--tint-yellow); }
 .bars { display: grid; gap: 8px; }
 .bar { display: grid; grid-template-columns: minmax(0, 210px) minmax(0, 1fr) 70px; gap: 10px; align-items: center; font-size: var(--step--1); }
 .bar .track { background: var(--sheet-2); border-radius: 4px; height: 14px; overflow: hidden; }
@@ -365,7 +365,7 @@ pre.mermaid { background: var(--sheet); border: 1px solid var(--rule); border-ra
   <section class="view" id="ask" role="tabpanel" aria-labelledby="tab-ask" hidden>
     <div class="lede">
       <span class="eyebrow">Live agents</span>
-      <h1>Question any agent about a case, or hand the analyst a new request.</h1>
+      <h1>Question any agent, ask the policy manual, or hand the analyst a new request.</h1>
       <p>Each answer is written live by Claude in the agent's role and grounded only on that case's record. The first question asks you to allow the page to use Claude.</p>
     </div>
     <div class="notice" id="ask-unavailable" hidden>Live questions need this page to be open in Claude. Everything else on the page works without it.</div>
@@ -383,6 +383,13 @@ pre.mermaid { background: var(--sheet); border: 1px solid var(--rule); border-ra
         <div class="answer" id="q-answer">Pick a suggested question or type your own.</div>
       </div>
     </div>
+    <div class="card" id="rag-card">
+      <div><h3>Policy Advisor: ask the policy manual (RAG)</h3><div class="rule-ref">Retrieves clauses from the procurement policy and regulatory notes (BM25, in the page), then Claude answers citing them</div></div>
+      <div class="chips" id="r-sugg"></div>
+      <label class="field">Policy or compliance question<textarea id="r-text">Can I split one order into two smaller orders to avoid getting three quotes?</textarea></label>
+      <div class="controls"><button class="btn primary" id="r-go">Ask the Policy Advisor</button><button class="btn" id="r-find">Only show matching clauses</button><span class="note" id="r-status"></span></div>
+      <div class="grid2"><div class="out" id="r-hits">Retrieved clauses appear here.</div><div class="out" id="r-answer">The cited answer appears here.</div></div>
+    </div>
     <div class="card">
       <div><h3>Intake desk: try your own purchase request</h3><div class="rule-ref">Procurement Analyst (Claude extracts) -> Policy rules (computed in the page)</div></div>
       <label class="field">Request as an employee would write it<textarea id="i-text">Urgent: need 600 nos bearing housings (cast iron, drawing BH-62) for the new gearbox line by 30 Oct 2026. Around Rs 4.2 lakh. Only Sahyadri Castings can make these, please approve fast.</textarea></label>
@@ -395,12 +402,15 @@ pre.mermaid { background: var(--sheet); border: 1px solid var(--rule); border-ra
   <section class="view" id="built" role="tabpanel" aria-labelledby="tab-built" hidden>
     <div class="lede">
       <span class="eyebrow">Architecture, evidence, business case</span>
-      <h1>Three tools, each doing the job it is best at.</h1>
+      <h1>Six tools, each doing the job it is best at.</h1>
     </div>
     <div class="tri">
       <div class="card"><h3>LangGraph runs the case</h3><p>A stateful graph with conditional routes (block, reject, exception, partial release), a human approval <span class="mono">interrupt()</span> with checkpointing, and one audit record per agent step.</p></div>
       <div class="card"><h3>CrewAI runs sourcing</h3><p>A crew of three: Category Manager (Kraljic), Supplier Performance &amp; Risk Analyst (scorecard), Negotiation Strategist (should-cost). Offline it is driven by a scripted expert LLM over the same ReAct loop.</p></div>
       <div class="card"><h3>n8n runs the business plumbing</h3><p>Request intake, approval e-mails with approve/reject links that resume the graph, Google Sheets audit log, and a daily MSME 45-day payment watch, all through a FastAPI service.</p></div>
+      <div class="card"><h3>LangChain connects the models</h3><p>One gateway (<span class="mono">init_chat_model</span>) switches between Gemini, OpenAI, Anthropic and Ollama; structured output turns requests into requisitions; LCEL chains drive the Policy Advisor.</p></div>
+      <div class="card"><h3>RAG grounds every rule</h3><p>The policy manual and regulatory notes are split into 39 clauses and searched with BM25 (optionally plus embeddings). The Policy Advisor answers with citations, and every finding names the clause behind it.</p></div>
+      <div class="card"><h3>Docker packages it</h3><p><span class="mono">docker compose up</span> starts the agents' API and n8n together, with both workflows imported and already pointed at the API.</p></div>
     </div>
     <pre class="mermaid">
 graph TD
@@ -419,6 +429,9 @@ graph TD
   resolver -- hard stop --> controller
   treasury --> controller
   controller --> done([Case memo and audit trail])
+  kb[(Policy knowledge base - RAG)] -. clauses .-> intake
+  kb -. clauses .-> policy
+  kb -. answers with citations .-> advisor[Policy Advisor]
     </pre>
     <div class="grid2">
       <div class="card">
@@ -660,7 +673,7 @@ graph TD
       <div class="decision ${v}">${rupee(step.decision)}</div>
       ${step.highlights ? `<div class="chips">${step.highlights.map((h) => `<span class="chip">${rupee(h)}</span>`).join("")}</div>` : ""}
       ${step.tools && step.tools.length ? `<div><div class="blk-title">Tools called</div><ul class="tools">${step.tools.map((t) => `<li><code>${esc(t.tool)}</code><span>${rupee(t.summary)}</span></li>`).join("")}</ul></div>` : ""}
-      ${step.findings && step.findings.length ? `<div><div class="blk-title">Findings</div><div class="finds">${step.findings.map((f) => `<div class="find"><span class="sev sev-${f.severity}">${f.severity}</span><span><b>${esc(f.code)}</b> ${rupee(f.detail)}</span></div>`).join("")}</div></div>` : ""}
+      ${step.findings && step.findings.length ? `<div><div class="blk-title">Findings, with the policy or law behind each</div><div class="finds">${step.findings.map((f) => `<div class="find"><span class="sev sev-${f.severity}">${f.severity}</span><span><b>${esc(f.code)}</b> ${rupee(f.detail)}${f.basis ? ` <span class="chip mono">${esc(f.basis)} ${esc(f.basis_title || "")}</span>` : ""}</span></div>`).join("")}</div></div>` : ""}
       ${extraFor(step, c)}
       ${step.agent !== "approver" ? `<div class="why"><div class="blk-title">Why</div><p>${rupee(step.rationale)}</p>
         <span class="src">written by: ${esc(step.rationale_source)} | numeric guardrail: ${esc(step.guardrail)}</span></div>` : ""}`;
@@ -867,6 +880,74 @@ QUESTION: ${q}`;
   $("#q-go").addEventListener("click", ask);
   $("#q-stop").addEventListener("click", () => qCtl?.abort());
 
+  /* policy advisor (RAG): BM25 over the knowledge base, same tokenizer as agentprocure/knowledge */
+  const STOP = new Set("a an the of to in on for and or is are be by with at as it its this that from can we our i my me do does what when which who how if any all into than then there their them they you your will should must not no may only per under over up within about".split(" "));
+  function toks(text) {
+    const out = [];
+    for (let w of (text.toLowerCase().match(/[a-z0-9]+/g) || [])) {
+      if (STOP.has(w)) continue;
+      for (const suf of ["ing", "ed", "es", "s"]) { if (w.length > 4 && w.endsWith(suf)) { w = w.slice(0, -suf.length); break; } }
+      if (w.length > 3 && w.at(-1) === w.at(-2) && !"aeiou0123456789".includes(w.at(-1))) w = w.slice(0, -1);
+      out.push(w);
+    }
+    return out;
+  }
+  const KB = D.kb.map((c) => ({ ...c, toks: toks(`${c.title} ${c.title} ${c.section} ${c.text}`) }));
+  const avgdl = KB.reduce((a, c) => a + c.toks.length, 0) / KB.length;
+  const df = new Map();
+  KB.forEach((c) => new Set(c.toks).forEach((t) => df.set(t, (df.get(t) || 0) + 1)));
+  const idfRaw = new Map([...df].map(([t, n]) => [t, Math.log((KB.length - n + 0.5) / (n + 0.5))]));
+  const idfFloor = 0.25 * ([...idfRaw.values()].reduce((a, b) => a + b, 0) / idfRaw.size);
+  const idf = (t) => { const v = idfRaw.get(t); return v === undefined ? 0 : (v < 0 ? idfFloor : v); };
+  function retrieve(q, k = 4) {
+    const qt = toks(q);
+    return KB.map((c) => {
+      const tf = new Map(); c.toks.forEach((t) => tf.set(t, (tf.get(t) || 0) + 1));
+      let score = 0;
+      for (const t of qt) { const f = tf.get(t) || 0; if (f) score += idf(t) * (f * 2.5) / (f + 1.5 * (1 - 0.75 + 0.75 * c.toks.length / avgdl)); }
+      return { c, score };
+    }).filter((x) => x.score > 0).sort((a, b) => b.score - a.score).slice(0, k);
+  }
+  const RSUGG = ["Can I split one order into two smaller orders to avoid getting three quotes?", "The vendor emailed new bank account details. Can we pay them today?",
+    "What interest do we owe if we pay a small enterprise late?", "When is an e-invoice IRN mandatory for a supplier?", "My manager says this is urgent, can we skip the quotes?"];
+  $("#r-sugg").innerHTML = RSUGG.map((q, i) => `<button class="btn" data-i="${i}">${esc(q)}</button>`).join("");
+  $("#r-sugg").querySelectorAll("button").forEach((b) => b.addEventListener("click", () => { $("#r-text").value = RSUGG[Number(b.dataset.i)]; showHits(); }));
+  function showHits() {
+    const hits = retrieve($("#r-text").value);
+    $("#r-hits").innerHTML = `<div class="blk-title" style="margin:0">Retrieved (BM25, top ${hits.length})</div>` + (hits.length ? hits.map((h) =>
+      `<div class="find"><span class="sev sev-INFO">${esc(h.c.clause)}</span><span><b>${esc(h.c.title)}</b> <span class="muted">(${esc(h.c.source)}, score ${h.score.toFixed(2)})</span><br>${rupee(h.c.text)}</span></div>`).join("") : "<p class='muted'>No clause matches. Try other words.</p>");
+    return hits;
+  }
+  $("#r-find").addEventListener("click", () => { showHits(); $("#r-answer").textContent = "Ask the Policy Advisor for a written answer with citations."; });
+  let rCtl = null;
+  $("#r-go").addEventListener("click", async () => {
+    const hits = showHits();
+    const sample = await getSample();
+    if (!sample) { $("#r-answer").textContent = "Live answers need this page open in Claude; the matching clauses are shown."; return; }
+    if (!hits.length) { $("#r-answer").textContent = "The policy does not cover this question. Ask the Procurement Head."; return; }
+    const context = hits.map((h) => `[${h.c.clause}] ${h.c.title}\n${h.c.text}`).join("\n\n");
+    const allowed = new Set(hits.map((h) => h.c.clause));
+    rCtl?.abort(); rCtl = new AbortController();
+    $("#r-answer").textContent = "Thinking..."; $("#r-go").disabled = true; $("#r-status").textContent = "";
+    try {
+      const { text } = await sample(`You are the Policy Advisor for Meridian Precision Components' procurement team (a fictional Indian manufacturer).
+Answer the employee's question using ONLY the extracts below. Put the clause id in square brackets after each point, for example [POL-4.2]. Do not add numbers that are not in the extracts. If the extracts do not answer it, say the policy does not cover it and who to ask. At most 120 words, plain English.
+
+Question: ${$("#r-text").value.slice(0, 1000)}
+
+Extracts:
+${context}`, { signal: rCtl.signal, cache: false, onText: ({ text }) => { $("#r-answer").textContent = text; } });
+      const cites = [...text.matchAll(/\[((?:POL|REG)-[A-Z]*-?\d+(?:\.\d+)?)\]/g)].map((m) => m[1]);
+      const stray = cites.filter((c) => !allowed.has(c));
+      $("#r-status").textContent = !cites.length ? "Guardrail: no clause cited; treat this answer with care." :
+        stray.length ? `Guardrail: cites clauses that were not retrieved (${stray.join(", ")}).` : `Guardrail passed: cites ${[...new Set(cites)].join(", ")}, all retrieved.`;
+    } catch (e) {
+      $("#r-answer").textContent = e && e.text ? e.text : "";
+      if (!e || e.code !== "cancelled") $("#r-status").textContent = errCopy(e);
+    } finally { $("#r-go").disabled = false; }
+  });
+  showHits();
+
   /* intake desk */
   const CATS = { "aluminium castings": ["die-cast", "die cast", "casting", "adc12"], "machined components": ["shaft", "machined", "cnc", "turned"],
     "electrical panels": ["panel", "plc", "vfd", "switchgear"], packaging: ["bag", "film", "packaging", "carton"], MRO: ["bolt", "fastener", "glove", "spare", "bearing", "tool"] };
@@ -928,9 +1009,10 @@ Request: """${text.slice(0, 2000)}"""`, { modelTier: "quick", signal: iCtl.signa
   const passed = D.evals.filter((e) => e.pass).length;
   $("#eval-sum").textContent = `${passed} of ${D.evals.length} injected conditions handled correctly: right final outcome, right control fired, right money figure. Each case mutates a scenario (price drift, missing IRN, duplicate invoice, missing PAN...) and runs the full multi-agent workflow.`;
   $("#eval-rows").innerHTML = D.evals.map((e) => `<tr><td class="mono">${e.id}</td><td style="white-space:normal;min-width:220px">${esc(e.case)}</td><td class="mono">${esc(e.expected)}</td><td>${e.pass ? '<span class="sev sev-INFO">PASS</span>' : '<span class="sev sev-BLOCK">FAIL</span>'}</td></tr>`).join("");
-  $("#built-facts").innerHTML = `<dt>Agents</dt><dd>11 AI agents (8 graph steps + a 3-agent crew) and 1 human approver</dd><dt>Unit + workflow tests</dt><dd>40 passing (pytest)</dd>
-    <dt>Eval cases</dt><dd>${passed}/${D.evals.length} passing</dd><dt>Traces on this page</dt><dd>${esc(D.generated_with)}</dd>
-    <dt>LLM options</dt><dd>offline, Gemini (free tier), OpenAI, Anthropic, Ollama</dd>`;
+  const re_ = D.rag_eval;
+  $("#built-facts").innerHTML = `<dt>Agents</dt><dd>12 AI agents (8 graph steps, a 3-agent crew, the Policy Advisor) and 1 human approver</dd><dt>Unit + workflow tests</dt><dd>47 passing (pytest)</dd>
+    <dt>Eval cases</dt><dd>${passed}/${D.evals.length} passing</dd><dt>RAG retrieval</dt><dd>${Math.round(re_.hit_at_3 * 100)}% of ${re_.questions} questions find the right clause in the top 3 (${Math.round(re_.hit_at_1 * 100)}% first)</dd>
+    <dt>Traces on this page</dt><dd>${esc(D.generated_with)}</dd><dt>LLM options</dt><dd>offline, Gemini (free tier), OpenAI, Anthropic, Ollama</dd>`;
   const bc = D.business_case, cols = ["Conservative", "Base", "Optimistic"];
   const row = (label, f) => `<tr><td>${label}</td>${cols.map((c) => `<td class="num">${f(bc[c])}</td>`).join("")}</tr>`;
   $("#bc-rows").innerHTML = [
