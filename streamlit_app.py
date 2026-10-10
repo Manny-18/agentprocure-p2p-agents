@@ -212,12 +212,12 @@ with tab_lab:
                 xr = run_case(copy.deepcopy(xsc), decision=xdec, case_id=f"{xid}-web-{uuid.uuid4().hex[:6]}")
             ok = xr["status"] == xstatus and set(xcodes) <= all_codes(xr)
             rows.append({"Case": xid, "Injected condition": xdesc, "Expected": xstatus, "Actual": xr["status"],
-                         "Controls fired": ", ".join(sorted(all_codes(xr))) or "-", "Pass": "✅" if ok else "❌"})
+                         "Pass": "✅" if ok else "❌", "Controls fired": ", ".join(sorted(all_codes(xr))) or "-"})
             bar.progress((i + 1) / len(CASES), text=f"{xid} done")
         bar.empty()
         passed = sum(r["Pass"] == "✅" for r in rows)
         show_status("COMPLETED" if passed == len(rows) else "ESCALATED", f"**{passed} of {len(rows)} cases passed**")
-        st.dataframe(rows, hide_index=True, width="stretch")
+        st.dataframe(rows, hide_index=True, width="stretch", height=35 * (len(rows) + 1) + 3)
     if st.session_state.get("lab") and st.session_state["lab"][0] == cid:
         r = st.session_state["lab"][1]
         fired = all_codes(r)
