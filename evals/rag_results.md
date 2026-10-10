@@ -1,4 +1,4 @@
-Retrieval: bm25 | 22 questions | hit@1 91% | hit@3 96% | MRR 0.932
+Retrieval: bm25 | 22 questions | hit@1 20/22 (90.9%) | hit@3 21/22 (95.5%) | MRR 0.932
 
 | Question | Expected | Retrieved (top 3) | Rank |
 |---|---|---|---|

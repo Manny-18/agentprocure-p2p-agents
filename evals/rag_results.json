@@ -1,6 +1,8 @@
 {
   "retrieval": "bm25",
   "questions": 22,
+  "hits_at_1": 20,
+  "hits_at_3": 21,
   "hit_at_1": 0.909,
   "hit_at_3": 0.955,
   "mrr": 0.932,

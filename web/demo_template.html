@@ -1011,7 +1011,7 @@ Request: """${text.slice(0, 2000)}"""`, { modelTier: "quick", signal: iCtl.signa
   $("#eval-rows").innerHTML = D.evals.map((e) => `<tr><td class="mono">${e.id}</td><td style="white-space:normal;min-width:220px">${esc(e.case)}</td><td class="mono">${esc(e.expected)}</td><td>${e.pass ? '<span class="sev sev-INFO">PASS</span>' : '<span class="sev sev-BLOCK">FAIL</span>'}</td></tr>`).join("");
   const re_ = D.rag_eval;
   $("#built-facts").innerHTML = `<dt>Agents</dt><dd>12 AI agents (8 graph steps, a 3-agent crew, the Policy Advisor) and 1 human approver</dd><dt>Unit + workflow tests</dt><dd>47 passing (pytest)</dd>
-    <dt>Eval cases</dt><dd>${passed}/${D.evals.length} passing</dd><dt>RAG retrieval</dt><dd>${Math.round(re_.hit_at_3 * 100)}% of ${re_.questions} questions find the right clause in the top 3 (${Math.round(re_.hit_at_1 * 100)}% first)</dd>
+    <dt>Eval cases</dt><dd>${passed}/${D.evals.length} passing</dd><dt>RAG retrieval</dt><dd>${re_.hits_at_3} of ${re_.questions} questions find the right clause in the top 3 (${re_.hits_at_1} ranked first)</dd>
     <dt>Traces on this page</dt><dd>${esc(D.generated_with)}</dd><dt>LLM options</dt><dd>offline, Gemini (free tier), OpenAI, Anthropic, Ollama</dd>`;
   const bc = D.business_case, cols = ["Conservative", "Base", "Optimistic"];
   const row = (label, f) => `<tr><td>${label}</td>${cols.map((c) => `<td class="num">${f(bc[c])}</td>`).join("")}</tr>`;

@@ -52,16 +52,17 @@ def run(k: int = 3) -> dict:
         rr += 1 / rank if rank else 0
         rows.append({"question": q, "expected": sorted(expected), "retrieved": got, "rank": rank})
     n = len(QUESTIONS)
-    return {"retrieval": base.mode, "questions": n, "hit_at_1": round(hit1 / n, 3), "hit_at_3": round(hit3 / n, 3),
-            "mrr": round(rr / n, 3), "rows": rows}
+    return {"retrieval": base.mode, "questions": n, "hits_at_1": hit1, "hits_at_3": hit3,
+            "hit_at_1": round(hit1 / n, 3), "hit_at_3": round(hit3 / n, 3), "mrr": round(rr / n, 3), "rows": rows}
 
 
 def main():
     res = run()
     out = Path(__file__).parent
     (out / "rag_results.json").write_text(json.dumps(res, indent=2), encoding="utf-8")
-    md = [f"Retrieval: {res['retrieval']} | {res['questions']} questions | hit@1 {res['hit_at_1']:.0%} | "
-          f"hit@3 {res['hit_at_3']:.0%} | MRR {res['mrr']}", "", "| Question | Expected | Retrieved (top 3) | Rank |", "|---|---|---|---|"]
+    n = res["questions"]
+    md = [f"Retrieval: {res['retrieval']} | {n} questions | hit@1 {res['hits_at_1']}/{n} ({res['hits_at_1'] / n:.1%}) | "
+          f"hit@3 {res['hits_at_3']}/{n} ({res['hits_at_3'] / n:.1%}) | MRR {res['mrr']}", "", "| Question | Expected | Retrieved (top 3) | Rank |", "|---|---|---|---|"]
     md += [f"| {r['question']} | {', '.join(r['expected'])} | {', '.join(r['retrieved'])} | {r['rank'] or 'miss'} |" for r in res["rows"]]
     (out / "rag_results.md").write_text("\n".join(md), encoding="utf-8")
     print("\n".join(md))

@@ -80,7 +80,7 @@ def main():
     data["kb"] = [{"clause": d.metadata["clause"], "title": d.metadata["title"], "section": d.metadata["section"],
                    "source": d.metadata["source"], "text": d.page_content} for d in kb().docs]
     rag = json.loads((ROOT / "evals" / "rag_results.json").read_text(encoding="utf-8"))
-    data["rag_eval"] = {k: rag[k] for k in ("retrieval", "questions", "hit_at_1", "hit_at_3", "mrr")}
+    data["rag_eval"] = {k: rag[k] for k in ("retrieval", "questions", "hits_at_1", "hits_at_3", "hit_at_1", "hit_at_3", "mrr")}
     payload = json.dumps(data, separators=(",", ":"), ensure_ascii=False).replace("</", "<\\/")
     html = (WEB / "demo_template.html").read_text(encoding="utf-8")
     html = html.replace("/*__RULES__*/", (WEB / "rules.js").read_text(encoding="utf-8"))
