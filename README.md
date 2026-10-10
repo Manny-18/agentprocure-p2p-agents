@@ -92,6 +92,7 @@ python -m evals.run_evals              # 22-case control evaluation (offline; EV
 python -m evals.rag_eval               # 22 policy questions: does retrieval find the right clause?
 python run_demo.py --ask "Can I split an order to avoid three quotes?"   # Policy Advisor (RAG)
 python -m agentprocure.business_case   # ROI, payback, NPV (3 scenarios)
+streamlit run streamlit_app.py         # web app: run the real agents in your browser
 ```
 
 ### Use a real LLM (free option)
@@ -113,6 +114,22 @@ Free-tier daily quotas are per model and can be small (20 requests a day on some
 case). If you see `GenerateRequestsPerDay` in an error, the gateway stops calling the model for the rest of
 the run; switch to a model with a larger free quota, for example `LLM_MODEL=gemini-flash-lite-latest`, or wait
 for the daily reset.
+
+### Web app (Streamlit): the real agents in a browser
+
+`streamlit run streamlit_app.py` opens a web app that runs the actual Python agents on every click (nothing is replayed):
+
+* **Run a case**: pick S1 to S4, edit the purchase request, watch each agent's tools, findings (with the policy clause
+  behind each one) and reasoning, then approve or reject at the LangGraph interrupt and see the CFO memo and KPIs.
+* **Defect lab**: run any of the 22 injected-defect evaluation cases, or all 22 at once, and see which control fired.
+* **Ask the Policy Advisor**: RAG answers with clause citations and the retrieved clauses.
+* **How it works**: the case graph drawn from the compiled LangGraph object, and the six tools.
+
+**Deploy free on Streamlit Community Cloud:** sign in at [share.streamlit.io](https://share.streamlit.io) with GitHub,
+choose *Create app* > *Deploy a public app from GitHub*, repository `Manny-18/agentprocure-p2p-agents`, branch `main`,
+main file `streamlit_app.py`; under *Advanced settings* pick Python 3.12. It runs offline (no key needed). To use Gemini,
+add `LLM_PROVIDER = "gemini"` and `GOOGLE_API_KEY = "..."` under the app's *Secrets*; every visitor then spends your
+free-tier quota. Never commit `.streamlit/secrets.toml` (it is git-ignored).
 
 ### API for n8n
 
@@ -180,6 +197,7 @@ n8n/                importable n8n workflows (n8n/docker/: copies wired for Dock
 tests/              pytest: rules, end-to-end workflow, RAG, LLM gateway resilience
 evals/              22 control-evaluation cases + 22 RAG retrieval questions
 Dockerfile, docker-compose.yml   API image; API + n8n stack
+streamlit_app.py   web app that runs the real agents (Streamlit; deployable on Streamlit Community Cloud)
 web/               live demo: index.html (open in any browser), rules.js (JS port of the rules),
                    build_demo.py + demo_template.html (rebuild after export_traces), traces.json
 ```

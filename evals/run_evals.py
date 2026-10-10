@@ -17,9 +17,9 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-# The evaluation scores the controls (rules), so it runs offline unless EVAL_WITH_LLM=1:
-# fast, repeatable, and it does not spend API quota.
-if os.getenv("EVAL_WITH_LLM") != "1":
+# Run from the command line, the evaluation scores the controls (rules) offline unless EVAL_WITH_LLM=1:
+# fast, repeatable, and it does not spend API quota. Importing CASES (the Streamlit app does) changes nothing.
+if __name__ == "__main__" and os.getenv("EVAL_WITH_LLM") != "1":
     os.environ["LLM_PROVIDER"] = "offline"
 
 from agentprocure import config  # noqa: E402
